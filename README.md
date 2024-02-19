@@ -1,1 +1,1 @@
-# MERN-ECOMMERCE
+Welcome to Gayatri's GitHub repository – a dazzling fusion of technology and jewelry. Crafted with the MERN stack, this project boasts a curated jewelry collection, robust user authentication, dynamic shopping cart, and secure payment gateways. Dive into the codebase to explore the seamless blend of immersive design and cutting-edge functionality, shaping the future of online jewelry shopping. Join us in redefining the art of adornment! 💍🌐
