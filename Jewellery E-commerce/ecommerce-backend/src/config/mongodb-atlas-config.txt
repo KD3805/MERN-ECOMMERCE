@@ -1,0 +1,8 @@
+Project name: jewellery-ecommerce
+
+username: kd3805
+password: kd@123
+
+mongodbURL: "mongodb+srv://kd3805:kd%40123@cluster0.tsxq3nw.mongodb.net/gayatri?retryWrites=true&w=majority"
+
+remember: here, '%40' in password is used for character '@' as it is not allowed directly in the URL.
