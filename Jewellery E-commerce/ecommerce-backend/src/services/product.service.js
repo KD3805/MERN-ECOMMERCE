@@ -3,9 +3,10 @@ const Product = require("../models/product.model");
 
 
 async function createProduct(reqData) {
-    let topLevel = await Category.findOne({name: reqData.topLevelCategory});
 
-    if(!topLevel) {
+    let topLevel = await Category.findOne({ name: reqData.topLevelCategory });
+
+    if (!topLevel) {
         topLevel = new Category({
             name: reqData.topLevelCategory,
             level: 1
@@ -19,7 +20,7 @@ async function createProduct(reqData) {
         parentCategory: topLevel._id
     })
 
-    if(!secondLevel) {
+    if (!secondLevel) {
         secondLevel = new Category({
             name: reqData.secondLevelCategory,
             parentCategory: topLevel._id,
@@ -34,7 +35,7 @@ async function createProduct(reqData) {
         parentCategory: secondLevel._id,
     })
 
-    if(!thirdLevel) {
+    if (!thirdLevel) {
         thirdLevel = new Category({
             name: reqData.thirdLevelCategory,
             parentCategory: secondLevel._id,
@@ -44,19 +45,22 @@ async function createProduct(reqData) {
         await thirdLevel.save();
     }
 
+    console.log("thirdLevel._id:", thirdLevel._id)
+
     const product = new Product({
         title: reqData.title,
         description: reqData.description,
         details: reqData.details,
         occasion: reqData.occasion,
+        type: reqData.type,
         color: reqData.color,
         price: reqData.price,
         discountedPrice: reqData.discountedPrice,
         discountPercent: reqData.discountPercent,
-        sizes: reqData.size,
-        imageUrls: reqData.imageUrl,
+        sizes: reqData.sizes,
+        imageUrls: reqData.imageUrls,
         brand: reqData.brand,
-        quantity: reqData.quantity,
+        // quantity: reqData.quantity,
         category: thirdLevel._id,
     })
 
@@ -65,12 +69,12 @@ async function createProduct(reqData) {
 
 async function deleteProduct(productId) {
     try {
-        const product = await findProductById(productId);
+        // const product = await findProductById(productId);
 
-        await Product.findByIdAndUpdate(productId);
+        await Product.findByIdAndDelete(productId);
         return "Product deleted successfully";
     } catch (error) {
-        throw new Error(error.message);       
+        throw new Error(error.message);
     }
 }
 
@@ -79,12 +83,16 @@ async function updateProduct(productId, reqData) {
 }
 
 async function findProductById(id) {
-    const product = await Product.findById(id).populate("category").exec();
+    try {
+        const product = await Product.findById(id).populate("category").exec();
 
-    if(!product) {
-        throw new Error("Product not found with id: "+ id);
+        if (!product) {
+            throw new Error("Product not found with id: " + id);
+        }
+        return product;
+    } catch (error) {
+        throw new Error(error.message);
     }
-    return product;
 }
 
 
@@ -93,7 +101,7 @@ async function findProductById(id) {
 async function getAllProducts(reqQuery) {
     let {
         category, // product-name
-        parentCategory, // jewellery-type (gold, diamond, ...)
+        type, // jewellery-type (gold, diamond, ...)
         color,
         minPrice,
         maxPrice,
@@ -101,38 +109,49 @@ async function getAllProducts(reqQuery) {
         maxDiscount,
         occasion,
         sort,
-        stock,
+        // stock,
         pageNumber,
         pageSize, // total products in 1 page
     } = reqQuery;
 
-    pageSize = pageSize || 10;
+    pageSize = parseInt(pageSize) || 12;
+    pageNumber = parseInt(pageNumber);
 
-    let query = Product.find().populate("category");    // populate the reference to Category model
+    let query = Product.find()
+    .populate("category")
+    .populate({path: "category", populate: {path: "parentCategory"}});  // populate the reference to Category model
 
-    if(category) {
-        const existCategory = await Category.findOne({name: category});
 
-        if(existCategory) {
-            query = query.where("category").equals(existCategory._id);
-        }
+    // -------------------- Filter by Category ---------------
+    
+    if (category !== 'jewellery') {
+        const existCategories = await Category.find({ name: category })
+        
+        const categoryIds = existCategories.map(cat => cat._id);
+        console.log(categoryIds)
+
+        if (existCategories.length > 0) {
+            query = query.where("category").in(categoryIds);
+        } 
         else {
-            return {content: [], currentPage: 1, totalPages: 0}
+            console.log("No such category!", category);
+            return { content: [], currentPage: 1, totalPages: 0 }
         }
     }
 
-    if(parentCategory) {
-        const existParentCategory = await Category.findOne({name: parentCategory});
+    // -------------------- Filter by Type ---------------
 
-        if(existParentCategory) {
-            query = query.where("category").equals(existParentCategory._id);
-        }
-        else {
-            return {content: [], currentPage: 1, totalPages: 0}
-        }
+    if (type != '' && type != null) {
+        const typeSet = new Set(type.split(",").map(type => type.trim().toLowerCase()));
+
+        const typeRegex = typeSet.size > 0 ? new RegExp([...typeSet].join("|"), "i") : null;
+
+        query = query.where("type").regex(typeRegex);
     }
 
-    if(color) {
+    // -------------------- Filter by Color ---------------
+
+    if (color != '' && color != null) {
         const colorSet = new Set(color.split(",").map(color => color.trim().toLowerCase()));
 
         const colorRegex = colorSet.size > 0 ? new RegExp([...colorSet].join("|"), "i") : null;
@@ -140,7 +159,9 @@ async function getAllProducts(reqQuery) {
         query = query.where("color").regex(colorRegex);
     }
 
-    if(occasion) {
+    // -------------------- Filter by Occasion ---------------
+
+    if (occasion != '' && occasion != null) {
         const occasionSet = new Set(occasion.split(",").map(occasion => occasion.trim().toLowerCase()));
 
         const occasionRegex = occasionSet.size > 0 ? new RegExp([...occasionSet].join("|"), "i") : null;
@@ -148,42 +169,48 @@ async function getAllProducts(reqQuery) {
         query = query.where("occasion").regex(occasionRegex);
     }
 
-    if(minPrice && maxPrice) {
+    // -------------------- Filter by Price ---------------    
+
+    if (minPrice && maxPrice) {
         query = query.where('discountedPrice').gte(minPrice).lte(maxPrice)
     }
 
-    if(minDiscount && maxDiscount) {
+    if (minDiscount && maxDiscount) {
         query = query.where('discountPercent').gte(minDiscount).lte(maxDiscount)
     }
 
-    if(stock) {
-        if(stock === 'in_stock') {
-            query = query.where('quantity').gt(0);
-        }
-        else if(stock === 'out_of_stock') {
-            query = query.where('quantity').eq(0);
-        }
+    // if (stock) {
+    //     if (stock === 'in_stock') {
+    //         query = query.where('quantity').gt(0);
+    //     }
+    //     else if (stock === 'out_of_stock') {
+    //         query = query.where('quantity').eq(0);
+    //     }
+    // }
+
+    if (sort) {
+        const sortDirection = sort === 'low_to_high' ? 1 : -1;
+        query = query.sort({ "discountedPrice": sortDirection });
     }
 
-    if(sort) {
-        const sortDirection = sort === 'price_high' ? -1 : 1;
-        query = query.sort({"discountedPrice": sortDirection});
-    }
+    // -------------------- Execute query ---------------
 
     const totalProducts = await Product.countDocuments(query);
+    // console.log("total prods: "+ totalProducts);
 
-    const skip = (pageNumber - 1)*pageSize;
+    const skip = (pageNumber - 1) * pageSize;
     query = query.skip(skip).limit(pageSize);
+    // console.log("Final query:", query._conditions);  // Log the final query conditions
 
     const products = await query.exec();
 
-    const totalPages = Math.ceil(totalProducts/pageSize);
+    const totalPages = Math.ceil(totalProducts / pageSize);
 
-    return {content: products, currentPage: pageNumber, totalPages};
+    return { content: products, currentPage: pageNumber, totalPages };
 }
 
 async function createMultipleProducts(products) {
-    for(let product of products) {
+    for (let product of products) {
         await createProduct(product);
     }
 }

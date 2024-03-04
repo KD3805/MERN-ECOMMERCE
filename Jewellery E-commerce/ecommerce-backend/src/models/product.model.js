@@ -28,11 +28,18 @@ const ProductSchema = new  mongoose.Schema({
     },
     quantity: {
         type: Number,
-        required: true,
+        // required: true,
     },
     brand: {
         type: String,
         required: true,
+    },
+    collectionName: {
+        type: String,
+        // required: true,
+    },
+    type: {
+        type: String,
     },
     color: {
         type: String,
@@ -40,14 +47,14 @@ const ProductSchema = new  mongoose.Schema({
     },
     sizes: [
         {
-            weight: {type:Number, required: true},
-            size:{type:Number, required: true},
-            stock:{type:Number, required: true},
+            weight: {type:String, required: true},
+            width:{type:String, required: true},
+            stock:{type:Number},
         }
     ],
     imageUrls: [
         {
-            imgUrl: {type:String, required: true},
+            imageUrl: {type:String}
         }
     ],
     ratings: [

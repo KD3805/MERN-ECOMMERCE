@@ -1,21 +1,38 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import OrderTracker from './OrderTracker';
 import { Grid, IconButton } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { useDispatch, useSelector } from 'react-redux';
+import { store } from '../../../state/store';
+import { findProductById } from '../../../state/product/Action';
+import { useParams } from 'react-router-dom';
+import { getOrderById } from '../../../state/order/Action';
 
 const OrderDetails = () => {
+    const { order } = useSelector(store => store);
+    const dispatch = useDispatch();
+    const params = useParams(); 
+    const index = parseInt(params.index);
+
+    useEffect(()=> {
+        dispatch(getOrderById(params.orderId));
+    }, [dispatch]);
+
+    const { firstName, lastName, streetAddress, city, zipCode, mobile, state } = order.order?.shippingAddress || {};
+    // const { title, brand, discountedPrice, discountPercent } = order.order?.orderItems[index]?.product;
+
     return (
         <div className='p-5 '>
 
             <div className='p-3 bg-pink-50 text-pink-950 rounded-lg' style={{ border: '1px solid #500724' }}>
                 <h1 className='font-bold text-xl py-3'>Delivery Address</h1>
                 <div className='space-y-2'>
-                    <h1 className='text-lg font-semibold'>Jethalal Gada</h1>
-                    <p className='text-sm font-normal'>Gokuldham society, powder gali, Mumbai, 400001</p>
+                    <h1 className='text-lg font-semibold'>{firstName} {lastName}</h1>
+                    <p className='text-sm font-normal'>{streetAddress}, {city}, {zipCode}</p>
                     <div>
                         <p className='text-sm font-semibold'>Phone Number : </p>
-                        <p className='text-sm font-normal'>9876543210</p>
+                        <p className='text-sm font-normal'>{mobile}</p>
                     </div>
                 </div>
             </div>
@@ -35,26 +52,26 @@ const OrderDetails = () => {
                         <div className="flex items-center">
                             <img
                                 className="w-[7rem] h-[7rem] shadow-md rounded-md object-cover"
-                                src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1707742451/1_koyxla.jpg"
+                                src={order.order?.orderItems[index]?.product.imageUrls[0].imageUrl}
                                 alt=""
                             />
 
                             <div className="ml-5 space-y-2">
                                 <p className="font-semibold text-lg">
-                                    Classy Diamond Flower Earrings
+                                    {order.order?.orderItems[index]?.product.title}
                                 </p>
                                 <p className="text-xs py-1 text-gray-400 font-medium">
-                                    Weight : 2.047 g | Size : 16.40 MM
+                                    Weight : {order.order?.weight} | Size : {order.order?.width} MM
                                 </p>
                                 <p className="text-xs  text-gray-400 font-medium">
-                                    Seller: Gayatri
+                                    Seller: {order.order?.orderItems[index]?.product.brand}
                                 </p>
 
                                 <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
-                                    <p className="font-semibold lg:text-lg">₹ 9999</p>
+                                    <p className="font-semibold lg:text-lg">₹ {order.order?.orderItems[index]?.product.discountedPrice}</p>
                                     {/* <p className="opacity-50 line-through lg:text-base">₹ 11999</p> */}
                                     <p className="font-semibold text-green-600 lg:text-base">
-                                        15% off
+                                        {order.order?.orderItems[index]?.product.discountPercent}% off
                                     </p>
                                 </div>
                             </div>

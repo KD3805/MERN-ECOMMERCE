@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser, register } from '../../state/auth/Action';
+import { store } from '../../state/store';
 
 
 const CssTextField = styled(TextField)({
@@ -26,10 +29,19 @@ const CssTextField = styled(TextField)({
 
 const RegisterForm = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const jwt = localStorage.getItem("jwt");
+    const { auth } = useSelector(store => store)
+
+    useEffect(() => {
+        if(jwt) {
+            dispatch(getUser(jwt));
+        }
+    }, [jwt, auth.jwt]);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e)
         const data = new FormData(e.currentTarget);
 
         const userData = {
@@ -39,13 +51,14 @@ const RegisterForm = () => {
             password: data.get('password'),
         }
 
-        console.log('userData', userData);
+        dispatch(register(userData));
+        navigate('/')
     }
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                    <h1 className='mb-5 font-semibold text-3xl text-center' style={{color: '#832729'}}>Sign Up</h1>
+                <h1 className='mb-5 font-semibold text-3xl text-center' style={{color: '#832729'}}>Sign Up</h1>
                 <Grid container spacing={3}>
 
 

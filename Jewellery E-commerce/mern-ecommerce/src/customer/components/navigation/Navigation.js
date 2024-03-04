@@ -1,213 +1,220 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Avatar from '@mui/material/Avatar';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { deepOrange, deepPurple } from '@mui/material/colors';
-import { useNavigate } from 'react-router-dom';
-import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
-import { Badge, Button, Grid } from '@mui/material';
-import AuthModel from '../../auth/AuthModel';
-
+import { Fragment, useEffect, useState } from "react";
+import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
+import {
+  Bars3Icon,
+  MagnifyingGlassIcon,
+  ShoppingBagIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
+import Avatar from "@mui/material/Avatar";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { deepOrange, deepPurple } from "@mui/material/colors";
+import { useLocation, useNavigate } from "react-router-dom";
+import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import { Badge, Button, Grid } from "@mui/material";
+import AuthModel from "../../auth/AuthModel";
+import { getUser, logout } from "../../../state/auth/Action";
+import { useDispatch, useSelector } from "react-redux";
 
 const navigation = {
   categories: [
     {
-      id: 'all-jewellery',
-      name: 'All Jewellery',
+      id: "all-jewellery",
+      name: "All Jewellery",
       sections: [
         {
-          id: 'category',
-          name: 'Category',
+          id: "category",
+          name: "Category",
           items: [
-            { name: 'Bangles', id: 'bangle' },
-            { name: 'Bracelets', id: 'bracelet' },
-            { name: 'Earrings', id: 'earring' },
-            { name: 'Pendants', id: 'pendant' },
-            { name: 'Mangal sutra', id: 'mangal-sutra' },
-            { name: 'Chains', id: 'chain' },
-            { name: 'Necklaces', id: 'necklace' },
-            { name: 'Rings', id: 'ring' },
+            { name: "All Jewellery", id: "jewellery" },
+            { name: "Bangles", id: "bangle" },
+            { name: "Bracelets", id: "bracelet" },
+            { name: "Earrings", id: "earring" },
+            { name: "Pendants", id: "pendant" },
+            { name: "Mangal sutra", id: "mangal-sutra" },
+            { name: "Chains", id: "chain" },
+            { name: "Necklaces", id: "necklace" },
+            { name: "Rings", id: "ring" },
           ],
         },
         {
-          id: 'types',
-          name: 'Jewellery Types',
+          id: "type",
+          name: "Jewellery Types",
           items: [
-            { name: 'Gold', id: 'gold' },
-            { name: 'Diamond', id: 'diamond' },
-            { name: 'Silver', id: 'silver' },
-            { name: 'Platinum', id: 'platinum' },
-            { name: 'Gemstones', id: 'gemstone' },
+            { name: "Gold", id: "gold" },
+            { name: "Diamond", id: "diamond" },
+            { name: "Silver", id: "silver" },
+            { name: "Platinum", id: "platinum" },
+            { name: "Gemstones", id: "gemstone" },
           ],
         },
+        // {
+        //   id: 'gender',
+        //   name: 'Gender',
+        //   items: [
+        //     { name: 'Women', id: 'women' },
+        //     { name: 'Men', id: 'men' },
+        //   ],
+        // },
         {
-          id: 'gender',
-          name: 'Gender',
+          id: "occasion",
+          name: "Occasion",
           items: [
-            { name: 'Women', id: 'women' },
-            { name: 'Men', id: 'men' },
-          ],
-        },
-        {
-          id: 'occasion',
-          name: 'Occasion',
-          items: [
-            { name: 'Bridal wear', id: 'bridal-wear' },
-            { name: 'Casual wear', id: 'casual-wear' },
-            { name: 'Engagement', id: 'engagement' },
-            { name: 'Modern wear', id: 'modern-wear' },
-            { name: 'Office wear', id: 'office-wear' },
-            { name: 'Traditional & ethenic wear', id: 'traditional-ethenic' },
+            { name: "Bridal wear", id: "bridal" },
+            { name: "Casual wear", id: "casual" },
+            { name: "Engagement", id: "engagement" },
+            { name: "Modern wear", id: "modern" },
+            { name: "Office wear", id: "office" },
+            { name: "Traditional & ethenic wear", id: "traditional-ethenic" },
           ],
         },
       ],
     },
     {
-      id: 'gold',
-      name: 'Gold',
+      id: "gold",
+      name: "Gold",
       sections: [
         {
-          id: 'category',
-          name: 'Category',
+          id: "category",
+          name: "Category",
           items: [
-            { name: 'Bangles', id: 'bangle' },
-            { name: 'Bracelets', id: 'bracelet' },
-            { name: 'Earrings', id: 'earring' },
-            { name: 'Necklaces', id: 'necklace' },
-            { name: 'Rings', id: 'ring' },
+            { name: "Bangles", id: "bangle" },
+            { name: "Bracelets", id: "bracelet" },
+            { name: "Earrings", id: "earring" },
+            { name: "Necklaces", id: "necklace" },
+            { name: "Rings", id: "ring" },
           ],
         },
         {
-          id: 'earrings',
-          name: 'Earrings',
+          id: "earrings",
+          name: "Earrings",
           items: [
-            { name: 'Drop Earrings', id: 'drop' },
-            { name: 'Hoop Earrings', id: 'hoop' },
-            { name: 'Jhumkas', id: 'jhumka' },
-            { name: 'Stud Earrings', id: 'stud' },
+            { name: "Drop Earrings", id: "drop" },
+            { name: "Hoop Earrings", id: "hoop" },
+            { name: "Jhumkas", id: "jhumka" },
+            { name: "Stud Earrings", id: "stud" },
           ],
         },
         {
-          id: 'rings',
-          name: 'Rings',
+          id: "rings",
+          name: "Rings",
           items: [
-            { name: 'Eangagement Rings', id: 'eangagement-ring' },
-            { name: 'Pearl Rings', id: 'pearl-ring' },
-            { name: 'Bridal Rings', id: 'bridal-ring' },
-            { name: 'Couple Rings', id: 'couple-ring' },
+            { name: "Eangagement Rings", id: "eangagement-ring" },
+            { name: "Pearl Rings", id: "pearl-ring" },
+            { name: "Bridal Rings", id: "bridal-ring" },
+            { name: "Couple Rings", id: "couple-ring" },
           ],
         },
         {
-          id: 'necklaces',
-          name: 'Necklaces',
+          id: "necklaces",
+          name: "Necklaces",
           items: [
-            { name: 'Pendants', id: 'pendant' },
-            { name: 'Mangal Sutra', id: 'mangal-sutra' },
-            { name: 'Chains', id: 'chain' },
-            { name: 'Locket', id: 'locket' },
+            { name: "Pendants", id: "pendant" },
+            { name: "Mangal Sutra", id: "mangal-sutra" },
+            { name: "Chains", id: "chain" },
+            { name: "Locket", id: "locket" },
           ],
         },
       ],
     },
     {
-      id: 'diamond',
-      name: 'Diamond',
+      id: "diamond",
+      name: "Diamond",
       sections: [
         {
-          id: 'category',
-          name: 'Category',
+          id: "category",
+          name: "Category",
           items: [
-            { name: 'Bangles', id: 'bangle' },
-            { name: 'Bracelets', id: 'bracelet' },
-            { name: 'Earrings', id: 'earring' },
-            { name: 'Necklaces', id: 'necklace' },
-            { name: 'Rings', id: 'ring' },
+            { name: "Bangles", id: "bangle" },
+            { name: "Bracelets", id: "bracelet" },
+            { name: "Earrings", id: "earring" },
+            { name: "Necklaces", id: "necklace" },
+            { name: "Rings", id: "ring" },
           ],
         },
         {
-          id: 'earrings',
-          name: 'Earrings',
+          id: "earrings",
+          name: "Earrings",
           items: [
-            { name: 'Drop Earrings', id: 'drop' },
-            { name: 'Hoop Earrings', id: 'hoop' },
-            { name: 'Jhumkas', id: 'jhumka' },
-            { name: 'Stud Earrings', id: 'stud' },
+            { name: "Drop Earrings", id: "drop" },
+            { name: "Hoop Earrings", id: "hoop" },
+            { name: "Jhumkas", id: "jhumka" },
+            { name: "Stud Earrings", id: "stud" },
           ],
         },
         {
-          id: 'rings',
-          name: 'Rings',
+          id: "rings",
+          name: "Rings",
           items: [
-            { name: 'Eangagement Rings', id: 'eangagement-ring' },
-            { name: 'Pearl Rings', id: 'pearl-ring' },
-            { name: 'Bridal Rings', id: 'bridal-ring' },
-            { name: 'Couple Rings', id: 'couple-ring' },
+            { name: "Eangagement Rings", id: "eangagement-ring" },
+            { name: "Pearl Rings", id: "pearl-ring" },
+            { name: "Bridal Rings", id: "bridal-ring" },
+            { name: "Couple Rings", id: "couple-ring" },
           ],
         },
         {
-          id: 'necklaces',
-          name: 'Necklaces',
+          id: "necklaces",
+          name: "Necklaces",
           items: [
-            { name: 'Pendants', id: 'pendant' },
-            { name: 'Mangal Sutra', id: 'mangal-sutra' },
-            { name: 'Chains', id: 'chain' },
-            { name: 'Locket', id: 'locket' },
+            { name: "Pendants", id: "pendant" },
+            { name: "Mangal Sutra", id: "mangal-sutra" },
+            { name: "Chains", id: "chain" },
+            { name: "Locket", id: "locket" },
           ],
         },
       ],
     },
     {
-      id: 'best-sellers',
-      name: 'Best Sellers',
+      id: "best-sellers",
+      name: "Best Sellers",
       sections: [
         {
-          id: 'category',
-          name: 'Category',
+          id: "category",
+          name: "Category",
           items: [
-            { name: 'Bangles', id: 'bangle' },
-            { name: 'Bracelets', id: 'bracelet' },
-            { name: 'Earrings', id: 'earring' },
-            { name: 'Necklaces', id: 'necklace' },
-            { name: 'Rings', id: 'ring' },
+            { name: "Bangles", id: "bangle" },
+            { name: "Bracelets", id: "bracelet" },
+            { name: "Earrings", id: "earring" },
+            { name: "Necklaces", id: "necklace" },
+            { name: "Rings", id: "ring" },
           ],
         },
         {
-          id: 'earrings',
-          name: 'Earrings',
+          id: "earrings",
+          name: "Earrings",
           items: [
-            { name: 'Drop Earrings', id: 'drop' },
-            { name: 'Hoop Earrings', id: 'hoop' },
-            { name: 'Jhumkas', id: 'jhumka' },
-            { name: 'Stud Earrings', id: 'stud' },
+            { name: "Drop Earrings", id: "drop" },
+            { name: "Hoop Earrings", id: "hoop" },
+            { name: "Jhumkas", id: "jhumka" },
+            { name: "Stud Earrings", id: "stud" },
           ],
         },
         {
-          id: 'rings',
-          name: 'Rings',
+          id: "rings",
+          name: "Rings",
           items: [
-            { name: 'Eangagement Rings', id: 'eangagement-ring' },
-            { name: 'Pearl Rings', id: 'pearl-ring' },
-            { name: 'Bridal Rings', id: 'bridal-ring' },
-            { name: 'Couple Rings', id: 'couple-ring' },
+            { name: "Eangagement Rings", id: "eangagement-ring" },
+            { name: "Pearl Rings", id: "pearl-ring" },
+            { name: "Bridal Rings", id: "bridal-ring" },
+            { name: "Couple Rings", id: "couple-ring" },
           ],
         },
         {
-          id: 'necklaces',
-          name: 'Necklaces',
+          id: "necklaces",
+          name: "Necklaces",
           items: [
-            { name: 'Pendants', id: 'pendant' },
-            { name: 'Mangal Sutra', id: 'mangal-sutra' },
-            { name: 'Chains', id: 'chain' },
-            { name: 'Locket', id: 'locket' },
+            { name: "Pendants", id: "pendant" },
+            { name: "Mangal Sutra", id: "mangal-sutra" },
+            { name: "Chains", id: "chain" },
+            { name: "Locket", id: "locket" },
           ],
         },
       ],
     },
     {
-      id: 'wedding',
-      name: 'Wedding',
+      id: "wedding",
+      name: "Wedding",
       // featured: [
       //   {
       //     name: 'New Arrivals',
@@ -225,59 +232,58 @@ const navigation = {
       // ],
       sections: [
         {
-          id: 'category',
-          name: 'Category',
+          id: "category",
+          name: "Category",
           items: [
-            { name: 'Bangles', id: 'bangle' },
-            { name: 'Bracelets', id: 'bracelet' },
-            { name: 'Earrings', id: 'earring' },
-            { name: 'Necklaces', id: 'necklace' },
-            { name: 'Rings', id: 'ring' },
+            { name: "Bangles", id: "bangle" },
+            { name: "Bracelets", id: "bracelet" },
+            { name: "Earrings", id: "earring" },
+            { name: "Necklaces", id: "necklace" },
+            { name: "Rings", id: "ring" },
           ],
         },
         {
-          id: 'earrings',
-          name: 'Earrings',
+          id: "earrings",
+          name: "Earrings",
           items: [
-            { name: 'Drop Earrings', id: 'drop' },
-            { name: 'Hoop Earrings', id: 'hoop' },
-            { name: 'Jhumkas', id: 'jhumka' },
-            { name: 'Stud Earrings', id: 'stud' },
+            { name: "Drop Earrings", id: "drop" },
+            { name: "Hoop Earrings", id: "hoop" },
+            { name: "Jhumkas", id: "jhumka" },
+            { name: "Stud Earrings", id: "stud" },
           ],
         },
         {
-          id: 'rings',
-          name: 'Rings',
+          id: "rings",
+          name: "Rings",
           items: [
-            { name: 'Eangagement Rings', id: 'eangagement-ring' },
-            { name: 'Pearl Rings', id: 'pearl-ring' },
-            { name: 'Bridal Rings', id: 'bridal-ring' },
-            { name: 'Couple Rings', id: 'couple-ring' },
+            { name: "Eangagement Rings", id: "eangagement-ring" },
+            { name: "Pearl Rings", id: "pearl-ring" },
+            { name: "Bridal Rings", id: "bridal-ring" },
+            { name: "Couple Rings", id: "couple-ring" },
           ],
         },
         {
-          id: 'necklaces',
-          name: 'Necklaces',
+          id: "necklaces",
+          name: "Necklaces",
           items: [
-            { name: 'Pendants', id: 'pendant' },
-            { name: 'Mangal Sutra', id: 'mangal-sutra' },
-            { name: 'Chains', id: 'chain' },
-            { name: 'Locket', id: 'locket' },
+            { name: "Pendants", id: "pendant" },
+            { name: "Mangal Sutra", id: "mangal-sutra" },
+            { name: "Chains", id: "chain" },
+            { name: "Locket", id: "locket" },
           ],
         },
       ],
     },
   ],
   pages: [
-    { name: 'Company', id: 'company' },
-    { name: 'Stores', id: 'store' },
+    { name: "Company", id: "company" },
+    { name: "Stores", id: "store" },
   ],
-}
+};
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(" ");
 }
-
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
@@ -286,20 +292,59 @@ export default function Navigation() {
   const openUserMenu = Boolean(anchorEl);
   const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const jwt = localStorage.getItem("jwt");
+  const { auth, cart } = useSelector((store) => store);
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getUser(jwt));
+    }
+  }, [jwt, auth.jwt]);
+
+  useEffect(() => {
+    if (auth.user) {
+      handleClose();
+    }
+    // if (location.pathname === "/login" || location.pathname === "/register") {
+    //   setOpenAuthModel(true);
+    // }
+  }, []);
 
   const handleCategoryClick = (category, section, item, close) => {
-    navigate(`/${category.id}/${section.id}/${item.id}`);
+    navigate(
+      `/${category.id.replace(/\s/g, "-").toLowerCase()}/${section.id
+        .replace(/\s/g, "-")
+        .toLowerCase()}/${item.id.replace(/\s/g, "-").toLowerCase()}`
+    );
     close();
-  }
+  };
 
-  const handleOpen = () => {
+  const handleSectionClick = (section, item, close) => {
+    navigate(
+      `/${section.id.replace(/\s/g, "-").toLowerCase()}/${item.id
+        .replace(/\s/g, "-")
+        .toLowerCase()}`
+    );
+    close();
+  };
+
+  const handleOpen = (e, auth) => {
+    e.preventDefault();
+    navigate(`/${auth}`);
     setOpenAuthModel(true);
-  }
+  };
 
   const handleClose = () => {
+    navigate("/");
     setOpenAuthModel(false);
-  }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    handleClose();
+  };
 
   return (
     <div className="bg-white">
@@ -347,11 +392,13 @@ export default function Navigation() {
                     <Tab.List className="-mb-px flex space-x-8 px-4">
                       {navigation.categories.map((category) => (
                         <Tab
-                          key={category.name}
+                          key={category.id}
                           className={({ selected }) =>
                             classNames(
-                              selected ? 'border-pink-950 text-pink-800' : 'border-transparent text-pink-800',
-                              'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
+                              selected
+                                ? "border-pink-950 text-pink-800"
+                                : "border-transparent text-pink-800",
+                              "flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium"
                             )
                           }
                         >
@@ -362,7 +409,10 @@ export default function Navigation() {
                   </div>
                   <Tab.Panels as={Fragment}>
                     {navigation.categories.map((category) => (
-                      <Tab.Panel key={category.name} className="space-y-10 px-4 pb-8 pt-10">
+                      <Tab.Panel
+                        key={category.id}
+                        className="space-y-10 px-4 pb-8 pt-10"
+                      >
                         {/* <div className="grid grid-cols-2 gap-x-4">
                           {category.featured.map((item) => (
                             <div key={item.name} className="group relative text-base sm:text-sm">
@@ -384,8 +434,11 @@ export default function Navigation() {
                           ))}
                         </div> */}
                         {category.sections.map((section) => (
-                          <div key={section.name}>
-                            <p id={`${category.id}-${section.id}-heading-mobile`} className="font-medium text-gray-900">
+                          <div key={section.id}>
+                            <p
+                              id={`${category.id}-${section.id}-heading-mobile`}
+                              className="font-medium text-gray-900"
+                            >
                               {section.name}
                             </p>
                             <ul
@@ -394,8 +447,11 @@ export default function Navigation() {
                               className="mt-6 flex flex-col space-y-6"
                             >
                               {section.items.map((item) => (
-                                <li key={item.name} className="flow-root">
-                                  <a href={item.href} className="-m-2 block p-2 text-gray-500">
+                                <li key={item.id} className="flow-root">
+                                  <a
+                                    href={item.href}
+                                    className="-m-2 block p-2 text-gray-500"
+                                  >
                                     {item.name}
                                   </a>
                                 </li>
@@ -409,9 +465,12 @@ export default function Navigation() {
                 </Tab.Group>
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {navigation.pages.map((page) => (
-                    <div key={page.name} className="flow-root">
-                      <a href={page.href} className="-m-2 block p-2 font-medium text-gray-900">
+                  {navigation.pages.map((page, index) => (
+                    <div key={`${page.name}-${index}`} className="flow-root">
+                      <a
+                        href={page.href}
+                        className="-m-2 block p-2 font-medium text-gray-900"
+                      >
                         {page.name}
                       </a>
                     </div>
@@ -420,17 +479,22 @@ export default function Navigation() {
 
                 <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
-                    <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                    <a
+                      href="#"
+                      className="-m-2 block p-2 font-medium text-gray-900"
+                    >
                       Sign in
                     </a>
                   </div>
                   <div className="flow-root">
-                    <a href="#" className="-m-2 block p-2 font-medium text-gray-900">
+                    <a
+                      href="#"
+                      className="-m-2 block p-2 font-medium text-gray-900"
+                    >
                       Create account
                     </a>
                   </div>
                 </div>
-
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -439,11 +503,10 @@ export default function Navigation() {
 
       <header className="relative">
         <div className="bg-pink-100 text-pink-950 sm:px-6">
-
           <div className="my-header lg:ml-0 ">
             {/* Logo */}
-            <Grid container xs={9} className='logo-search-div'>
-              <a href='#' className='cursor-pointer'>
+            <Grid container xs={9} className="logo-search-div">
+              <a href="#" className="cursor-pointer">
                 <span className="sr-only">Your Company</span>
                 <img
                   className="object-cover w-40 mt-4"
@@ -455,17 +518,25 @@ export default function Navigation() {
               </a>
 
               {/* Search bar */}
-              <div className='relative header-search-div'>
-                <input type="text" placeholder='Search for Gold Jewellery, Diamond…' className='bg-white header-searchbar text-pink-950' />
-                <span className='search-icon'>
+              <div className="relative header-search-div">
+                <input
+                  type="text"
+                  placeholder="Search for Gold Jewellery, Diamond…"
+                  className="bg-white header-searchbar text-pink-950"
+                />
+                <span className="search-icon">
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </span>
               </div>
-
             </Grid>
 
             {/* customer's action buttons */}
-            <Grid container xs={3} justifyContent='space-around' className="flex items-center">
+            <Grid
+              container
+              xs={3}
+              justifyContent="space-around"
+              className="flex items-center"
+            >
               {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                 <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
                   Sign in
@@ -487,47 +558,115 @@ export default function Navigation() {
                 KD
               </Avatar> */}
 
-              <Grid onMouseEnter={() => setIsHovering(true)} onMouseLeave={() => setIsHovering(false)} item xs={4} direction='column' className="flex items-center cursor-pointer transition duration-1000 border-pink-950 relative  hover:border-b-2 pb-2">
+              <Grid
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                item
+                xs={4}
+                direction="column"
+                className="flex items-center cursor-pointer transition duration-1000 border-pink-950 relative  hover:border-b-2 pb-2"
+              >
                 <PermIdentityOutlinedIcon
                   sx={{ width: "30px", height: "30px" }}
-                  className='opacity-60'
+                  className="opacity-60"
                 />
                 <span className="font-normal uppercase lg:text-sm">
-                  Account
+                  {auth.user?.firstName ? auth.user?.firstName : "Account"}
                 </span>
 
-                {
-                  isHovering && 
-                  <div className='p-3 absolute top-15 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000'>
-                    <h1 className='text-2xl font-normal uppercase'>My Account</h1>
-                    <p className='text-xs font-normal'>LOGIN TO ACCESS YOUR ACCOUNT</p>
+                {!auth.user?.firstName
+                  ? isHovering && (
+                      <div className="p-3 absolute top-15 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
+                        <h1 className="text-2xl font-normal uppercase">
+                          My Account
+                        </h1>
+                        <p className="text-xs font-normal">
+                          LOGIN TO ACCESS YOUR ACCOUNT
+                        </p>
 
-                    <div className='py-2 flex items-center justify-around'>
-                      <Button
-                        onClick={handleOpen}
-                        variant="outlined"
-                        type="submit"
-                        sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderColor: '#832729' }, }}
-                        className="flex items-center justify-center rounded-md border-none px-2 py-1"
+                        <div className="py-2 flex items-center justify-around">
+                          <Button
+                            onClick={(e) => handleOpen(e, "login")}
+                            variant="outlined"
+                            type="submit"
+                            sx={{
+                              fontSize: "0.75rem",
+                              color: "#832729",
+                              borderColor: "#832729",
+                              "&:hover": {
+                                boxShadow: "#f9a8d4 0px 5px 20px",
+                                borderColor: "#832729",
+                              },
+                            }}
+                            // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
+                            className="flex items-center justify-center rounded-md border-none px-2 py-1"
+                          >
+                            log in
+                          </Button>
+                          <Button
+                            onClick={(e) => handleOpen(e, "register")}
+                            variant="contained"
+                            type="submit"
+                            sx={{
+                              fontSize: "0.75rem",
+                              bgcolor: "#832729",
+                              "&:hover": { bgcolor: "#500724" },
+                            }}
+                            className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
+                          >
+                            sign up
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  : isHovering && (
+                      <div
+                        className="p-3 absolute top-15 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
+                        style={{ color: "#832729" }}
                       >
-                        log in
-                      </Button>
-                      <Button
-                        onClick={handleOpen}
-                        variant="contained"
-                        type="submit"
-                        sx={{ fontSize: '0.75rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
-                        className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
-                      >
-                        sign up
-                      </Button>
-                    </div>
+                        <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
+                          <h1 className="text-xl font-semibold">
+                            Hi! {auth.user?.firstName},
+                          </h1>
+                          <h1 className="text-xs font-normal lowercase">
+                            {auth.user?.email}
+                          </h1>
+                        </div>
 
-                  </div>
-                }
+                        <div
+                          key="acount-details"
+                          className="py-2 flex flex-col space-y-3"
+                        >
+                          <h1
+                            key="my-acount"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            My Account
+                          </h1>
+                          <h1
+                            onClick={()=> navigate('/account/orders')}
+                            key="order-history"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            Order History
+                          </h1>
+                          <h1
+                            key="contact-us"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            Contact Us
+                          </h1>
+                          <h1
+                            key="log-out"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                            onClick={handleLogout}
+                          >
+                            Log out
+                          </h1>
+                        </div>
+                      </div>
+                    )}
               </Grid>
-
-
 
               {/* Favourite */}
               {/* <div className="flex lg:ml-6">
@@ -537,11 +676,16 @@ export default function Navigation() {
                 </a>
               </div> */}
 
-              <Grid item xs={4} direction='column' className="flex items-center cursor-pointer transition duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2">
-                <Badge badgeContent={0} color='secondary'>
+              <Grid
+                item
+                xs={4}
+                direction="column"
+                className="flex items-center cursor-pointer transition duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2"
+              >
+                <Badge badgeContent={0} color="secondary">
                   <FavoriteBorderIcon
                     sx={{ width: "25px", height: "25px" }}
-                    className='opacity-60'
+                    className="opacity-60"
                   />
                 </Badge>
                 <span className="font-normal uppercase lg:text-sm">
@@ -561,25 +705,29 @@ export default function Navigation() {
                 </a>
               </div> */}
 
-              <Grid onClick={()=>navigate('/account/orders')} item xs={4} direction='column' className="flex items-center cursor-pointer transition-all duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2">
-                <Badge badgeContent={0} color='secondary'>
+              <Grid
+                onClick={() => navigate("/cart")}
+                item
+                xs={4}
+                direction="column"
+                className="flex items-center cursor-pointer transition-all duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2"
+              >
+                <Badge badgeContent={cart.cart?.totalItem} color="error">
                   <AddShoppingCartIcon
                     sx={{ width: "25px", height: "25px" }}
-                    className='opacity-60'
+                    className="opacity-60"
                   />
                 </Badge>
-                <span className="font-normal uppercase lg:text-sm">
-                  Cart
-                </span>
+                <span className="font-normal uppercase lg:text-sm">Cart</span>
               </Grid>
             </Grid>
-
           </div>
-
         </div>
 
-
-        <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Top"
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
+        >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center">
               <button
@@ -594,17 +742,17 @@ export default function Navigation() {
               {/* Flyout menus */}
               <Popover.Group className="hidden z-50 lg:ml-8 lg:block lg:self-stretch">
                 <div className="flex h-full space-x-8">
-                  {navigation.categories.map((category) => (
-                    <Popover key={category.name} className="flex">
+                  {navigation.categories.map((category, index) => (
+                    <Popover key={`${category.name}-${index}`} className="flex">
                       {({ open, close }) => (
                         <>
                           <div className="relative flex">
                             <Popover.Button
                               className={classNames(
                                 open
-                                  ? 'border-pink-700 text-pink-950 border-b-2'
-                                  : ' text-gray-700  hover:text-pink-950 unline-animation',
-                                'z-10 -mb-px flex items-center  px-2 pt-px text-base font-medium transition-colors duration-200 ease-out'
+                                  ? "border-pink-700 text-pink-950 border-b-2"
+                                  : " text-gray-700  hover:text-pink-950 unline-animation",
+                                "z-10 -mb-px flex items-center  px-2 pt-px text-base font-medium transition-colors duration-200 ease-out"
                               )}
                             >
                               {category.name}
@@ -622,12 +770,14 @@ export default function Navigation() {
                           >
                             <Popover.Panel className="absolute inset-x-0 top-full text-sm text-gray-700">
                               {/* Presentational element used to render the bottom shadow, if we put the shadow on the actual panel it pokes out the top, so we use this shorter element to hide the top of the shadow */}
-                              <div className="absolute inset-0 top-1/2 bg-white shadow" aria-hidden="true" />
+                              <div
+                                className="absolute inset-0 top-1/2 bg-white shadow"
+                                aria-hidden="true"
+                              />
 
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-1 gap-x-8 gap-y-10 py-10">
-
                                     {/* <div className="col-start-2 grid grid-cols-2 gap-x-8">
                                       {category.featured.map((item) => (
                                         <div key={item.name} className="group relative text-sm">
@@ -648,8 +798,11 @@ export default function Navigation() {
 
                                     <div className="row-start-1 grid grid-cols-4 gap-x-8 gap-y-10 text-sm">
                                       {category.sections.map((section) => (
-                                        <div key={section.name}>
-                                          <p id={`${section.name}-heading`} className="font-semibold text-lg text-pink-950">
+                                        <div key={section.id}>
+                                          <p
+                                            id={`${section.name}-heading`}
+                                            className="font-semibold text-lg text-pink-950"
+                                          >
                                             {section.name}
                                           </p>
                                           <ul
@@ -657,15 +810,28 @@ export default function Navigation() {
                                             aria-labelledby={`${section.name}-heading`}
                                             className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                           >
-                                            {section.items.map((item) => (
-                                              <li key={item.name} className="flex">
-                                                <p onClick={() => {
-                                                  handleCategoryClick(category, section, item, close)
-                                                }} className="hover:text-gray-900 hover:underline hover:shadow-sm transition duration-300 cursor-pointer">
-                                                  {item.name}
-                                                </p>
-                                              </li>
-                                            ))}
+                                            {section.items.map(
+                                              (item, index) => (
+                                                <li
+                                                  key={item.id}
+                                                  className="flex"
+                                                >
+                                                  <p
+                                                    onClick={() => {
+                                                      handleCategoryClick(
+                                                        category,
+                                                        section,
+                                                        item,
+                                                        close
+                                                      );
+                                                    }}
+                                                    className="hover:text-gray-900 hover:underline hover:shadow-sm transition duration-300 cursor-pointer"
+                                                  >
+                                                    {item.name}
+                                                  </p>
+                                                </li>
+                                              )
+                                            )}
                                           </ul>
                                         </div>
                                       ))}
@@ -692,14 +858,13 @@ export default function Navigation() {
                 </div>
               </Popover.Group>
 
-                
               {/*  */}
             </div>
           </div>
         </nav>
       </header>
 
-      <AuthModel handleClose={handleClose} open={openAuthModel}/>
+      <AuthModel handleClose={handleClose} open={openAuthModel} />
     </div>
-  )
+  );
 }

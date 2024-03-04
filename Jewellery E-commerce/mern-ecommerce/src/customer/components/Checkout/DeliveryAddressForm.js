@@ -2,6 +2,9 @@ import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
 import React from 'react'
 import AddressCard from '../AddressCard/AddressCard'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createOrder } from '../../../state/order/Action';
+import { store } from '../../../state/store';
 
 
 const CssTextField = styled(TextField)({
@@ -27,10 +30,11 @@ const CssTextField = styled(TextField)({
 
 const DeliveryAddressForm = () => {
   const navigate = useNavigate();
-  
+  const dispatch = useDispatch();
+  const {auth} = useSelector(store => store);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(e)
     const data = new FormData(e.currentTarget);
 
     const address = {
@@ -42,13 +46,14 @@ const DeliveryAddressForm = () => {
       zipCode: data.get('zip'),
       mobile: data.get('phoneNumber')
     }
-
-    console.log('address', address);
+    const orderData = {address, navigate}
+    dispatch(createOrder(orderData))
+    console.log('address', orderData);
   }
 
-  const handleDelivery = () => {
-    navigate('/checkout/?step=3');
-  }
+  // const handleDelivery = () => {
+  //   navigate('/checkout/?step=3');
+  // }
 
 
   return (
@@ -60,7 +65,11 @@ const DeliveryAddressForm = () => {
               <div className="p-3 flex flex-col gap-4 cursor-pointer">
                 <h1 className='text-lg font-semibold text-pink-950 uppercase'>Deliver To</h1>
                 <hr />
-                <AddressCard />
+                <div>
+                {auth.user?.address.map((item)=> (
+                  <AddressCard address={item} />
+                ))}
+                </div>
                 
                 {/* <Button
                   variant="contained"
@@ -162,7 +171,7 @@ const DeliveryAddressForm = () => {
                 </Grid>
 
                 <Button
-                  onClick={handleDelivery}
+                  // onClick={handleDelivery}
                   variant="contained"
                   type="submit"
                   sx={{ mt: '2rem', ml: '1.5rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}

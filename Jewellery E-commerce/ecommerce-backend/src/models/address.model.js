@@ -25,10 +25,10 @@ const AddressSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users"
-    },
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "users"
+    // },
     mobile: {
         type: String,
         required: true

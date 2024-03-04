@@ -28,7 +28,7 @@ const createUser = async (userData) => {
 const findUserById = async (userId) => {
     try {
         const user = await User.findById(userId)
-        // .populate('address');
+        .populate('address');
         // const user = await User.findById(userId).select('-__v -password')
 
         if (!user) {
@@ -73,7 +73,7 @@ const getUserProfileByToken = async(token) => {
 
 const getAllUsers = async()=>{
     try {
-        const users = await User.find();
+        const users = await User.find().populate('user');
         return users;
 
     } catch (error) {

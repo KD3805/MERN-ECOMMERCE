@@ -32,6 +32,7 @@ async function findUserCart(userId) {
 
         cart.totalPrice = totalPrice;
         cart.totalItem = totalItem;
+        cart.totalDiscountedPrice = totalDiscountedPrice;
         cart.discount = Math.floor(((totalPrice - totalDiscountedPrice) / totalPrice) * 100);
 
         return cart;
@@ -64,8 +65,9 @@ async function addCartItem(userId, req) {
             cart.cartItems.push(createdCartItem);
             await cart.save();
 
-            return "Item added to cart successfully";
-
+            return createdCartItem;
+        } else {
+            return isPresent;
         }
     } catch (error) {
         throw new Error(error.message);

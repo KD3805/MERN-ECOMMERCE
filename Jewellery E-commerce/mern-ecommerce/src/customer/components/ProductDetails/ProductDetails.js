@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
-import { Box, Button, Fab, Grid, IconButton, LinearProgress, Rating, TextField, Typography } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import {
+  Box,
+  Button,
+  Fab,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Rating,
+  TextField,
+  Typography,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import styled from "@emotion/styled";
-import { styled as selectStyle } from '@mui/material/styles';
+import { styled as selectStyle } from "@mui/material/styles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -15,7 +25,11 @@ import ProductReviewCard from "./ProductReviewCard";
 import ProductRatingBox from "./ProductRatingBox";
 import { best_sellers } from "../Data/best_sellers";
 import HomeSectionCard from "../Section_card/HomeSectionCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { findProductById } from "../../../state/product/Action";
+import { store } from "../../../state/store";
+import { addItemToCart } from "../../../state/cart/Action";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -72,53 +86,51 @@ const product = {
 
 const ratings = [
   {
-    category: 'Excellent',
+    category: "Excellent",
     rayingValue: 70,
-    color: 'success'
+    color: "success",
   },
   {
-    category: 'Very Good',
+    category: "Very Good",
     rayingValue: 50,
-    color: 'warning'
+    color: "warning",
   },
   {
-    category: 'Good',
+    category: "Good",
     rayingValue: 30,
-    color: 'primary'
+    color: "primary",
   },
   {
-    category: 'Average',
+    category: "Average",
     rayingValue: 20,
-    color: 'secondary'
+    color: "secondary",
   },
   {
-    category: 'Poor',
+    category: "Poor",
     rayingValue: 10,
-    color: 'error'
+    color: "error",
   },
-
 ];
 
 const CssTextField = selectStyle(TextField)({
-  '& label.Mui-focused': {
-    color: '#500724',
+  "& label.Mui-focused": {
+    color: "#500724",
   },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: '#500724',
+  "& .MuiInput-underline:after": {
+    borderBottomColor: "#500724",
   },
-  '& .MuiOutlinedInput-root': {
-    '& fieldset': {
-      borderColor: '#500724',
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "#500724",
     },
-    '&:hover fieldset': {
-      borderColor: '#500724',
+    "&:hover fieldset": {
+      borderColor: "#500724",
     },
-    '&.Mui-focused fieldset': {
-      borderColor: '#500724',
+    "&.Mui-focused fieldset": {
+      borderColor: "#500724",
     },
   },
 });
-
 
 const reviews = { href: "#", average: 4, totalCount: 117 };
 
@@ -127,15 +139,26 @@ function classNames(...classes) {
 }
 
 export default function ProductDetails() {
-  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-  const [selectedWeight, setSelectedWeight] = useState(0.0);
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const param = useParams();
+  const dispatch = useDispatch();
+  const { products } = useSelector((store) => store);
+  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
+  const [selectedWeight, setSelectedWeight] = useState(products.product?.sizes[0]?.weight || '');
 
-  const handleAddToCart = () => {
-    navigate('/cart');
-  }
+  useEffect(() => {
+    const data = { productId: param.productId };
+    dispatch(findProductById(data));
+  }, [param.productId]);
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+
+    const data = { productId: param.productId, weight: selectedWeight }
+    dispatch(addItemToCart(data))
+    navigate("/cart");
+  };
 
   const StyledRating = styled(Rating)({
     "& .MuiRating-iconFilled": {
@@ -161,7 +184,7 @@ export default function ProductDetails() {
                     href={breadcrumb.href}
                     className="mr-2 text-sm font-medium text-gray-900"
                   >
-                    {breadcrumb.name}
+                    {ProductDetails.product?.title}
                   </a>
                   <svg
                     width={16}
@@ -177,13 +200,12 @@ export default function ProductDetails() {
               </li>
             ))}
             <li className="text-sm">
-              <a
-                href={product.href}
+              <p
                 aria-current="page"
                 className="font-medium text-gray-500 hover:text-gray-600"
               >
-                {product.name}
-              </a>
+                {products.product?.title}
+              </p>
             </li>
           </ol>
         </nav>
@@ -194,17 +216,15 @@ export default function ProductDetails() {
           <div className="flex flex-col items-center">
             <div className="max-w-[30rem] max-h-[35rem] overflow-hidden rounded-lg">
               <img
-                src={product.images[0].src}
-                alt={product.images[0].alt}
+                src={products.product?.imageUrls[0].imageUrl}
                 className="h-full w-full object-cover object-center"
               />
             </div>
             <div className="flex flex-wrap">
-              {product.images.map((item) => (
+              {products.product?.imageUrls.map((item) => (
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg max-w-[5rem] max-h-[5rem] mt-4 ml-2">
                   <img
-                    src={item.src}
-                    alt={item.alt}
+                    src={item.imageUrl}
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
@@ -216,12 +236,17 @@ export default function ProductDetails() {
           <div className="lg:col-span-1 max-h-auto max-w-2xl px-4 pb-16 sm:px-6 lg:max-w-7xl lg:px-8 lg:pb-24">
             <div className="lg:col-span-2 pb-3 border-b-2 border-pink-950">
               <h1 className="text-lg lg:text-2xl font-semibold text-gray-950">
-                {product.name}
+                {products.product?.title}
               </h1>
               {/* Reviews */}
               <div className="mt-1">
                 <div className="flex items-center space-x-3">
-                  <StyledRating name="rating" value={3.5} readOnly precision={0.1} />
+                  <StyledRating
+                    name="rating"
+                    value={3.5}
+                    readOnly
+                    precision={0.1}
+                  />
                   <Typography variant="subtitle2" component="div">
                     48 reviews
                   </Typography>
@@ -234,14 +259,18 @@ export default function ProductDetails() {
               <h2 className="sr-only">Product information</h2>
 
               <p className="mt-1 text-sm lg:text-sm text-gray-600">
-                {product.description}
+                {products.product?.description}
               </p>
 
               <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
-                <p className="font-semibold lg:text-2xl">₹ 9999</p>
-                <p className="opacity-50 line-through lg:text-base">₹ 11999</p>
+                <p className="font-semibold lg:text-2xl">
+                  ₹ {products.product?.discountedPrice}
+                </p>
+                <p className="opacity-50 line-through lg:text-base">
+                  ₹ {products.product?.price}
+                </p>
                 <p className="font-semibold text-green-600 lg:text-lg">
-                  15% off
+                  {products.product?.discountPercent}% off
                 </p>
               </div>
 
@@ -260,7 +289,7 @@ export default function ProductDetails() {
                     <Box
                       component="form"
                       sx={{
-                        '& .MuiTextField-root': { mt: 1.5, width: '20ch' },
+                        "& .MuiTextField-root": { mt: 1.5, width: "20ch" },
                       }}
                       noValidate
                       autoComplete="off"
@@ -269,15 +298,19 @@ export default function ProductDetails() {
                         id="outlined-select-weight"
                         select
                         label="Wieght"
-                        defaultValue='5.424'
+                        defaultValue={selectedWeight}
                       >
-                        <MenuItem value={5.424}>5.424 g</MenuItem>
-                        <MenuItem value={5.434}>5.434 g</MenuItem>
-                        <MenuItem value={5.444}>5.444 g</MenuItem>
+                        {products.product?.sizes?.map((wt) => (
+                          <MenuItem onClick={() => setSelectedWeight(wt.weight)} value={parseFloat(wt.weight.split("  ")[0])}>
+                            {wt.weight}
+                          </MenuItem>
+                        ))}
+
+                        {/* <MenuItem value={5.434}>5.434 g</MenuItem>
+                        <MenuItem value={5.444}>5.444 g</MenuItem> */}
                       </CssTextField>
                     </Box>
                   </div>
-
 
                   {/* Size */}
                   <div className="flex flex-col gap-2">
@@ -291,7 +324,7 @@ export default function ProductDetails() {
                     <Box
                       component="form"
                       sx={{
-                        '& .MuiTextField-root': { mt: 1.5, width: '20ch' },
+                        "& .MuiTextField-root": { mt: 1.5, width: "20ch" },
                       }}
                       noValidate
                       autoComplete="off"
@@ -300,10 +333,12 @@ export default function ProductDetails() {
                         id="outlined-select-size"
                         select
                         label="Size"
-                        defaultValue='S'
+                        defaultValue="S"
                       >
                         {product.sizes.map((item) => (
-                          <MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>
+                          <MenuItem key={item.name} value={item.name}>
+                            {item.name}
+                          </MenuItem>
                         ))}
                       </CssTextField>
                     </Box>
@@ -398,10 +433,14 @@ export default function ProductDetails() {
               </div> */}
 
                 <Button
-                  onClick={handleAddToCart}
+                  onClick={(e) => handleAddToCart(e)}
                   variant="contained"
                   type="submit"
-                  sx={{ my: '2rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
+                  sx={{
+                    my: "2rem",
+                    bgcolor: "#832729",
+                    "&:hover": { bgcolor: "#500724" },
+                  }}
                   className="flex w-4/12 uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none "
                 >
                   Add to Cart
@@ -418,20 +457,42 @@ export default function ProductDetails() {
 
                 <div className="mt-3">
                   <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                    {product.highlights.map((highlight) => (
-                      <li key={highlight} className="text-gray-400">
-                        <span className="text-gray-600">{highlight}</span>
-                      </li>
-                    ))}
+                    <li>
+                      <span className="text-gray-600">
+                        Color: {products.product?.color}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="text-gray-600">
+                        Brand: {products.product?.brand}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="text-gray-600">
+                        Occasion: {products.product?.occasion}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="text-gray-600">
+                        Product: {products.product?.category.name}
+                      </span>
+                    </li>
+                    <li>
+                      <span className="text-gray-600">
+                        Jewellery type: {products.product?.type} jewellery
+                      </span>
+                    </li>
                   </ul>
                 </div>
               </div>
 
-              <div className="mt-10">
+              <div className="mt-8">
                 <h2 className="text-base font-medium text-gray-900">Details</h2>
 
                 <div className="mt-3 mb-4 space-y-6">
-                  <p className="text-sm text-gray-600">{product.details}</p>
+                  <p className="text-sm text-gray-600">
+                    {products.product?.details}
+                  </p>
                 </div>
               </div>
             </div>
@@ -440,15 +501,18 @@ export default function ProductDetails() {
 
         {/* Rating & Reviews */}
         <section className="mb-20">
-          <h1 className="font-semibold text-lg pb-4">Recent Reviews & Ratings</h1>
+          <h1 className="font-semibold text-lg pb-4">
+            Recent Reviews & Ratings
+          </h1>
 
           <div className="border p-5">
             <Grid container spacing={7}>
-
               {/* Review */}
               <Grid item xs={7}>
                 <div className="space-y-5">
-                  {[1, 1, 1].map((item) => <ProductReviewCard />)}
+                  {[1, 1, 1].map((item) => (
+                    <ProductReviewCard />
+                  ))}
                 </div>
               </Grid>
 
@@ -458,33 +522,43 @@ export default function ProductDetails() {
 
                 <div className="flex items-center space-x-3">
                   <StyledRating value={4.6} precision={0.1} readOnly />
-                  <p className="text-sm text-gray-600">
-                    5643 reviews
-                  </p>
+                  <p className="text-sm text-gray-600">5643 reviews</p>
                 </div>
 
                 <Box className="mt-5 space-y-5">
-                  {
-                    ratings.map((item) => <ProductRatingBox category={item.category} ratingValue={item.rayingValue} color={item.color} />)
-                  }
+                  {ratings.map((item) => (
+                    <ProductRatingBox
+                      category={item.category}
+                      ratingValue={item.rayingValue}
+                      color={item.color}
+                    />
+                  ))}
                 </Box>
               </Grid>
             </Grid>
           </div>
-
         </section>
-
 
         {/* Similar Products */}
         <section className="mb-20">
-          <h2 style={{ letterSpacing: '1px' }} className='text-3xl font-semibold text-pink-950 text-center px-10'>You may also like</h2>
-          <img src="https://www.tanishq.co.in/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw78fb320b/images/home/Line-Design.svg" className='w-full h-20 object-cover' alt="" />
+          <h2
+            style={{ letterSpacing: "1px" }}
+            className="text-3xl font-semibold text-pink-950 text-center px-10"
+          >
+            You may also like
+          </h2>
+          <img
+            src="https://www.tanishq.co.in/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw78fb320b/images/home/Line-Design.svg"
+            className="w-full h-20 object-cover"
+            alt=""
+          />
 
           <div className="flex flex-wrap items-baseline justify-evenly space-y-10">
-            {best_sellers.map((item) => <HomeSectionCard product={item} />)}
+            {best_sellers.map((item) => (
+              <HomeSectionCard product={item} />
+            ))}
           </div>
         </section>
-
       </div>
     </div>
   );

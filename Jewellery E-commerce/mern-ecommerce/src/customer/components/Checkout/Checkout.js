@@ -110,6 +110,15 @@ export default function Checkout() {
     const querySearch = new URLSearchParams(location.search);
     const [activeStep, setActiveStep] = React.useState(querySearch.get("step") || 0);
 
+    const step = querySearch.get('step');
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
 
     return (
         <div className='p-10 lg:px-20 lg:py-10'>
@@ -124,7 +133,7 @@ export default function Checkout() {
             </Stack>
 
             {
-                activeStep == 2 ? <DeliveryAddressForm /> : <OrderSummary />
+                step == 2 ? <DeliveryAddressForm /> : <OrderSummary />
             }
         </div>
     );

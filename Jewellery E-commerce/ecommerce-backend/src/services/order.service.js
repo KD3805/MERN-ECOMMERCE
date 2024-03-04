@@ -2,7 +2,7 @@ const Address = require('../models/address.model.js');
 const Order = require('../models/order.model.js');
 const OrderItem = require('../models/orderItems.model.js');
 const cartService = require('../services/cart.service.js');
-
+ 
 async function createOrder(user, shippAddress) {
     let address;
 
@@ -59,7 +59,7 @@ async function placeOrder(orderId) {
     const order = await findOrderById(orderId);
 
     order.orderStatus = "PLACED";
-    order.paymentDeatils.status = "COMPLETED";
+    order.user.paymentDeatils.status = "COMPLETED";
 
     return await order.save();
 }
@@ -107,7 +107,7 @@ async function findOrderById(orderId) {
 
 async function usersOrderHistory(userId) {
     try {
-        const orders = await Order.find({user: userId, orderStatus: "PLACED"})
+        const orders = await Order.find({user: userId})
         .populate({path: "orderItems", populate: {path: "product"}}).lean();
 
         return orders;

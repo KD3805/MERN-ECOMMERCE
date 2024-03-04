@@ -1,6 +1,8 @@
 import React from 'react'
 import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../state/auth/Action';
 
 
 const CssTextField = styled(TextField)({
@@ -26,6 +28,7 @@ const CssTextField = styled(TextField)({
 
 const LoginForm = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,13 +36,15 @@ const LoginForm = () => {
         const data = new FormData(e.currentTarget);
 
         const userData = {
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
             email: data.get('email'),
             password: data.get('password'),
         }
 
-        console.log('userData', userData);
+        // Redirect to dashboard if the login is successful
+        dispatch(login(userData))
+        .catch((err) => alert("Wrong username or password, err:", err));
+
+        navigate('/');
     }
 
     return (

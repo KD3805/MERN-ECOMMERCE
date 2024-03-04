@@ -1,5 +1,5 @@
-import React from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -14,22 +14,20 @@ import { best_sellers } from "../Data/best_sellers";
 import ProductCard from "./productCard";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { findProducts } from '../../../state/product/Action';
+import { store } from '../../../state/store';
+import { Pagination } from '@mui/material';
+import Loading from '../../../Loading';
+
 
 const sortOptions = [
   // { name: 'Most Popular', href: '#', current: true },
   // { name: 'Best Rating', href: '#', current: false },
   // { name: 'Newest', href: '#', current: false },
-  { name: "Price: Low to High", href: "#", current: false },
-  { name: "Price: High to Low", href: "#", current: false },
+  { name: "Price: Low to High", value: "low_to_high", current: false },
+  { name: "Price: High to Low", value: "high_to_low", current: false },
 ];
-
-// const subCategories = [
-//   { name: 'Totes', href: '#' },
-//   { name: 'Backpacks', href: '#' },
-//   { name: 'Travel Bags', href: '#' },
-//   { name: 'Hip Bags', href: '#' },
-//   { name: 'Laptop Sleeves', href: '#' },
-// ];
 
 const rangeFilters = [
   {
@@ -50,9 +48,9 @@ const filters = [
       { value: "bangle", label: "Bangles", checked: false },
       { value: "bracelet", label: "Bracelets", checked: false },
       { value: "earring", label: "Earrings", checked: false },
-      { value: "earring", label: "Pendants", checked: false },
+      { value: "pendant", label: "Pendants", checked: false },
       { value: "mangal-sutra", label: "Mangal sutra", checked: false },
-      { value: "chains", label: "Chains", checked: false },
+      { value: "chain", label: "Chains", checked: false },
       { value: "necklace", label: "Necklaces", checked: false },
       { value: "ring", label: "Rings", checked: false },
     ],
@@ -101,40 +99,6 @@ const filters = [
       },
     ],
   },
-  {
-    id: "metal",
-    name: "Metal",
-    options: [
-      { value: "gold", label: "Gold", checked: false },
-      { value: "silver", label: "Silver", checked: false },
-      { value: "platinum", label: "Platinum", checked: false },
-    ],
-  },
-  // {
-  //   id: 'category',
-  //   name: 'Category',
-  //   options: [
-  //     { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-  //     { value: 'sale', label: 'Sale', checked: false },
-  //     { value: 'travel', label: 'Travel', checked: true },
-  //     { value: 'organization', label: 'Organization', checked: false },
-  //     { value: 'accessories', label: 'Accessories', checked: false },
-  //   ],
-  // },
-  // {
-  //   id: 'price',
-  //   name: 'Price',
-  //   options: [
-  //     { value: '5999-9999', label: 'White', checked: false },
-  //     { value: '9999-19999', label: 'Beige', checked: false },
-  //     { value: '19999-29999', label: 'Blue', checked: true },
-  //     { value: '29999-39999', label: 'Brown', checked: false },
-  //     { value: '39999-49999', label: 'Green', checked: false },
-  //     { value: '49999-59999', label: 'Purple', checked: false },
-  //     { value: '59999-69999', label: 'Purple', checked: false },
-  //     { value: '69999-59999', label: 'Purple', checked: false },
-  //   ],
-  // },
 ];
 
 function classNames(...classes) {
@@ -143,22 +107,95 @@ function classNames(...classes) {
 
 export default function Product() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [priceVal, setPriceVal] = useState([2000, 60000]);
-  const [discountVal, setDiscountVal] = useState([5, 50]);
+  const [priceVal, setPriceVal] = useState([1000, 60000]);
+  const [discountVal, setDiscountVal] = useState([10, 50]);
   const location = useLocation();
+  const param = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { products } = useSelector(store => store);
 
+  const decodedQueryString = decodeURIComponent(location.search);
+  const searchParams = new URLSearchParams(decodedQueryString);
+  const colorValue = searchParams.get("color");
+  const priceValue = searchParams.get("price");
+  const discountValue = searchParams.get("discount");
+  const sortValue = searchParams.get("sort");
+  const pageNumberValue = searchParams.get("page");
+  // const stockValue = searchParams.get("stock");
+  const typeValue = searchParams.get("type");
+  const occasionValue = searchParams.get("occasion");
+
+  useEffect(() => {
+    const [minPrice, maxPrice] = priceValue === null ? [100, 1000000] : priceValue.split(",").map(Number);
+    const [minDiscount, maxDiscount] = discountValue === null ? [0, 100] : discountValue.split(",").map(Number);
+
+    try {
+      // check for jewellery type for all-jewellery category
+
+      const jewelryType = ['gold', 'diamond', 'silver', 'gemstone', 'platinum'];
+
+      const typeParam = jewelryType.includes(param.levelThree) ? param.levelThree : param.levelOne;
+
+      if (jewelryType.includes(typeParam)) {
+        searchParams.set("type", typeParam);
+
+        if (jewelryType.includes(param.levelThree)) {
+          navigate(`/${param.levelOne}/${param.levelThree}/jewellery?${searchParams}`);
+        } else {
+          navigate(`/${param.levelOne}/${param.levelTwo}/${param.levelThree}?${searchParams}`);
+        }
+      }
+
+      // check for jewellery occasion for all-jewellery category
+
+      const occasionTypes = ['bridal', 'casual', 'engagement', 'modern', 'office', 'traditional-ethenic'];
+
+      if (occasionTypes.includes(param.levelThree)) {
+        searchParams.set("occasion", param.levelThree);
+        navigate(`/${param.levelOne}/${param.levelThree}/jewellery?${searchParams}`);
+      }
+
+      const data = {
+        category: param.levelThree,
+        color: colorValue || [],
+        minPrice,
+        maxPrice,
+        minDiscount,
+        maxDiscount,
+        sort: sortValue || "low_to_high",
+        pageNumber: parseInt(pageNumberValue) || 1,
+        pageSize: 12,
+        occasion: occasionValue || [],
+        type: typeValue || [],
+      }
+      dispatch(findProducts(data));
+
+    } catch (error) {
+      console.error('Error in useEffect:', error);
+    }
+
+  }, [
+    param.levelThree,
+    colorValue,
+    priceValue,
+    discountValue,
+    sortValue,
+    pageNumberValue,
+    occasionValue,
+    typeValue
+  ])
 
   // Handle multiple filters on cards
-  const handleFilters = (value, sectionId)  => {
+  const handleFilters = (value, sectionId) => {
     const searchParams = new URLSearchParams(location.search);
 
     let filterValue = searchParams.getAll(sectionId);
 
-    if(filterValue.length>0 && filterValue[0].split(',').includes(value)) {
-      filterValue = filterValue[0].split(',').filter((item)=> item !== value);
+    if (filterValue.length > 0 && filterValue[0].split(',').includes(value)) {
+      filterValue = filterValue[0].split(',').filter((item) => item !== value);
 
-      if(filterValue.length===0) {
+      if (filterValue.length === 0) {
         searchParams.delete(sectionId)
       }
     }
@@ -166,12 +203,12 @@ export default function Product() {
       filterValue.push(value)
     }
 
-    if(filterValue.length>0) {
+    if (filterValue.length > 0) {
       searchParams.set(sectionId, filterValue.join(','));
     }
 
     const query = searchParams.toString();
-    navigate({search:`?${query}`});
+    navigate({ search: `?${query}` });
   }
 
 
@@ -181,7 +218,7 @@ export default function Product() {
 
     searchParams.set(sectionId, priceVal);
     const query = searchParams.toString();
-    navigate({search:`?${query}`});
+    navigate({ search: `?${query}` });
   }
 
   // Handle DISCOUNT range filters on cards
@@ -190,7 +227,24 @@ export default function Product() {
 
     searchParams.set(sectionId, discountVal);
     const query = searchParams.toString();
-    navigate({search:`?${query}`});
+    navigate({ search: `?${query}` });
+  }
+
+  // Handle SORT selection filters on cards
+  const handleSortFilter = (sortVal) => {
+    const searchParams = new URLSearchParams(location.search);
+    console.log('filter method', sortVal)
+    searchParams.set('sort', sortVal);
+    const query = searchParams.toString();
+    navigate({ search: `?${query}` });
+  }
+
+  // Handle pagination
+  const handlePaginationChange = (event, value) => {
+    const searchParams = new URLSearchParams(location.search)
+    searchParams.set("page", value)
+    const query = searchParams.toString()
+    navigate({ search: `?${query}` })
   }
 
   return (
@@ -256,10 +310,10 @@ export default function Product() {
                       ))} */}
                     </ul>
 
-                    {filters.map((section) => (
+                    {filters.map((section, index) => (
                       <Disclosure
                         as="div"
-                        key={section.id}
+                        key={`${section.id}-${index}`}
                         className="border-t border-gray-200 px-4 py-6"
                       >
                         {({ open }) => (
@@ -288,7 +342,7 @@ export default function Product() {
                               <div className="space-y-6">
                                 {section.options.map((option, optionIdx) => (
                                   <div
-                                    key={option.value}
+                                    key={`${option.value}-${optionIdx}`}
                                     className="flex items-center"
                                   >
                                     <input
@@ -350,20 +404,22 @@ export default function Product() {
                   <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                       {sortOptions.map((option) => (
-                        <Menu.Item key={option.name}>
+                        <Menu.Item key={option.value}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
+                            <p
+                              onClick={() => {
+                                handleSortFilter(option.value);
+                              }}
                               className={classNames(
                                 option.current
                                   ? "font-medium text-gray-900"
                                   : "text-gray-500",
                                 active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm"
+                                "block px-4 py-2 text-sm cursor-pointer"
                               )}
                             >
                               {option.name}
-                            </a>
+                            </p>
                           )}
                         </Menu.Item>
                       ))}
@@ -442,11 +498,11 @@ export default function Product() {
                       <Disclosure.Panel className="pt-6">
                         <div className="space-y-4">
                           <RangeSlider
-                            onThumbDragEnd={(e)=>handlePriceRangeFilter('price')}
+                            onThumbDragEnd={(e) => handlePriceRangeFilter('price')}
                             value={priceVal}
                             onInput={setPriceVal}
-                            min={1000}
-                            max={120000}
+                            min={100}
+                            max={1000000}
                             step={5}
                             id="range-slider-price"
                           />
@@ -502,10 +558,10 @@ export default function Product() {
                       <Disclosure.Panel className="pt-6">
                         <div className="space-y-4">
                           <RangeSlider
-                            onThumbDragEnd={(e)=>handleDiscountRangeFilter('discount')}
+                            onThumbDragEnd={(e) => handleDiscountRangeFilter('discount')}
                             value={discountVal}
                             onInput={setDiscountVal}
-                            min={10}
+                            min={0}
                             max={90}
                             step={1}
                             id="range-slider-discount"
@@ -568,7 +624,7 @@ export default function Product() {
                                 className="flex items-center"
                               >
                                 <input
-                                  onChange={()=>handleFilters(option.value, section.id)}
+                                  onChange={() => handleFilters(option.value, section.id)}
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   defaultValue={option.value}
@@ -595,13 +651,35 @@ export default function Product() {
               {/* Product grid */}
               <div className="lg:col-span-4 w-full">
                 <div className="flex flex-wrap justify-center bg-white py-3">
-                  {best_sellers.map((item) => (
-                    <ProductCard product={item} />
-                  ))}
+                  {products.products?.content ? (
+                    products.products.content.length === 0 ? (
+                      <div className='flex items-center justify-center h-[50vh]'>
+                        <div className='flex flex-col space-y-5'>
+                          <img src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1709462235/no-found_mnvvpf.svg" alt="" />
+                          <h1 className='text-3xl font-semibold text-pink-950'>No products found</h1>
+                        </div>
+                      </div>
+                    ) : (
+                      products.products.content.map((product) => (
+                        <ProductCard product={product} key={product._id} />
+                      ))
+                    )
+                  ) : (
+                    <Loading />
+                  )}
                 </div>
               </div>
+
             </div>
           </section>
+
+          {/* Pagination */}
+          <section className='w-full px-[3.6rem]'>
+            <div className='px-4 py-5 flex justify-center'>
+              <Pagination count={products.products?.totalPages} color='error' onChange={handlePaginationChange} />
+            </div>
+          </section>
+
         </main>
       </div>
     </div>

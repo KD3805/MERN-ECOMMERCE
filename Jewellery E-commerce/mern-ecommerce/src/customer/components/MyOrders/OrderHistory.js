@@ -1,8 +1,12 @@
 import { Disclosure } from "@headlessui/react";
 import { Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import OrderCard from "./OrderCard";
+import { useDispatch, useSelector } from "react-redux";
+import { store } from "../../../state/store";
+import { getOrderHistory } from "../../../state/order/Action";
+import { format } from 'date-fns';
 
 const orderStatus = [
     {
@@ -20,6 +24,12 @@ const orderStatus = [
 const OrderHistory = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { auth, order } = useSelector(store => store);
+
+    useEffect(() => {
+        dispatch(getOrderHistory(auth));
+    }, [])
 
     // Handle multiple filters on cards
     const handleFilters = (value, sectionId) => {
@@ -94,8 +104,19 @@ const OrderHistory = () => {
                 </Grid>
 
                 <Grid item xs={9}>
-                    <div className="space-y-5">
-                        {[1,1,1,1,1].map((item)=><OrderCard />)}
+                    <div>
+                        {order.orders?.map((order) => {
+                            const formattedDate = format(order.orderDate, 'MMMM, dd');
+
+                            return (
+                                <div className="space-y-5 mb-5">
+                                    <h1 className="text-2xl my-3 font-semibold text-pink-950">{formattedDate}</h1>
+                                    {
+                                        order.orderItems?.map((item, index) => <OrderCard item={item} orderDate={formattedDate} orderId={order?._id} index={index} orderStatus={order.orderStatus}/>)
+                                    }
+                                </div>
+                            )
+                        })}
                     </div>
                 </Grid>
 

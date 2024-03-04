@@ -1,10 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AddressCard from '../AddressCard/AddressCard'
 import Cart from '../Cart/Cart'
 import CartItem from '../Cart/CartItem'
 import { Button } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation } from 'react-router-dom'
+import { getOrderById } from '../../../state/order/Action'
+import { store } from '../../../state/store'
+import { createPayment } from '../../../state/payment/Action'
 
 const OrderSummary = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const { order } = useSelector(store => store);
+  const searchParams = new URLSearchParams(location.search);
+  const orderId = searchParams.get("order_id");
+
+  useEffect(() => {
+    dispatch(getOrderById(orderId));
+  }, [orderId])
+
+  const handlePayment = () => {
+    dispatch(createPayment(orderId));
+  }
+
+  // const {firstName, lastName, streetAddress, city, state, zipCode, mobile} = order.order?.shippingAddress;
+
   return (
     <div className='my-10'>
       <div className='p-5 shadow-lg rounded-s-md h-screen overflow-y-scroll' id='order-summary'>
@@ -12,9 +33,9 @@ const OrderSummary = () => {
         {/* <AddressCard /> */}
         <div className='flex flex-wrap items-center justify-between p-3 rounded-lg' style={{ border: '1px solid #500724' }}>
           <div className='space-y-2'>
-            <h1 className='text-lg font-semibold'>Jethalal Gada</h1>
-            <p className='text-sm text-gray-500 font-normal'>Gokuldham society, powder gali, Mumbai, 400001</p>
-            <p className='text-sm text-gray-500 font-normal'>Phone : 9876543210</p>
+            <h1 className='text-lg font-semibold'>{order.order?.shippingAddress.firstName+" "+order.order?.shippingAddress.lastName}</h1>
+            <p className='text-sm text-gray-500 font-normal'>{order.order?.shippingAddress.streetAddress}, {order.order?.shippingAddress.city}, {order.order?.shippingAddress.zipCode}</p>
+            <p className='text-sm text-gray-500 font-normal'>Phone : {order.order?.shippingAddress.mobile}</p>
           </div>
 
           <Button
@@ -34,49 +55,31 @@ const OrderSummary = () => {
           <div className='lg:grid grid-cols-3 relative'>
 
             <div className='col-span-2'>
-              {/* Product 1 */}
-              <div className='p-2 my-12 shadow-md rounded-md'>
-                <div className='flex items-center'>
-                  <div className='w-[10rem] h-[10rem] shadow-sm rounded-lg'>
-                    <img src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1707742451/1_koyxla.jpg" className='w-full h-full object-cover' alt="" />
-                  </div>
-                  <div className='ml-5 space-y-1'>
-                    <p className='font-semibold text-xl'>Classy Diamond Flower Earrings</p>
-                    <p className='text-xs py-1 text-gray-400 font-medium'>Weight : 2.047 g | Size : 16.40 MM</p>
-                    <p className='text-xs  text-gray-400 font-medium'>Seller: Gayatri</p>
-
-                    <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
-                      <p className="font-semibold lg:text-xl">₹ 9999</p>
-                      <p className="opacity-50 line-through lg:text-base">₹ 11999</p>
-                      <p className="font-semibold text-green-600 lg:text-sm">
-                        15% off
+              {order.order?.orderItems.map((item) => (
+                <div className='p-2 my-12 shadow-md rounded-md'>
+                  <div className='flex items-center'>
+                    <div className='w-[10rem] h-[10rem] shadow-sm rounded-lg'>
+                      <img src={item.product?.imageUrls[0]?.imageUrl} className='w-full h-full object-cover' alt="" />
+                    </div>
+                    <div className='ml-5 space-y-1'>
+                      <p className='font-semibold text-xl'>{item.product?.title}</p>
+                      <p className='text-xs py-1 text-gray-400 font-medium'>Weight : {item.weight} 
+                      {/* | Size : 16.40 MM */}
                       </p>
+                      <p className='text-xs  text-gray-400 font-medium'>Seller: {item.product?.brand}</p>
+
+                      <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
+                        <p className="font-semibold lg:text-xl">₹ {item.product?.discountedPrice}</p>
+                        <p className="opacity-50 line-through lg:text-base">₹ {item.product?.price}</p>
+                        <p className="font-semibold text-green-600 lg:text-sm">
+                        {item.product?.discountPercent}% off
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
 
-              {/* Product 2 */}
-              <div className='p-2 my-12 shadow-md rounded-md'>
-                <div className='flex items-center'>
-                  <div className='w-[10rem] h-[10rem] shadow-sm rounded-lg'>
-                    <img src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1707742452/7_rr1ans.jpg" className='w-full h-full object-cover' alt="" />
-                  </div>
-                  <div className='ml-5 space-y-1'>
-                    <p className='font-semibold text-xl'>Classy Diamond Flower Earrings</p>
-                    <p className='text-xs py-1 text-gray-400 font-medium'>Weight : 2.047 g | Size : 16.40 MM</p>
-                    <p className='text-xs  text-gray-400 font-medium'>Seller: Gayatri</p>
-
-                    <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
-                      <p className="font-semibold lg:text-xl">₹ 9999</p>
-                      <p className="opacity-50 line-through lg:text-base">₹ 11999</p>
-                      <p className="font-semibold text-green-600 lg:text-sm">
-                        15% off
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             <div className='pl-10 sticky top-0 h-[100vh] mt-5 lg:mt-0'>
@@ -91,12 +94,12 @@ const OrderSummary = () => {
                 <div className='space-y-3 font-semibold'>
                   <div className='flex justify-between pt-3 text-black'>
                     <span>Sub Total</span>
-                    <span>₹ 25222</span>
+                    <span>₹ {order.order?.totalPrice}</span>
                   </div>
 
                   <div className='flex justify-between pt-3'>
                     <span>Discount</span>
-                    <span className='text-green-600'>- ₹ 1261</span>
+                    <span className='text-green-600'>- {order.order?.discount} %</span>
                   </div>
 
                   <div className='flex justify-between pt-3'>
@@ -109,11 +112,12 @@ const OrderSummary = () => {
                     style={{ color: "#832729" }}
                   >
                     <span>TOTAL (Incl of all Taxes.)</span>
-                    <span>₹ 23961</span>
+                    <span>₹ {order.order?.totalDiscountedPrice}</span>
                   </div>
                 </div>
 
                 <Button
+                  onClick={handlePayment}
                   variant="contained"
                   type="submit"
                   sx={{ my: '2rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
