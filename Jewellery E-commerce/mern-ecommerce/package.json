@@ -15,7 +15,10 @@
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
+    "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
+    "framer-motion": "^11.0.12",
+    "immer": "^10.0.4",
     "jquery": "^3.7.1",
     "material-ui-search-bar": "^1.0.0-beta.14",
     "postcss": "^8.4.33",
@@ -31,6 +34,7 @@
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
     "sweetalert2": "^11.10.5",
+    "tailwind-merge": "^2.2.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

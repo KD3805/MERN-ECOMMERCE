@@ -12,7 +12,11 @@ async function createRating(reqData, user) {
         createdAt: new Date(),
     })
 
-    return await rating.save();
+    const createdRating = await rating.save();
+    product.ratings.push(createdRating._id);
+    await product.save();
+
+    return createdRating;
 }
 
 async function getProductRating(productId) {

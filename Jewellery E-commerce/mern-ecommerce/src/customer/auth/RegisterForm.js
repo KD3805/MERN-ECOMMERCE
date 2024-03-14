@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, register } from '../../state/auth/Action';
 import { store } from '../../state/store';
+import { ModalContext } from '../../context/modal/modalContext';
 
 
 const CssTextField = styled(TextField)({
@@ -32,6 +33,8 @@ const RegisterForm = () => {
     const dispatch = useDispatch();
     const jwt = localStorage.getItem("jwt");
     const { auth } = useSelector(store => store)
+    const modal = useContext(ModalContext)
+
 
     useEffect(() => {
         if(jwt) {
@@ -43,17 +46,18 @@ const RegisterForm = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-
+    
         const userData = {
             firstName: data.get('firstName'),
             lastName: data.get('lastName'),
             email: data.get('email'),
             password: data.get('password'),
+            navigate
         }
-
-        dispatch(register(userData));
-        navigate('/')
+    
+        dispatch(register(userData, modal));
     }
+    
 
     return (
         <div>

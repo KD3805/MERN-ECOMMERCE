@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { RadioGroup } from "@headlessui/react";
@@ -30,6 +30,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { findProductById } from "../../../state/product/Action";
 import { store } from "../../../state/store";
 import { addItemToCart } from "../../../state/cart/Action";
+import HomeSectionCarousel from "../HomeSectionCarousel/HomeSectionCarousel";
+import { RRContext } from "../../../context/rrBox/rrContext";
+import RatingReviewForm from "../MyOrders/RatingReviewForm";
 
 const product = {
   name: "Basic Tee 6-Pack",
@@ -144,8 +147,25 @@ export default function ProductDetails() {
   const param = useParams();
   const dispatch = useDispatch();
   const { products } = useSelector((store) => store);
-  const [selectedSize, setSelectedSize] = useState(product.sizes[2]);
-  const [selectedWeight, setSelectedWeight] = useState(products.product?.sizes[0]?.weight || '');
+  const modal = useContext(RRContext);
+
+  const [selectedSize, setSelectedSize] = useState(
+    products.product?.sizes[0]?.size || ""
+  );
+  const [selectedWeight, setSelectedWeight] = useState(
+    products.product?.sizes[0]?.weight || ""
+  );
+
+
+  const handleOpenModal = () => {
+    navigate(`/product/${param.productId}/ratrev`)
+    modal.openModal();
+  };
+
+  const handleCloseModal = () => {
+    modal.closeModal();
+  };
+
 
   useEffect(() => {
     const data = { productId: param.productId };
@@ -155,8 +175,8 @@ export default function ProductDetails() {
   const handleAddToCart = (e) => {
     e.preventDefault();
 
-    const data = { productId: param.productId, weight: selectedWeight }
-    dispatch(addItemToCart(data))
+    const data = { productId: param.productId, weight: selectedWeight };
+    dispatch(addItemToCart(data));
     navigate("/cart");
   };
 
@@ -241,12 +261,7 @@ export default function ProductDetails() {
               {/* Reviews */}
               <div className="mt-1">
                 <div className="flex items-center space-x-3">
-                  <StyledRating
-                    name="rating"
-                    value={3.5}
-                    readOnly
-                    precision={0.1}
-                  />
+                  <StyledRating name="rating" value={3.5} readOnly />
                   <Typography variant="subtitle2" component="div">
                     48 reviews
                   </Typography>
@@ -269,7 +284,7 @@ export default function ProductDetails() {
                 <p className="opacity-50 line-through lg:text-base">
                   ₹ {products.product?.price}
                 </p>
-                <p className="font-semibold text-green-600 lg:text-lg">
+                <p className="lg:text-lg sm:text-base  text-red-500 font-bold">
                   {products.product?.discountPercent}% off
                 </p>
               </div>
@@ -301,7 +316,10 @@ export default function ProductDetails() {
                         defaultValue={selectedWeight}
                       >
                         {products.product?.sizes?.map((wt) => (
-                          <MenuItem onClick={() => setSelectedWeight(wt.weight)} value={parseFloat(wt.weight.split("  ")[0])}>
+                          <MenuItem
+                            onClick={() => setSelectedWeight(wt.weight)}
+                            value={parseFloat(wt.weight.split(" ")[0])}
+                          >
                             {wt.weight}
                           </MenuItem>
                         ))}
@@ -313,36 +331,41 @@ export default function ProductDetails() {
                   </div>
 
                   {/* Size */}
-                  <div className="flex flex-col gap-2">
-                    <Typography
-                      id="size-label"
-                      sx={{ fontWeight: 600 }}
-                      variant="body2"
-                    >
-                      Gross Size
-                    </Typography>
-                    <Box
-                      component="form"
-                      sx={{
-                        "& .MuiTextField-root": { mt: 1.5, width: "20ch" },
-                      }}
-                      noValidate
-                      autoComplete="off"
-                    >
-                      <CssTextField
-                        id="outlined-select-size"
-                        select
-                        label="Size"
-                        defaultValue="S"
+                  {products.product?.sizes[0]?.size && (
+                    <div className="flex flex-col gap-2">
+                      <Typography
+                        id="size-label"
+                        sx={{ fontWeight: 600 }}
+                        variant="body2"
                       >
-                        {product.sizes.map((item) => (
-                          <MenuItem key={item.name} value={item.name}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </CssTextField>
-                    </Box>
-                  </div>
+                        Gross Size
+                      </Typography>
+                      <Box
+                        component="form"
+                        sx={{
+                          "& .MuiTextField-root": { mt: 1.5, width: "20ch" },
+                        }}
+                        noValidate
+                        autoComplete="off"
+                      >
+                        <CssTextField
+                          id="outlined-select-size"
+                          select
+                          label="Size"
+                          defaultValue={selectedSize}
+                        >
+                          {products.product?.sizes?.map((s) => (
+                            <MenuItem
+                              onClick={() => setSelectedWeight(s.size)}
+                              value={parseFloat(s.size.split(" ")[0])}
+                            >
+                              {s.size}
+                            </MenuItem>
+                          ))}
+                        </CssTextField>
+                      </Box>
+                    </div>
+                  )}
 
                   {/*  Quantity */}
                   {/* <div className="flex flex-col items-center justify-center gap-1">
@@ -458,28 +481,48 @@ export default function ProductDetails() {
                 <div className="mt-3">
                   <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
                     <li>
+                      <span className="text-gray-800 font-semibold">
+                        Color:
+                      </span>
                       <span className="text-gray-600">
-                        Color: {products.product?.color}
+                        {" "}
+                        {products.product?.color}
                       </span>
                     </li>
                     <li>
+                      <span className="text-gray-800 font-semibold">
+                        Brand:
+                      </span>
                       <span className="text-gray-600">
-                        Brand: {products.product?.brand}
+                        {" "}
+                        {products.product?.brand}
                       </span>
                     </li>
                     <li>
+                      <span className="text-gray-800 font-semibold">
+                        Occasion:
+                      </span>
                       <span className="text-gray-600">
-                        Occasion: {products.product?.occasion}
+                        {" "}
+                        {products.product?.occasion}
                       </span>
                     </li>
                     <li>
+                      <span className="text-gray-800 font-semibold">
+                        Product:
+                      </span>
                       <span className="text-gray-600">
-                        Product: {products.product?.category.name}
+                        {" "}
+                        {products.product?.category.name}
                       </span>
                     </li>
                     <li>
+                      <span className="text-gray-800 font-semibold">
+                        Jewellery type:
+                      </span>
                       <span className="text-gray-600">
-                        Jewellery type: {products.product?.type} jewellery
+                        {" "}
+                        {products.product?.type} jewellery
                       </span>
                     </li>
                   </ul>
@@ -501,23 +544,51 @@ export default function ProductDetails() {
 
         {/* Rating & Reviews */}
         <section className="mb-20">
-          <h1 className="font-semibold text-lg pb-4">
+          <h1 className="font-semibold sm:pl-10 text-2xl font-sans pb-4">
             Recent Reviews & Ratings
           </h1>
 
-          <div className="border p-5">
+          <div className="p-5">
             <Grid container spacing={7}>
               {/* Review */}
-              <Grid item xs={7}>
+              <Grid item xs={12} lg={7}>
                 <div className="space-y-5">
-                  {[1, 1, 1].map((item) => (
-                    <ProductReviewCard />
-                  ))}
+                  {products.product?.reviews.length !== 0 ? (
+                    products.product?.reviews?.map((item, index) => (
+                      <ProductReviewCard
+                        reviewData={item}
+                        ratingData={products.product?.ratings?.[index]}
+                        key={index}
+                      />
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-center h-[15rem]">
+                      <div className="flex flex-col items-center justify-center space-y-4">
+                        <StyledRating value={5} precision={0.1} readOnly />
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleOpenModal();
+                          }}
+                          variant="contained"
+                          type="button"
+                          sx={{
+                            fontSize: '0.75rem',
+                            bgcolor: "#832729",
+                            "&:hover": { bgcolor: "#500724" },
+                          }}
+                          className="flex uppercase items-center justify-center rounded-md border-none px-8 py-2 font-medium text-white focus:outline-none "
+                        >
+                          Be the first to write a review
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </Grid>
 
               {/* Rating */}
-              <Grid item xs={5}>
+              <Grid item xs={12} lg={5}>
                 <h1 className="text-xl font-semibold pb-1">Product Rating</h1>
 
                 <div className="flex items-center space-x-3">
@@ -541,7 +612,7 @@ export default function ProductDetails() {
 
         {/* Similar Products */}
         <section className="mb-20">
-          <h2
+          {/* <h2
             style={{ letterSpacing: "1px" }}
             className="text-3xl font-semibold text-pink-950 text-center px-10"
           >
@@ -551,15 +622,24 @@ export default function ProductDetails() {
             src="https://www.tanishq.co.in/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw78fb320b/images/home/Line-Design.svg"
             className="w-full h-20 object-cover"
             alt=""
-          />
+          /> */}
 
-          <div className="flex flex-wrap items-baseline justify-evenly space-y-10">
-            {best_sellers.map((item) => (
-              <HomeSectionCard product={item} />
-            ))}
-          </div>
+          {/* <div className="flex flex-wrap items-baseline justify-evenly space-y-10">
+            
+          </div> */}
+
+          <h1 className="font-semibold text-2xl font-sans sm:pl-10">
+            You May Also Like
+          </h1>
+
+          <HomeSectionCarousel
+            sectionLabel={"similar"}
+            sectionCategory={products.product?.category.name}
+          />
         </section>
       </div>
+
+      <RatingReviewForm open={modal.state} handleClose={handleCloseModal} />
     </div>
   );
 }

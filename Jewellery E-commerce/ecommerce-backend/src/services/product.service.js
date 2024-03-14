@@ -1,7 +1,6 @@
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
-
 async function createProduct(reqData) {
 
     let topLevel = await Category.findOne({ name: reqData.topLevelCategory });
@@ -84,7 +83,14 @@ async function updateProduct(productId, reqData) {
 
 async function findProductById(id) {
     try {
-        const product = await Product.findById(id).populate("category").exec();
+        const product = await Product.findById(id)
+            .populate("category")
+            .populate({ path: "category", populate: { path: "parentCategory" } })
+            .populate({ path: "category", populate: { path: "parentCategory", populate: { path: "name" } } })
+            .populate("reviews")
+            .populate("ratings")
+            .populate({ path: 'reviews', populate: { path: 'user' } })
+            .exec();
 
         if (!product) {
             throw new Error("Product not found with id: " + id);
@@ -118,21 +124,22 @@ async function getAllProducts(reqQuery) {
     pageNumber = parseInt(pageNumber);
 
     let query = Product.find()
-    .populate("category")
-    .populate({path: "category", populate: {path: "parentCategory"}});  // populate the reference to Category model
+        .populate("category")
+        .populate({ path: "category", populate: { path: "parentCategory" } })
+    // populate the reference to Category model
 
 
     // -------------------- Filter by Category ---------------
-    
+
     if (category !== 'jewellery') {
         const existCategories = await Category.find({ name: category })
-        
+
         const categoryIds = existCategories.map(cat => cat._id);
         console.log(categoryIds)
 
         if (existCategories.length > 0) {
             query = query.where("category").in(categoryIds);
-        } 
+        }
         else {
             console.log("No such category!", category);
             return { content: [], currentPage: 1, totalPages: 0 }

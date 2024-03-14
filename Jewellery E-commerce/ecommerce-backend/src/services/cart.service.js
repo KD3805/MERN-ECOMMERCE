@@ -12,6 +12,25 @@ async function createCart(user) {
     }
 }
 
+async function calculateTotals(cart) {
+    let totalPrice = 0;
+    let totalDiscountedPrice = 0;
+    let totalItem = 0;
+
+    for (let cartItem of cart.cartItems) {
+        totalPrice += cartItem.price;
+        totalDiscountedPrice += cartItem.discountedPrice;
+        totalItem += cartItem.quantity;
+    }
+
+    return {
+        totalPrice,
+        totalItem,
+        totalDiscountedPrice,
+        discount: Math.floor(((totalPrice - totalDiscountedPrice) / totalPrice) * 100),
+    };
+}
+
 async function findUserCart(userId) {
     try {
         let cart = await Cart.findOne({user: userId});
@@ -20,20 +39,8 @@ async function findUserCart(userId) {
         
         cart.cartItems = cartItems;
 
-        let totalPrice = 0;
-        let totalDiscountedPrice = 0;
-        let totalItem = 0;
-
-        for(let cartItem of cart.cartItems) {
-            totalPrice += cartItem.price;
-            totalDiscountedPrice += cartItem.discountedPrice;
-            totalItem += cartItem.quantity;
-        }
-
-        cart.totalPrice = totalPrice;
-        cart.totalItem = totalItem;
-        cart.totalDiscountedPrice = totalDiscountedPrice;
-        cart.discount = Math.floor(((totalPrice - totalDiscountedPrice) / totalPrice) * 100);
+        const totals = await calculateTotals(cart);
+        Object.assign(cart, totals);
 
         return cart;
 

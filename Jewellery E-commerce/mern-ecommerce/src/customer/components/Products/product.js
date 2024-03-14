@@ -55,17 +55,17 @@ const filters = [
       { value: "ring", label: "Rings", checked: false },
     ],
   },
-  {
-    id: "type",
-    name: "Jewellery Type",
-    options: [
-      { value: "diamond", label: "Diamond Jewellery", checked: false },
-      { value: "gold", label: "Gold Jewellery", checked: false },
-      { value: "silver", label: "Silver Jewellery", checked: false },
-      { value: "gemstones", label: "Jewellery with Gemstones", checked: false },
-      { value: "platinum", label: "Platinum Jewellery", checked: false },
-    ],
-  },
+  // {
+  //   id: "type",
+  //   name: "Jewellery Type",
+  //   options: [
+  //     { value: "diamond", label: "Diamond Jewellery", checked: false },
+  //     { value: "gold", label: "Gold Jewellery", checked: false },
+  //     { value: "silver", label: "Silver Jewellery", checked: false },
+  //     { value: "gemstones", label: "Jewellery with Gemstones", checked: false },
+  //     { value: "platinum", label: "Platinum Jewellery", checked: false },
+  //   ],
+  // },
   {
     id: "color",
     name: "Color",
@@ -660,8 +660,10 @@ export default function Product() {
                         </div>
                       </div>
                     ) : (
-                      products.products.content.map((product) => (
-                        <ProductCard product={product} key={product._id} />
+                      products.products.content.map((product, idx) => (
+                        <div className='h-[25rem] w-fit'>
+                          <ProductCard product={product} key={product._id} index={idx} />
+                        </div>
                       ))
                     )
                   ) : (

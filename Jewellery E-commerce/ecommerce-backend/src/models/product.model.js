@@ -48,7 +48,7 @@ const ProductSchema = new  mongoose.Schema({
     sizes: [
         {
             weight: {type:String, required: true},
-            width:{type:String, required: true},
+            size:{type:String, required: false},
             stock:{type:Number},
         }
     ],

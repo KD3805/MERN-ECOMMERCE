@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import AddressCard from '../AddressCard/AddressCard'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,11 +31,16 @@ const CssTextField = styled(TextField)({
 const DeliveryAddressForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {auth} = useSelector(store => store);
+  const [data, setData] = useState({});
+  const { auth } = useSelector(store => store);
+  console.log('auth user', auth?.user)
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('e.currentTarget', e.currentTarget)
     const data = new FormData(e.currentTarget);
+    console.log('formdata', data.set('firstName', 'jsk'))
+    console.log('formdata', data.get('firstName'))
 
     const address = {
       firstName: data.get('firstName'),
@@ -51,9 +56,9 @@ const DeliveryAddressForm = () => {
     console.log('address', orderData);
   }
 
-  // const handleDelivery = () => {
-  //   navigate('/checkout/?step=3');
-  // }
+  const handleDelivery = () => {
+    navigate('/checkout/?step=3');
+  }
 
 
   return (
@@ -66,11 +71,39 @@ const DeliveryAddressForm = () => {
                 <h1 className='text-lg font-semibold text-pink-950 uppercase'>Deliver To</h1>
                 <hr />
                 <div>
-                {auth.user?.address.map((item)=> (
-                  <AddressCard address={item} />
-                ))}
+                  {auth.user?.address.map((address) => (
+                    <div className='p-3 rounded-lg' style={{ border: '1px solid #500724' }}>
+                      <div className='space-y-2'>
+                        <h1 className='text-lg font-semibold'>{address.firstName} {address.lastName}</h1>
+                        <p className='text-sm text-gray-500 font-normal'>{address.streetAddress}, {address.city}, {address.state}, {address.zipCode}</p>
+                        <p className='text-sm text-gray-500 font-normal'>Phone : {address.mobile}</p>
+                      </div>
+                      <Button
+                        variant="outlined"
+                        type="submit"
+                        onClick={() => {
+                          setData(
+                            {
+                              ...data,
+                              firstName: address.firstName,
+                              lastName: address.lastName,
+                              streetAddress: address.streetAddress, 
+                              city: address.city,
+                              state: address.state,
+                              zipCode: address.zipCode,
+                              mobile: address.mobile
+                            }
+                          )
+                        }}
+                        sx={{ my: '1rem', fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderColor: '#832729' }, }}
+                        className="flex w-4/12 items-center justify-center rounded-md border-none px-3 py-1"
+                      >
+                        Use This Address
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-                
+
                 {/* <Button
                   variant="contained"
                   type="submit"
@@ -82,7 +115,7 @@ const DeliveryAddressForm = () => {
               </div>
             </Grid>
           </div>
-        </Grid>
+        </Grid >
 
         <Grid item xs={12} lg={7}>
 
@@ -99,6 +132,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    defaultValue={data ? data.firstName : ''}
                   />
                 </Grid>
 
@@ -110,6 +144,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    defaultValue={data ? data.lastName : ''}
                   />
                 </Grid>
 
@@ -123,6 +158,7 @@ const DeliveryAddressForm = () => {
                     autoComplete='given-name'
                     multiline
                     rows={4}
+                    defaultValue={data ? data.streetAddress : ''}
                   />
                 </Grid>
 
@@ -134,6 +170,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    defaultValue={data ? data.city : ''}
                   />
                 </Grid>
 
@@ -145,6 +182,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    defaultValue={data ? data.state : ''}
                   />
                 </Grid>
 
@@ -156,6 +194,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='shipping postal-code'
+                    defaultValue={data ? data.zipCode : ''}
                   />
                 </Grid>
 
@@ -167,6 +206,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-number'
+                    defaultValue={data ? data.mobile : ''}
                   />
                 </Grid>
 
@@ -188,8 +228,8 @@ const DeliveryAddressForm = () => {
 
 
 
-      </Grid>
-    </div>
+      </Grid >
+    </div >
   )
 }
 

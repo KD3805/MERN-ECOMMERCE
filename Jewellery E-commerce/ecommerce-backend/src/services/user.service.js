@@ -73,7 +73,7 @@ const getUserProfileByToken = async(token) => {
 
 const getAllUsers = async()=>{
     try {
-        const users = await User.find().populate('user');
+        const users = await User.find().populate('user')
         return users;
 
     } catch (error) {

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { login } from '../../state/auth/Action';
+import { ModalContext } from '../../context/modal/modalContext';
 
 
 const CssTextField = styled(TextField)({
@@ -29,23 +30,27 @@ const CssTextField = styled(TextField)({
 const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const modal = useContext(ModalContext)
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(e)
-        const data = new FormData(e.currentTarget);
-
-        const userData = {
-            email: data.get('email'),
-            password: data.get('password'),
+        try {
+            const data = new FormData(e.currentTarget);
+    
+            const userData = {
+                email: data.get('email'),
+                password: data.get('password'),
+                navigate
+            };
+    
+            dispatch(login(userData, modal));
+        } catch (err) {
+            alert("Wrong username or password");
+            // You may want to handle this error differently, e.g., display an error message.
         }
-
-        // Redirect to dashboard if the login is successful
-        dispatch(login(userData))
-        .catch((err) => alert("Wrong username or password, err:", err));
-
-        navigate('/');
-    }
+    };
+    
+    
 
     return (
         <div>

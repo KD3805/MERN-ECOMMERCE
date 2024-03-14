@@ -30,14 +30,14 @@ export const createOrder = (reqData) => async(dispatch) => {
 }
 
 export const getOrderById = (orderId) => async(dispatch) => {
-    console.log("get order req data", orderId);
     dispatch({type: GET_ORDER_BY_ID_REQUEST})
 
     try {
         const {data} = await api.get(
             `/api/orders/${orderId}`,
         )
-
+        
+        console.log(`order data with id: ${orderId}`, data);
         dispatch({
             type: GET_ORDER_BY_ID_SUCCESS,
             payload: data,

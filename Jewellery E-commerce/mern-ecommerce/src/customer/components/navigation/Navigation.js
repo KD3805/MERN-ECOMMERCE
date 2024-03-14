@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
@@ -16,6 +16,7 @@ import { Badge, Button, Grid } from "@mui/material";
 import AuthModel from "../../auth/AuthModel";
 import { getUser, logout } from "../../../state/auth/Action";
 import { useDispatch, useSelector } from "react-redux";
+import { ModalContext } from "../../../context/modal/modalContext";
 
 const navigation = {
   categories: [
@@ -287,7 +288,8 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
-  const [openAuthModel, setOpenAuthModel] = useState(false);
+  // const [openAuthModel, setOpenAuthModel] = useState(false);
+  const modal = useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const openUserMenu = Boolean(anchorEl);
   const [isHovering, setIsHovering] = useState(false);
@@ -333,12 +335,12 @@ export default function Navigation() {
   const handleOpen = (e, auth) => {
     e.preventDefault();
     navigate(`/${auth}`);
-    setOpenAuthModel(true);
+    modal.openModal();
   };
 
   const handleClose = () => {
     navigate("/");
-    setOpenAuthModel(false);
+    modal.closeModal();
   };
 
   const handleLogout = () => {
@@ -503,15 +505,13 @@ export default function Navigation() {
 
       <header className="relative">
         <div className="bg-pink-100 text-pink-950 sm:px-6">
-          <div className="my-header lg:ml-0 ">
+          <div className="my-header">
             {/* Logo */}
-            <Grid container xs={9} className="logo-search-div">
+            <div className="logo-search-div w-[85%]">
               <a href="#" className="cursor-pointer">
                 <span className="sr-only">Your Company</span>
                 <img
                   className="object-cover w-40 mt-4"
-                  // width={140}
-                  // height={140}
                   src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1707743755/gayatri_logo_yylmuj.png"
                   alt=""
                 />
@@ -528,14 +528,11 @@ export default function Navigation() {
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </span>
               </div>
-            </Grid>
+            </div>
 
             {/* customer's action buttons */}
-            <Grid
-              container
-              xs={3}
-              justifyContent="space-around"
-              className="flex items-center"
+            <div
+              className="flex items-center justify-between w-[15%]"
             >
               {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                 <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
@@ -558,25 +555,23 @@ export default function Navigation() {
                 KD
               </Avatar> */}
 
-              <Grid
+              <div
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
-                item
                 xs={4}
-                direction="column"
-                className="flex items-center cursor-pointer transition duration-1000 border-pink-950 relative  hover:border-b-2 pb-2"
+                className="flex items-center flex-col cursor-pointer transition duration-1000 border-pink-950 relative  hover:border-b-2 pb-2"
               >
                 <PermIdentityOutlinedIcon
-                  sx={{ width: "30px", height: "30px" }}
+                  sx={{ width: "25px", height: "25px" }}
                   className="opacity-60"
                 />
-                <span className="font-normal uppercase lg:text-sm">
+                <span className="font-sans font-medium uppercase text-sm">
                   {auth.user?.firstName ? auth.user?.firstName : "Account"}
                 </span>
 
                 {!auth.user?.firstName
                   ? isHovering && (
-                      <div className="p-3 absolute top-15 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
+                      <div className="p-3 absolute top-14 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
                         <h1 className="text-2xl font-normal uppercase">
                           My Account
                         </h1>
@@ -621,7 +616,7 @@ export default function Navigation() {
                     )
                   : isHovering && (
                       <div
-                        className="p-3 absolute top-15 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
+                        className="p-3 absolute top-14 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
                         style={{ color: "#832729" }}
                       >
                         <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
@@ -666,51 +661,37 @@ export default function Navigation() {
                         </div>
                       </div>
                     )}
-              </Grid>
+              </div>
 
               {/* Favourite */}
-              {/* <div className="flex lg:ml-6">
-                <a href="#" className="text-gray-500 hover:text-gray-600">
-                  <span className="sr-only">Favourite</span>
-                  <FavoriteBorderIcon className="h-6 w-6 hover:h-8" aria-hidden="true" />
-                </a>
-              </div> */}
-
-              <Grid
-                item
+              <div
                 xs={4}
-                direction="column"
-                className="flex items-center cursor-pointer transition duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2"
+                onClick={() => {
+                  // document.getElementById('nav-fav-btn').classList.add("border-b-2");
+                  navigate("/wishlist")
+                }}
+                className="flex items-center flex-col cursor-pointer border-pink-950  hover:border-b-2 pb-2"
               >
-                <Badge badgeContent={0} color="secondary">
+                <Badge badgeContent={0} color="error">
                   <FavoriteBorderIcon
                     sx={{ width: "25px", height: "25px" }}
                     className="opacity-60"
                   />
                 </Badge>
-                <span className="font-normal uppercase lg:text-sm">
+                <span className="font-sans font-medium uppercase text-sm">
                   Wishlist
                 </span>
-              </Grid>
+              </div>
 
               {/* Cart */}
-              {/* <div className="ml-4 flow-root lg:ml-6">
-                <a href="#" className="group -m-2 flex items-center">
-                  <AddShoppingCartIcon
-                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                  <span className="sr-only">items in cart, view bag</span>
-                </a>
-              </div> */}
-
-              <Grid
-                onClick={() => navigate("/cart")}
-                item
+              <div
+                onClick={() => {
+                  // document.getElementById('nav-cart-btn').classList.add("border-b-2");
+                  navigate("/cart")
+                }}
                 xs={4}
-                direction="column"
-                className="flex items-center cursor-pointer transition-all duration-1000 ease-in-out border-pink-950  hover:border-b-2 pb-2"
+                id="nav-cart-btn"
+                className="flex items-center flex-col cursor-pointer border-pink-950  hover:border-b-2 pb-2"
               >
                 <Badge badgeContent={cart.cart?.totalItem} color="error">
                   <AddShoppingCartIcon
@@ -718,9 +699,9 @@ export default function Navigation() {
                     className="opacity-60"
                   />
                 </Badge>
-                <span className="font-normal uppercase lg:text-sm">Cart</span>
-              </Grid>
-            </Grid>
+                <span className="font-sans font-medium uppercase text-sm">Cart</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -864,7 +845,7 @@ export default function Navigation() {
         </nav>
       </header>
 
-      <AuthModel handleClose={handleClose} open={openAuthModel} />
+      <AuthModel handleClose={handleClose} open={modal.state} />
     </div>
   );
 }

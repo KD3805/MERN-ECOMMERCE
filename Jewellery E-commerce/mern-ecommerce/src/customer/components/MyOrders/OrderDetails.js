@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import OrderTracker from './OrderTracker';
 import { Grid, IconButton } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
@@ -6,24 +6,39 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { useDispatch, useSelector } from 'react-redux';
 import { store } from '../../../state/store';
 import { findProductById } from '../../../state/product/Action';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getOrderById } from '../../../state/order/Action';
+import RatingReviewForm from './RatingReviewForm';
+import { RRContext } from '../../../context/rrBox/rrContext';
 
 const OrderDetails = () => {
     const { order } = useSelector(store => store);
     const dispatch = useDispatch();
     const params = useParams(); 
     const index = parseInt(params.index);
+    const navigate = useNavigate();
+    // const [openAuthModel, setOpenAuthModel] = useState(false);
+    const modal = useContext(RRContext);
 
     useEffect(()=> {
         dispatch(getOrderById(params.orderId));
     }, [dispatch]);
 
+    const handleOpen = () => {
+        navigate(`/product/${order.order?.orderItems[index]?.product._id}/ratrev`)
+        modal.openModal();
+    };
+
+    const handleClose = () => {
+        modal.closeModal();
+    };
+
+
     const { firstName, lastName, streetAddress, city, zipCode, mobile, state } = order.order?.shippingAddress || {};
     // const { title, brand, discountedPrice, discountPercent } = order.order?.orderItems[index]?.product;
 
     return (
-        <div className='p-5 '>
+        <div className='p-5'>
 
             <div className='p-3 bg-pink-50 text-pink-950 rounded-lg' style={{ border: '1px solid #500724' }}>
                 <h1 className='font-bold text-xl py-3'>Delivery Address</h1>
@@ -61,7 +76,7 @@ const OrderDetails = () => {
                                     {order.order?.orderItems[index]?.product.title}
                                 </p>
                                 <p className="text-xs py-1 text-gray-400 font-medium">
-                                    Weight : {order.order?.weight} | Size : {order.order?.width} MM
+                                    Weight : {order.order?.weight} | Size : {order.order?.size} MM
                                 </p>
                                 <p className="text-xs  text-gray-400 font-medium">
                                     Seller: {order.order?.orderItems[index]?.product.brand}
@@ -87,7 +102,12 @@ const OrderDetails = () => {
                                         sx={{ width: "20px", height: "20px" }}
                                         className="text-pink-950 mr-2 text-sm"
                                     />
-                                    <span className="font-semibold text-pink-950 lg:text-base">
+                                    <span className="font-semibold text-pink-950 lg:text-base" 
+                                    onClick={(e)=>{
+                                        e.preventDefault();
+                                        handleOpen();
+                                    }}
+                                    >
                                         Rate & Review Product
                                     </span>
                                 </IconButton>
@@ -108,6 +128,8 @@ const OrderDetails = () => {
                     </Grid>
                 </Grid>
             </div>
+
+            <RatingReviewForm open={modal.state} handleClose={handleClose}/>
         </div>
     )
 }

@@ -1,8 +1,10 @@
 import { Avatar, Box, Grid, Rating } from '@mui/material';
 import React from 'react';
 import styled from "@emotion/styled";
+import { format } from 'date-fns';
 
-const ProductReviewCard = () => {
+const ProductReviewCard = ({ reviewData, ratingData }) => {
+
     const StyledRating = styled(Rating)({
         "& .MuiRating-iconFilled": {
           color: "#831843",
@@ -12,26 +14,28 @@ const ProductReviewCard = () => {
         },
     });
 
+    const formattedDate = format(reviewData.createdAt, 'MMMM d, yyyy');
+
   return (
     <div>
       <Grid container gap={3}>
         <Box>
-            <Avatar className='text-white' sx={{width: 50, height: 50, fontSize: '1rem', bgcolor: '#832729'}}>
-                KD
+            <Avatar className='text-white' sx={{width: 50, height: 50, fontSize: '1.3rem', bgcolor: '#832729'}}>
+                {reviewData.user?.firstName.charAt(0).toUpperCase()}
             </Avatar>
         </Box>
 
         <Grid item xs={9}>
             <div className="mb-2">
                 <div>
-                    <h1 className='font-semibold text-lg m-0'>Krishna</h1>
-                    <p className='font-medium text-sm text-gray-500'>April 5, 2023</p>
+                    <h1 className='font-semibold text-xl m-0'>{reviewData.user?.firstName}</h1>
+                    <p className='font-medium text-sm text-gray-500'>{formattedDate}</p>
                 </div>
             </div>
 
-            <StyledRating name="rating" value={3.5} readOnly precision={0.5}/>
+            <StyledRating name="rating" value={ratingData?.rating} readOnly precision={0.5}/>
 
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ratione, eveniet.</p>
+            <p>{reviewData.review}</p>
         </Grid>
 
       </Grid>
