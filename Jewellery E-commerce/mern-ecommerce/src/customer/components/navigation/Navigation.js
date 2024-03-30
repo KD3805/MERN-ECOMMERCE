@@ -297,7 +297,7 @@ export default function Navigation() {
   const dispatch = useDispatch();
   const location = useLocation();
   const jwt = localStorage.getItem("jwt");
-  const { auth, cart } = useSelector((store) => store);
+  const { auth, cart, wishlist } = useSelector((store) => store);
 
   useEffect(() => {
     if (jwt) {
@@ -309,9 +309,6 @@ export default function Navigation() {
     if (auth.user) {
       handleClose();
     }
-    // if (location.pathname === "/login" || location.pathname === "/register") {
-    //   setOpenAuthModel(true);
-    // }
   }, []);
 
   const handleCategoryClick = (category, section, item, close) => {
@@ -345,7 +342,7 @@ export default function Navigation() {
 
   const handleLogout = () => {
     dispatch(logout());
-    handleClose();
+    modal.closeModal()
   };
 
   return (
@@ -534,133 +531,133 @@ export default function Navigation() {
             <div
               className="flex items-center justify-between w-[15%]"
             >
-              {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Sign in
-                </a>
-                <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Create account
-                </a>
-              </div> */}
-
-              {/* MUI Avatar */}
-              {/* <Avatar
-                onClick={()=>navigate('/account/orders')}
-                sx={{ bgcolor: "#500724", width: 40, height: 40, fontSize: 16, marginLeft: 3, cursor: "pointer" }}
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup='true'
-                aria-expanded={open ? 'true' : undefined}
-              >
-                KD
-              </Avatar> */}
-
+              
               <div
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 xs={4}
-                className="flex items-center flex-col cursor-pointer transition duration-1000 border-pink-950 relative  hover:border-b-2 pb-2"
+                className="flex items-center flex-col cursor-pointer transition duration-1000 border-pink-950 relative unline-navigation"
               >
                 <PermIdentityOutlinedIcon
                   sx={{ width: "25px", height: "25px" }}
                   className="opacity-60"
                 />
-                <span className="font-sans font-medium uppercase text-sm">
+                <span className="font-semibold uppercase text-sm">
                   {auth.user?.firstName ? auth.user?.firstName : "Account"}
                 </span>
 
                 {!auth.user?.firstName
                   ? isHovering && (
-                      <div className="p-3 absolute top-14 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
-                        <h1 className="text-2xl font-normal uppercase">
+                    <div className="p-3 absolute top-14 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
+                      <h1 className="text-2xl font-normal uppercase">
+                        My Account
+                      </h1>
+                      <p className="text-xs font-normal">
+                        LOGIN TO ACCESS YOUR ACCOUNT
+                      </p>
+
+                      <div className="py-2 flex items-center justify-around">
+                        <Button
+                          onClick={(e) => handleOpen(e, "login")}
+                          variant="outlined"
+                          type="submit"
+                          sx={{
+                            fontSize: "0.75rem",
+                            color: "#832729",
+                            borderColor: "#832729",
+                            "&:hover": {
+                              boxShadow: "#f9a8d4 0px 5px 20px",
+                              borderColor: "#832729",
+                            },
+                          }}
+                          // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
+                          className="flex items-center justify-center rounded-md border-none px-2 py-1"
+                        >
+                          log in
+                        </Button>
+                        <Button
+                          onClick={(e) => handleOpen(e, "register")}
+                          variant="contained"
+                          type="submit"
+                          sx={{
+                            fontSize: "0.75rem",
+                            bgcolor: "#832729",
+                            "&:hover": { bgcolor: "#500724" },
+                          }}
+                          className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
+                        >
+                          sign up
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                  : isHovering && (
+                    <div
+                      className="p-3 absolute top-13 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
+                      style={{ color: "#832729" }}
+                    >
+                      <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
+                        <h1 className="text-xl font-semibold">
+                          Hi! {auth.user?.firstName},
+                        </h1>
+                        <h1 className="text-xs font-normal lowercase">
+                          {auth.user?.email}
+                        </h1>
+                      </div>
+
+                      <div
+                        key="acount-details"
+                        className="py-2 flex flex-col space-y-3"
+                      >
+                        {
+                          auth.user?.role === "ADMIN" && (
+                            <h1
+                              onClick={() => navigate('/admin')}
+                              key="admin-panel"
+                              className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                            >
+                              Admin Panel
+                            </h1>
+                          )
+                        }
+                        <h1
+                          key="my-acount"
+                          onClick={() => {
+                            navigate("/user-details/?layout=0")
+                          }}
+                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                        >
                           My Account
                         </h1>
-                        <p className="text-xs font-normal">
-                          LOGIN TO ACCESS YOUR ACCOUNT
-                        </p>
-
-                        <div className="py-2 flex items-center justify-around">
-                          <Button
-                            onClick={(e) => handleOpen(e, "login")}
-                            variant="outlined"
-                            type="submit"
-                            sx={{
-                              fontSize: "0.75rem",
-                              color: "#832729",
-                              borderColor: "#832729",
-                              "&:hover": {
-                                boxShadow: "#f9a8d4 0px 5px 20px",
-                                borderColor: "#832729",
-                              },
-                            }}
-                            // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
-                            className="flex items-center justify-center rounded-md border-none px-2 py-1"
-                          >
-                            log in
-                          </Button>
-                          <Button
-                            onClick={(e) => handleOpen(e, "register")}
-                            variant="contained"
-                            type="submit"
-                            sx={{
-                              fontSize: "0.75rem",
-                              bgcolor: "#832729",
-                              "&:hover": { bgcolor: "#500724" },
-                            }}
-                            className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
-                          >
-                            sign up
-                          </Button>
-                        </div>
-                      </div>
-                    )
-                  : isHovering && (
-                      <div
-                        className="p-3 absolute top-14 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
-                        style={{ color: "#832729" }}
-                      >
-                        <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
-                          <h1 className="text-xl font-semibold">
-                            Hi! {auth.user?.firstName},
-                          </h1>
-                          <h1 className="text-xs font-normal lowercase">
-                            {auth.user?.email}
-                          </h1>
-                        </div>
-
-                        <div
-                          key="acount-details"
-                          className="py-2 flex flex-col space-y-3"
+                        <h1
+                          onClick={() => {
+                            navigate("/user-details/?layout=2")
+                          }}
+                          key="order-history"
+                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
                         >
-                          <h1
-                            key="my-acount"
-                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                          >
-                            My Account
-                          </h1>
-                          <h1
-                            onClick={()=> navigate('/account/orders')}
-                            key="order-history"
-                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                          >
-                            Order History
-                          </h1>
-                          <h1
-                            key="contact-us"
-                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                          >
-                            Contact Us
-                          </h1>
-                          <h1
-                            key="log-out"
-                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                            onClick={handleLogout}
-                          >
-                            Log out
-                          </h1>
-                        </div>
+                          Order History
+                        </h1>
+                        <h1
+                          key="contact-us"
+                          onClick={() => {
+                            // document.getElementById('nav-fav-btn').classList.add("border-b-2");
+                            navigate("/user-details/?layout=3")
+                          }}
+                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                        >
+                          Contact Us
+                        </h1>
+                        <h1
+                          key="log-out"
+                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          onClick={handleLogout}
+                        >
+                          Log out
+                        </h1>
                       </div>
-                    )}
+                    </div>
+                  )}
               </div>
 
               {/* Favourite */}
@@ -668,17 +665,17 @@ export default function Navigation() {
                 xs={4}
                 onClick={() => {
                   // document.getElementById('nav-fav-btn').classList.add("border-b-2");
-                  navigate("/wishlist")
+                  navigate("/user-details/?layout=1")
                 }}
-                className="flex items-center flex-col cursor-pointer border-pink-950  hover:border-b-2 pb-2"
+                className="flex items-center flex-col cursor-pointer border-pink-950 relative unline-navigation"
               >
-                <Badge badgeContent={0} color="error">
+                <Badge badgeContent={wishlist?.wishItems?.length} color="error">
                   <FavoriteBorderIcon
                     sx={{ width: "25px", height: "25px" }}
                     className="opacity-60"
                   />
                 </Badge>
-                <span className="font-sans font-medium uppercase text-sm">
+                <span className="font-semibold uppercase text-sm">
                   Wishlist
                 </span>
               </div>
@@ -691,7 +688,7 @@ export default function Navigation() {
                 }}
                 xs={4}
                 id="nav-cart-btn"
-                className="flex items-center flex-col cursor-pointer border-pink-950  hover:border-b-2 pb-2"
+                className="flex items-center flex-col cursor-pointer border-pink-950  relative unline-navigation"
               >
                 <Badge badgeContent={cart.cart?.totalItem} color="error">
                   <AddShoppingCartIcon
@@ -699,7 +696,9 @@ export default function Navigation() {
                     className="opacity-60"
                   />
                 </Badge>
-                <span className="font-sans font-medium uppercase text-sm">Cart</span>
+                <span className="font-semibold uppercase text-sm">
+                  Cart
+                </span>
               </div>
             </div>
           </div>

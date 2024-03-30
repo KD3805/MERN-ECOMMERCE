@@ -17,7 +17,7 @@ const ProductReviewCard = ({ reviewData, ratingData }) => {
     const formattedDate = format(reviewData.createdAt, 'MMMM d, yyyy');
 
   return (
-    <div>
+    <div className='my-3'>
       <Grid container gap={3}>
         <Box>
             <Avatar className='text-white' sx={{width: 50, height: 50, fontSize: '1.3rem', bgcolor: '#832729'}}>

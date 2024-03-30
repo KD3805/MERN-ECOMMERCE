@@ -22,8 +22,8 @@ const MainCarousel = () => {
         return (
             // <!-- slider section starts -->
             <div className="slider_area slider_black owl-carousel">
-                {/* <img src={item.image} className='w-full h-full relative object-cover object-left-top z-10 cursor-pointer' role='representation' alt="" /> */}
-                <div class="single_slider w-full h-full object-cover" style={{ backgroundImage: "url(" + item.image + ")" }}>
+                <img src={item.image} className='w-full h-full relative object-cover z-10 cursor-pointer' role='representation' alt="" />
+                {/* <div class="single_slider w-full h-full object-cover" style={{ backgroundImage: "url(" + item.image + ")" }}>
                     <div className="container">
                         <div className="row h-full align-items-center">
                             <div className="col-12">
@@ -37,7 +37,7 @@ const MainCarousel = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
             // <!-- slider section ends -->
         );

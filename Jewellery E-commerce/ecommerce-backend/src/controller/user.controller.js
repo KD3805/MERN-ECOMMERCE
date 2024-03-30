@@ -13,7 +13,7 @@ const getUserProfile = async(req, res) => {
         return res.status(200).send(user);
 
     } catch (error) {
-        return res.status(500).send({error: error.message});
+        return res.status(500).send({error: error.message, statusCode: 500});
     }
 }
 
@@ -26,4 +26,20 @@ const getAllUsers = async(req, res) => {
     }
 }
 
-module.exports = { getAllUsers, getUserProfile }
+const deleteUserProfile = async (req, res) => {
+    try {
+        const delUser = await userService.deleteUserById(req.params.id);
+        if (delUser) {
+            return res.status(200).send({ message: "User deleted successfully!" });
+        } else {
+            return res.status(404).send({ error: 'User not found!' }); // If user not found, return 404
+        }
+    } catch (error) {
+        console.log("delete user controller error:::::", error);
+        return res.status(500).send({ error: 'Failed to delete user!' });
+    }
+};
+
+
+
+module.exports = { getAllUsers, getUserProfile, deleteUserProfile }

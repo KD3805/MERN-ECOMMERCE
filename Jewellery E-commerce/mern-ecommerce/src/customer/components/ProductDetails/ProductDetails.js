@@ -170,7 +170,7 @@ export default function ProductDetails() {
   useEffect(() => {
     const data = { productId: param.productId };
     dispatch(findProductById(data));
-  }, [param.productId]);
+  }, [param.productId, products?.product?.reviews]);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -234,7 +234,7 @@ export default function ProductDetails() {
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-10 px-4 pt-10">
           {/* Image gallery */}
           <div className="flex flex-col items-center">
-            <div className="max-w-[30rem] max-h-[35rem] overflow-hidden rounded-lg">
+            <div className="max-w-[30rem] max-h-[35rem] w-[25rem] h-[25rem] shadow-md overflow-hidden rounded-lg">
               <img
                 src={products.product?.imageUrls[0].imageUrl}
                 className="h-full w-full object-cover object-center"
@@ -273,7 +273,7 @@ export default function ProductDetails() {
             <div className="mt-3 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
 
-              <p className="mt-1 text-sm lg:text-sm text-gray-600">
+              <p className="mt-1 text-sm lg:text-base text-gray-600">
                 {products.product?.description}
               </p>
 
@@ -474,12 +474,12 @@ export default function ProductDetails() {
             <div className="py-0 lg:col-span-2 lg:col-start-1 lg:border-t lg:border-b lg:border-gray-400 lg:pb-16 lg:pr-8 lg:pt-6">
               {/* Highlights and details */}
               <div className="mt-4">
-                <h3 className="text-base font-medium text-gray-900">
+                <h3 className="text-lg font-semibold text-gray-900">
                   Highlights
                 </h3>
 
                 <div className="mt-3">
-                  <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                  <ul role="list" className="list-disc space-y-2 pl-4 text-base" style={{ textTransform: "capitalize" }}>
                     <li>
                       <span className="text-gray-800 font-semibold">
                         Color:
@@ -530,10 +530,10 @@ export default function ProductDetails() {
               </div>
 
               <div className="mt-8">
-                <h2 className="text-base font-medium text-gray-900">Details</h2>
+                <h2 className="text-lg font-semibold text-gray-900">Details</h2>
 
                 <div className="mt-3 mb-4 space-y-6">
-                  <p className="text-sm text-gray-600">
+                  <p className="text-base text-gray-600">
                     {products.product?.details}
                   </p>
                 </div>
@@ -548,19 +548,33 @@ export default function ProductDetails() {
             Recent Reviews & Ratings
           </h1>
 
-          <div className="p-5">
+          <div className="py-3 px-5">
             <Grid container spacing={7}>
               {/* Review */}
               <Grid item xs={12} lg={7}>
-                <div className="space-y-5">
+                <div className="space-y-5 h-[40vh] overflow-y-scroll">
                   {products.product?.reviews.length !== 0 ? (
-                    products.product?.reviews?.map((item, index) => (
-                      <ProductReviewCard
-                        reviewData={item}
-                        ratingData={products.product?.ratings?.[index]}
-                        key={index}
-                      />
-                    ))
+                    <div>
+                      {products.product?.reviews?.map((item, index) => (
+                        <ProductReviewCard
+                          reviewData={item}
+                          ratingData={products.product?.ratings?.[index]}
+                          key={index}
+                        />
+                      ))}
+                      <Button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleOpenModal();
+                        }}
+                        variant="outlined"
+                        type="submit"
+                        sx={{ fontSize: '0.75rem', fontWeight: 'bold', color: '#832729', borderColor: '#832729', "&:hover": { boxShadow: "#832729 0px 0px 10px", borderColor: '#832729' }, }}
+                        className="p-2 my-4 mx-auto flex items-center justify-center rounded-md border-none focus:outline-none"
+                      >
+                        ✍🏻 Write a Review
+                      </Button>
+                    </div>
                   ) : (
                     <div className="flex items-center justify-center h-[15rem]">
                       <div className="flex flex-col items-center justify-center space-y-4">
@@ -637,9 +651,9 @@ export default function ProductDetails() {
             sectionCategory={products.product?.category.name}
           />
         </section>
-      </div>
+      </div >
 
       <RatingReviewForm open={modal.state} handleClose={handleCloseModal} />
-    </div>
+    </div >
   );
 }

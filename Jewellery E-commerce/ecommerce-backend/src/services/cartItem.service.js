@@ -1,8 +1,6 @@
 const CartItem = require('../models/cartItem.model');
 const userService = require('../services/user.service.js');
 
-// No need to create a function for add cart-item
-
 async function updateCartItem(userId, cartItemId, cartItemData) {
     try {
         const item = await findCartItemById(cartItemId);

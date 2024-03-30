@@ -55,6 +55,7 @@ async function addCartItem(userId, req) {
         const product = await Product.findById(req.productId);
 
         const isPresent = await CartItem.findOne({cart: cart._id, product: product._id, userId});
+        console.log("isPresent in cart.service", isPresent)
 
         if(!isPresent) {
             const cartItem = new CartItem({
@@ -71,7 +72,7 @@ async function addCartItem(userId, req) {
             const createdCartItem = await cartItem.save();
             cart.cartItems.push(createdCartItem);
             await cart.save();
-
+            
             return createdCartItem;
         } else {
             return isPresent;

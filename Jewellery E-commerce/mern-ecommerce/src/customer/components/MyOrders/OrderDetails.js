@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react';
 import OrderTracker from './OrderTracker';
 import { Grid, IconButton } from "@mui/material";
 import StarIcon from '@mui/icons-material/Star';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useDispatch, useSelector } from 'react-redux';
-import { store } from '../../../state/store';
-import { findProductById } from '../../../state/product/Action';
-import { useNavigate, useParams } from 'react-router-dom';
 import { getOrderById } from '../../../state/order/Action';
+import { useNavigate, useParams } from 'react-router-dom';
 import RatingReviewForm from './RatingReviewForm';
 import { RRContext } from '../../../context/rrBox/rrContext';
 
@@ -17,12 +15,37 @@ const OrderDetails = () => {
     const params = useParams(); 
     const index = parseInt(params.index);
     const navigate = useNavigate();
-    // const [openAuthModel, setOpenAuthModel] = useState(false);
     const modal = useContext(RRContext);
+    const [activeStep, setActiveStep] = useState(1);
 
     useEffect(()=> {
-        dispatch(getOrderById(params.orderId));
-    }, [dispatch]);
+        const fetchOrder = () => {
+            dispatch(getOrderById(params.orderId));
+        };
+
+        fetchOrder();
+    }, [dispatch, params.orderId]);
+
+    useEffect(() => {
+        if (!order || !order.order?.orderStatus) return;
+
+        let newActiveStep;
+        switch(order.order?.orderStatus) {
+            case "CONFIRMED":
+                newActiveStep = 2;
+                break;  
+            case "SHIPPED":
+                newActiveStep = 4;   
+                break;
+            case "DELIVERED":
+                newActiveStep = 5;        
+                break;
+            default:
+                newActiveStep = 1;   
+        }
+
+        setActiveStep(newActiveStep);
+    }, [order?.order?.orderStatus]);
 
     const handleOpen = () => {
         navigate(`/product/${order.order?.orderItems[index]?.product._id}/ratrev`)
@@ -33,13 +56,10 @@ const OrderDetails = () => {
         modal.closeModal();
     };
 
-
     const { firstName, lastName, streetAddress, city, zipCode, mobile, state } = order.order?.shippingAddress || {};
-    // const { title, brand, discountedPrice, discountPercent } = order.order?.orderItems[index]?.product;
 
     return (
         <div className='p-5'>
-
             <div className='p-3 bg-pink-50 text-pink-950 rounded-lg' style={{ border: '1px solid #500724' }}>
                 <h1 className='font-bold text-xl py-3'>Delivery Address</h1>
                 <div className='space-y-2'>
@@ -53,12 +73,12 @@ const OrderDetails = () => {
             </div>
 
             <div className='my-3'>
-                <OrderTracker activeStep={4} />
+                <OrderTracker activeStep={activeStep} />
             </div>
-
 
             <div className="p-3 shadow-md hover:shadow-xl transition duration-300 hover:-translate-y-1 rounded-lg cursor-pointer">
                 <Grid
+                    onClick={()=>navigate(`/product/${order.order?.orderItems[index]?.product._id}`)}
                     container
                     spacing={2}
                     sx={{ justifyContent: "space-between", alignItems: "center", flexWrap: 'wrap' }}
@@ -72,20 +92,19 @@ const OrderDetails = () => {
                             />
 
                             <div className="ml-5 space-y-2">
-                                <p className="font-semibold text-lg">
+                                <p className="font-semibold text-xl">
                                     {order.order?.orderItems[index]?.product.title}
                                 </p>
-                                <p className="text-xs py-1 text-gray-400 font-medium">
-                                    Weight : {order.order?.weight} | Size : {order.order?.size} MM
+                                <p className="text-sm py-1 text-gray-400 font-medium">
+                                    Weight : {order.order?.orderItems[index]?.weight} | Size : {order.order?.orderItems[index]?.size} MM
                                 </p>
-                                <p className="text-xs  text-gray-400 font-medium">
+                                <p className="text-sm  text-gray-400 font-medium">
                                     Seller: {order.order?.orderItems[index]?.product.brand}
                                 </p>
 
                                 <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
                                     <p className="font-semibold lg:text-lg">₹ {order.order?.orderItems[index]?.product.discountedPrice}</p>
-                                    {/* <p className="opacity-50 line-through lg:text-base">₹ 11999</p> */}
-                                    <p className="font-semibold text-green-600 lg:text-base">
+                                    <p className="font-semibold text-red-500 lg:text-sm">
                                         {order.order?.orderItems[index]?.product.discountPercent}% off
                                     </p>
                                 </div>
@@ -134,4 +153,4 @@ const OrderDetails = () => {
     )
 }
 
-export default OrderDetails
+export default OrderDetails;

@@ -8,7 +8,7 @@ const Loading = () => {
                 visible={true}
                 height="60"
                 width="60"
-                ariaLabel="color-ring-loading"
+                ariaLabel="color-ring-loading"  
                 wrapperStyle={{}}
                 wrapperClass="color-ring-wrapper"
                 colors={['#db2777', '#be185d', '#9d174d', '#831843', '#832729']}

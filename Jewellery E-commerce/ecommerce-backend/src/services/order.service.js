@@ -118,7 +118,10 @@ async function usersOrderHistory(userId) {
 
 async function getAllOrders() {
     try {
-        return await Order.find().populate({path: "orderItems", populate: {path: "product"}}).lean();
+        return await Order.find()
+        .populate({path: "orderItems", populate: {path: "product"}})
+        .populate('user')
+        .lean();
     } catch (error) {
         throw new Error(error);
     }

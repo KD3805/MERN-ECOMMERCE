@@ -8,7 +8,7 @@ export const getCart = () => async (dispatch) => {
         const { data } = await api.get('/api/cart');
         dispatch({ type: GET_CART_SUCCESSS, payload: data })
 
-        console.log('cart', data);
+        // console.log('cart', data);
 
     } catch (error) {
         dispatch({ type: GET_CART_FAILURE, payload: error.message })

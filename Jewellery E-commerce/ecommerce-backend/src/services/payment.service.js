@@ -19,7 +19,8 @@ const createPaymentLink = async(orderId) => {
                 email: true
             },
             reminder_enable: true,
-            callback_url: `http://localhost:3000/payment/${orderId}`,
+            // callback_url: `http://localhost:3000/payment/${orderId}`,
+            callback_url: `http://localhost:3000/user-details/?layout=2`,
             callback_method: 'get',
 
         };
@@ -55,6 +56,7 @@ const updatePaymentInformation = async(reqData) => {
             order.paymentDetails.paymentId = paymentId;
             order.paymentDetails.paymentStatus = "COMPLETED";
             order.orderStatus = "PLACED";
+            order.deliveryDate = Date.now();
 
             await order.save();
         }

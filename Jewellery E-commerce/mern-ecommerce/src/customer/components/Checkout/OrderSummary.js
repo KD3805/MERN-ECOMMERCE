@@ -38,14 +38,14 @@ const OrderSummary = () => {
             <p className='text-sm text-gray-500 font-normal'>Phone : {order.order?.shippingAddress.mobile}</p>
           </div>
 
-          <Button
+          {/* <Button
             variant="outlined"
             type="submit"
             sx={{ my: '1rem', fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderColor: '#832729' }, }}
             className="flex w-2/12 items-center justify-center rounded-md border-none p-3"
           >
             Change Address
-          </Button>
+          </Button> */}
         </div>
 
         <hr />
@@ -63,15 +63,15 @@ const OrderSummary = () => {
                     </div>
                     <div className='ml-5 space-y-1'>
                       <p className='font-semibold text-xl'>{item.product?.title}</p>
-                      <p className='text-xs py-1 text-gray-400 font-medium'>Weight : {item.weight} 
+                      <p className='text-sm py-1 text-gray-400 font-medium'>Weight : {item.weight} 
                       {/* | Size : 16.40 MM */}
                       </p>
-                      <p className='text-xs  text-gray-400 font-medium'>Seller: {item.product?.brand}</p>
+                      <p className='text-sm  text-gray-400 font-medium'>Seller: {item.product?.brand}</p>
 
                       <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
                         <p className="font-semibold lg:text-xl">₹ {item.product?.discountedPrice}</p>
                         <p className="opacity-50 line-through lg:text-base">₹ {item.product?.price}</p>
-                        <p className="font-semibold text-green-600 lg:text-sm">
+                        <p className="font-semibold text-red-500 lg:text-sm">
                         {item.product?.discountPercent}% off
                         </p>
                       </div>

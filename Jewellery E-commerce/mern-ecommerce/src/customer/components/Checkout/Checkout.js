@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -10,13 +10,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import PaymentIcon from '@mui/icons-material/Payment';
 import DeliveryAddressForm from './DeliveryAddressForm';
 import OrderSummary from './OrderSummary';
+import Swal from 'sweetalert2'
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -108,7 +109,8 @@ const steps = ['Login', 'Dilivery Address', 'Order Summary', 'Payment'];
 export default function Checkout() {
     const location = useLocation();
     const querySearch = new URLSearchParams(location.search);
-    const [activeStep, setActiveStep] = React.useState(querySearch.get("step") || 0);
+    const [activeStep, setActiveStep] = React.useState(querySearch.get("step"));
+    const navigate = useNavigate();
 
     const step = querySearch.get('step');
 
@@ -120,10 +122,18 @@ export default function Checkout() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+
     return (
-        <div className='p-10 lg:px-20 lg:py-10'>
+        <div className='p-10 lg:px-20 lg:py-10' onLoad={() => {
+            // const isAuthenticated = ;
+
+            if(!(localStorage.getItem('jwt') !== null)) {
+                navigate('/login')
+                return;
+            }
+        }}>
             <Stack sx={{ width: '100%' }}>
-                <Stepper alternativeLabel activeStep={activeStep} connector={<ColorlibConnector />}>
+                <Stepper alternativeLabel activeStep={querySearch.get("step")} connector={<ColorlibConnector />}>
                     {steps.map((label) => (
                         <Step key={label}>
                             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>

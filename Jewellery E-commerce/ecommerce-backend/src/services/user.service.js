@@ -4,7 +4,7 @@ const jwtProvider = require("../config/jwtProvider.js");
 
 const createUser = async (userData) => {
     try {
-        let { firstName, lastName, email, password } = userData;
+        let { firstName, lastName, email, password, role } = userData;
 
         const isUserExist = await User.findOne({ email });
 
@@ -14,7 +14,7 @@ const createUser = async (userData) => {
 
         password = await bcrypt.hash(password, 10);
 
-        const user = await User.create({ firstName, lastName, email, password });
+        const user = await User.create({ firstName, lastName, email, password, role });
 
         console.log(user);
 
@@ -28,7 +28,7 @@ const createUser = async (userData) => {
 const findUserById = async (userId) => {
     try {
         const user = await User.findById(userId)
-        .populate('address');
+            .populate('address');
         // const user = await User.findById(userId).select('-__v -password')
 
         if (!user) {
@@ -43,7 +43,7 @@ const findUserById = async (userId) => {
 
 const getUserByEmail = async (email) => {
     try {
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email});
 
         if (!user) {
             throw new Error("user not found with email:", email);
@@ -55,25 +55,37 @@ const getUserByEmail = async (email) => {
     }
 }
 
-const getUserProfileByToken = async(token) => {
+const getUserProfileByToken = async (token) => {
     try {
         const userId = jwtProvider.getUserIdFromToken(token);
+        const now = Math.floor(Date.now() / 1000); // Convert current time to seconds
 
         const user = await findUserById(userId);
 
         if (!user) {
-            throw new Error("user not found with id:", userId);
+            throw new Error("User not found with id: " + userId);
         }
         return user;
 
+        // if (exp < now) {
+        //     throw new Error('The token has expired!', 401);
+        // } else {
+        //     const user = await findUserById(userId);
+
+        //     if (!user) {
+        //         throw new Error("User not found with id: " + userId);
+        //     }
+        //     return user;
+        // }
     } catch (error) {
         throw new Error(error.message);
     }
 }
 
-const getAllUsers = async()=>{
+
+const getAllUsers = async () => {
     try {
-        const users = await User.find().populate('user')
+        const users = await User.find();
         return users;
 
     } catch (error) {
@@ -81,4 +93,22 @@ const getAllUsers = async()=>{
     }
 }
 
-module.exports = ({ createUser, getUserByEmail, findUserById, getUserProfileByToken, getAllUsers });
+
+const deleteUserById = async (userId) => {
+    try {
+        const user = await findUserById(userId);
+
+        if (!user) {
+            throw new Error("Couldn't find user for deletion");
+        }
+
+        await User.deleteOne({ _id: userId }); // Using deleteOne() instead of remove()
+        return 'User deleted successfully';
+    } catch (err) {
+        console.error("Error deleting user:", err);
+        throw err;
+    }
+};
+
+
+module.exports = ({ createUser, getUserByEmail, findUserById, getUserProfileByToken, getAllUsers, deleteUserById });

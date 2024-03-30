@@ -1,3 +1,5 @@
+// authenticate.js (middleware)
+
 const jwtProvider = require('../config/jwtProvider.js');
 const userService = require('../services/user.service.js');
 
@@ -10,7 +12,14 @@ const authenticate = async (req, res, next) => {
         }
 
         const userId = jwtProvider.getUserIdFromToken(token);
-        const user = await userService.findUserById(userId); // Add await here
+
+        // Ensure that token verification is done properly
+        if (!userId) {
+            return res.status(403).send({ error: "Invalid token..." });
+        }
+
+        // Here, we assume the token is valid, proceed to find the user
+        const user = await userService.findUserById(userId);
 
         if (!user) {
             return res.status(404).send({ error: "User not found..." });
@@ -19,7 +28,8 @@ const authenticate = async (req, res, next) => {
         req.user = user;
 
     } catch (error) {
-        return res.status(600).send({ error: error.message });
+        // If any error occurs during token verification or user lookup
+        return res.status(500).send({ error: error.message, statusCode: 600 });
     }
     next();
 }

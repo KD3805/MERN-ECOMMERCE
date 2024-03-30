@@ -87,7 +87,7 @@ const HomeSectionCarousel = ({
                     </h2>
                     <p className="text-lg font-normal text-center pt-2">{sectionDisc}</p>
                     <img
-                        src="https://www.tanishq.co.in/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw78fb320b/images/home/Line-Design.svg"
+                        src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711727694/Line-Design_fhgakp.svg"
                         className="w-full h-20 object-cover"
                         alt=""
                     />

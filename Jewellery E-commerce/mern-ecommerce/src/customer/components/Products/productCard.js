@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import zIndex from "@mui/material/styles/zIndex";
 
 const ProductCard = ({ product, index }) => {
-  console.log("product", product);
   const discount = Math.floor(
     ((product.price - product.discountedPrice) / product.price) * 100
   );
@@ -20,19 +19,19 @@ const ProductCard = ({ product, index }) => {
         setMouseHover(false);
       }}
       style={
-        isMouseHover ? { zIndex: zIndex.modal + 2, boxShadow: "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px" } : { zIndex: zIndex.appBar }
+        isMouseHover ? { zIndex: zIndex.modal + 2, boxShadow: "rgba(50, 50, 93, 0.25) 0px 30px 60px -12px, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px" } : { zIndex: zIndex.appBar, boxShadow: "rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px"}
       }
       onClick={() => navigate(`/product/${product?._id}`)}
-      className="p-2 rounded-lg w-[15rem] h-[23rem] shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:h-[32rem] hover:bg-white m-3 transition-all duration-300 cursor-pointer"
+      className="p-2 rounded-lg w-[15rem] h-[23rem] overflow-hidden hover:-translate-y-10 hover:h-[30rem] hover:bg-white m-3 transition-all duration-300 cursor-pointer"
     >
       <div className="h-[15rem] mb-3 overflow-hidden">
         <img
           style={
             isMouseHover
               ? {
-                  transform: "scale(1.1)",
-                  transition: "transform 0.2s",
-                }
+                transform: "scale(1.1)",
+                transition: "transform 0.2s",
+              }
               : {}
           }
           src={
@@ -47,7 +46,12 @@ const ProductCard = ({ product, index }) => {
 
       <div className="flex flex-col justify-center items-center text-center">
         <div className="mb-2">
-          <h1 className="text-lg font-semibold">{product.title}</h1>
+          <h1 
+            className="text-lg font-semibold" 
+            style={{textOverflow: "ellipsis", overflow: "hidden", width: "13rem", whiteSpace: "nowrap"}}
+          >
+            {product.title}
+          </h1>
           <button
             style={{ textTransform: "capitalize" }}
             className="text-sm font-bold text-rose-500 px-2"
@@ -94,10 +98,15 @@ const ProductCard = ({ product, index }) => {
           </div>
         )}
 
-        <div className="my-2 flex w-full gap-2 items-center justify-center hover:text-red-500 transition duration-500">
-          <p className="text-sm font-medium opacity-50">View Details</p>
-          <span>&rarr;</span>
-        </div>
+        {
+          !isMouseHover &&
+          (
+            <div className="my-2 flex w-full gap-2 items-center justify-center hover:text-red-500 transition duration-500">
+              <p className="text-sm font-medium opacity-50">Hover Details</p>
+              <span>&rarr;</span>
+            </div>
+          )
+        }
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getCart } from '../../../state/cart/Action'
 import { store } from '../../../state/store'
 
+
 const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -17,7 +18,8 @@ const Cart = () => {
 
     useEffect(() => {
         dispatch(getCart());
-    }, [cart.updateCartItem, cart.deleteCartItem])
+
+    }, [cart.updateCartItem, cart.deleteCartItem, cart.cartItems])
 
     return (
         <div>
@@ -26,9 +28,9 @@ const Cart = () => {
                     (
                         <div className='lg:grid grid-cols-3 lg:px-16 relative'>
                             <div className='col-span-2'>
-                                {cart.cart?.cartItems.map((item) => <CartItem item={item} />)}
+                                {cart.cart?.cartItems?.map((item) => <CartItem item={item} />)}
 
-                                <div className='flex items-center justify-center'>
+                                <div className='flex items-center justify-center my-5'>
                                     <Button
                                         onClick={() => navigate('/')}
                                         variant="outlined"

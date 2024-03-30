@@ -34,6 +34,9 @@ app.use('/api/cart', cartRouter);
 const cartItemRouter = require('./routes/cartItem.route.js');
 app.use('/api/cart_item', cartItemRouter);
 
+const wishRouter = require('./routes/wish.route.js');
+app.use('/api/wish', wishRouter);
+
 const orderRouter = require('./routes/order.route.js');
 app.use('/api/orders', orderRouter);
 

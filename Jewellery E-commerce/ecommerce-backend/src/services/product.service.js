@@ -55,11 +55,11 @@ async function createProduct(reqData) {
         color: reqData.color,
         price: reqData.price,
         discountedPrice: reqData.discountedPrice,
-        discountPercent: reqData.discountPercent,
+        discountPercent: Math.floor(((reqData.price - reqData.discountedPrice) / reqData.price) * 100),
         sizes: reqData.sizes,
         imageUrls: reqData.imageUrls,
         brand: reqData.brand,
-        // quantity: reqData.quantity,
+        quantity: reqData.quantity,
         category: thirdLevel._id,
     })
 
@@ -85,8 +85,7 @@ async function findProductById(id) {
     try {
         const product = await Product.findById(id)
             .populate("category")
-            .populate({ path: "category", populate: { path: "parentCategory" } })
-            .populate({ path: "category", populate: { path: "parentCategory", populate: { path: "name" } } })
+            // .populate({ path: "category", populate: { path: "parentCategory" } })
             .populate("reviews")
             .populate("ratings")
             .populate({ path: 'reviews', populate: { path: 'user' } })
@@ -135,7 +134,6 @@ async function getAllProducts(reqQuery) {
         const existCategories = await Category.find({ name: category })
 
         const categoryIds = existCategories.map(cat => cat._id);
-        console.log(categoryIds)
 
         if (existCategories.length > 0) {
             query = query.where("category").in(categoryIds);

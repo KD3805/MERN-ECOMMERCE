@@ -65,7 +65,7 @@ export const getOrderHistory = (reqData) => async(dispatch) => {
             `/api/orders/user`, 
             reqData
         )
-        // console.log("order history ------ ", data)
+        console.log("order history ------ ", data)
 
         dispatch({
             type: GET_ORDER_HISTORY_SUCCESS,

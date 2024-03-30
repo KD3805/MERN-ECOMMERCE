@@ -25,19 +25,19 @@ const CartItem = ({item}) => {
             <div className='flex items-center'>
 
                 <div className='w-[10rem] h-[10rem] shadow-sm rounded-lg'>
-                    <img src={item.product.imageUrls[0].imageUrl} className='w-full h-full object-cover' alt="" />
+                    <img src={item.product?.imageUrls?.[0]?.imageUrl} className='w-full h-full object-cover' alt="" />
                 </div>
 
                 <div className='ml-5 space-y-1'>
-                    <p className='font-semibold text-xl'>{item.product.title}</p>
-                    <p className='text-xs py-1 text-gray-400 font-medium'>Weight : {item.weight} | Size : {item.width} MM</p>
-                    <p className='text-xs  text-gray-400 font-medium'>Seller: {item.product.brand}</p>
+                    <p className='font-semibold text-xl'>{item.product?.title}</p>
+                    <p className='text-sm py-1 text-gray-400 font-medium'>Weight : {item.weight} | Size : {item.width} MM</p>
+                    <p className='text-sm  text-gray-400 font-medium'>Seller: {item.product?.brand}</p>
 
                     <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
                         <p className="font-semibold lg:text-xl">₹ {item.discountedPrice}</p>
                         <p className="opacity-50 line-through lg:text-base">₹ {item.price}</p>
-                        <p className="font-semibold text-green-600 lg:text-sm">
-                            {item.product.discountPercent}% off
+                        <p className="font-semibold text-red-500 text-sm">
+                            {item.product?.discountPercent}% off
                         </p>
                     </div>
                 </div>

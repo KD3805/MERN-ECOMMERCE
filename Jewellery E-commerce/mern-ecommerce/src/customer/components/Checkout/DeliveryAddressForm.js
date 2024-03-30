@@ -80,20 +80,9 @@ const DeliveryAddressForm = () => {
                       </div>
                       <Button
                         variant="outlined"
-                        type="submit"
                         onClick={() => {
-                          setData(
-                            {
-                              ...data,
-                              firstName: address.firstName,
-                              lastName: address.lastName,
-                              streetAddress: address.streetAddress, 
-                              city: address.city,
-                              state: address.state,
-                              zipCode: address.zipCode,
-                              mobile: address.mobile
-                            }
-                          )
+                          setData(address)
+                          console.log(address)
                         }}
                         sx={{ my: '1rem', fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderColor: '#832729' }, }}
                         className="flex w-4/12 items-center justify-center rounded-md border-none px-3 py-1"
@@ -103,16 +92,8 @@ const DeliveryAddressForm = () => {
                     </div>
                   ))}
                 </div>
-
-                {/* <Button
-                  variant="contained"
-                  type="submit"
-                  sx={{ my: '2rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
-                  className="flex w-full uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none "
-                >
-                  Deliver Here
-                </Button> */}
               </div>
+              
             </Grid>
           </div>
         </Grid >
@@ -132,6 +113,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    value={data.firstName}
                     defaultValue={data ? data.firstName : ''}
                   />
                 </Grid>
@@ -144,6 +126,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    value={data.lastName}
                     defaultValue={data ? data.lastName : ''}
                   />
                 </Grid>
@@ -158,6 +141,7 @@ const DeliveryAddressForm = () => {
                     autoComplete='given-name'
                     multiline
                     rows={4}
+                    value={data.streetAddress}
                     defaultValue={data ? data.streetAddress : ''}
                   />
                 </Grid>
@@ -170,6 +154,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    value={data.city}
                     defaultValue={data ? data.city : ''}
                   />
                 </Grid>
@@ -182,6 +167,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-name'
+                    value={data.state}
                     defaultValue={data ? data.state : ''}
                   />
                 </Grid>
@@ -194,6 +180,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='shipping postal-code'
+                    value={data.zipCode}
                     defaultValue={data ? data.zipCode : ''}
                   />
                 </Grid>
@@ -206,6 +193,7 @@ const DeliveryAddressForm = () => {
                     fullWidth
                     required
                     autoComplete='given-number'
+                    value={data.mobile}
                     defaultValue={data ? data.mobile : ''}
                   />
                 </Grid>

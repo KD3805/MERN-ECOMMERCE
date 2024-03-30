@@ -22,13 +22,13 @@ const OrderCard = ({ item, orderId, index, orderDate, orderStatus }) => {
                         />
 
                         <div className="ml-5 space-y-2">
-                            <p className="font-semibold text-lg">
+                            <p className="font-semibold text-xl">
                                 {item.product?.title}
                             </p>
-                            <p className="text-xs py-1 text-gray-400 font-medium">
+                            <p className="text-sm py-1 text-gray-400 font-medium">
                                 Weight : {item?.weight} | Size : {item?.width || 16.52} MM
                             </p>
-                            <p className="text-xs  text-gray-400 font-medium">
+                            <p className="text-sm  text-gray-400 font-medium">
                                 Seller: {item.product?.brand}
                             </p>
                         </div>

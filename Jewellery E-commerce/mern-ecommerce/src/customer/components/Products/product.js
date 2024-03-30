@@ -41,31 +41,31 @@ const rangeFilters = [
 ];
 
 const filters = [
-  {
-    id: "product",
-    name: "Product",
-    options: [
-      { value: "bangle", label: "Bangles", checked: false },
-      { value: "bracelet", label: "Bracelets", checked: false },
-      { value: "earring", label: "Earrings", checked: false },
-      { value: "pendant", label: "Pendants", checked: false },
-      { value: "mangal-sutra", label: "Mangal sutra", checked: false },
-      { value: "chain", label: "Chains", checked: false },
-      { value: "necklace", label: "Necklaces", checked: false },
-      { value: "ring", label: "Rings", checked: false },
-    ],
-  },
   // {
-  //   id: "type",
-  //   name: "Jewellery Type",
+  //   id: "product",
+  //   name: "Product",
   //   options: [
-  //     { value: "diamond", label: "Diamond Jewellery", checked: false },
-  //     { value: "gold", label: "Gold Jewellery", checked: false },
-  //     { value: "silver", label: "Silver Jewellery", checked: false },
-  //     { value: "gemstones", label: "Jewellery with Gemstones", checked: false },
-  //     { value: "platinum", label: "Platinum Jewellery", checked: false },
+  //     { value: "bangle", label: "Bangles", checked: false },
+  //     { value: "bracelet", label: "Bracelets", checked: false },
+  //     { value: "earring", label: "Earrings", checked: false },
+  //     { value: "pendant", label: "Pendants", checked: false },
+  //     { value: "mangal-sutra", label: "Mangal sutra", checked: false },
+  //     { value: "chain", label: "Chains", checked: false },
+  //     { value: "necklace", label: "Necklaces", checked: false },
+  //     { value: "ring", label: "Rings", checked: false },
   //   ],
   // },
+  {
+    id: "type",
+    name: "Jewellery Type",
+    options: [
+      { value: "diamond", label: "Diamond Jewellery", checked: false },
+      { value: "gold", label: "Gold Jewellery", checked: false },
+      { value: "silver", label: "Silver Jewellery", checked: false },
+      { value: "gemstones", label: "Jewellery with Gemstones", checked: false },
+      { value: "platinum", label: "Platinum Jewellery", checked: false },
+    ],
+  },
   {
     id: "color",
     name: "Color",
@@ -660,7 +660,7 @@ export default function Product() {
                         </div>
                       </div>
                     ) : (
-                      products.products.content.map((product, idx) => (
+                      products.products?.content?.map((product, idx) => (
                         <div className='h-[25rem] w-fit'>
                           <ProductCard product={product} key={product._id} index={idx} />
                         </div>
