@@ -5,7 +5,6 @@ export const getWish = () => async (dispatch) => {
     dispatch({ type: GET_WISH_REQUEST });
 
     try {
-        
         const { data } = await api.get('/api/wish');
         dispatch({ type: GET_WISH_SUCCESSS, payload: data })
         console.log("GET WISHLIST DATA (Action.js):::::", data)
