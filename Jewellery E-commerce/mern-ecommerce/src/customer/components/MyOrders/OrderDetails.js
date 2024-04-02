@@ -32,10 +32,10 @@ const OrderDetails = () => {
         let newActiveStep;
         switch(order.order?.orderStatus) {
             case "CONFIRMED":
-                newActiveStep = 2;
+                newActiveStep = 1;
                 break;  
             case "SHIPPED":
-                newActiveStep = 4;   
+                newActiveStep = 2;   
                 break;
             case "DELIVERED":
                 newActiveStep = 5;        

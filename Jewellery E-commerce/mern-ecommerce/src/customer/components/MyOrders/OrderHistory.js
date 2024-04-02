@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { getOrderHistory } from "../../../state/order/Action";
 import { format } from "date-fns";
-import { SnackbarProvider, useSnackbar } from "notistack";
 import { updatePayment } from "../../../state/payment/Action";
 import Loading from "../../../Loading";
 
@@ -30,7 +29,6 @@ const OrderHistory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { auth, order } = useSelector((store) => store);
-  const { enqueueSnackbar } = useSnackbar();
 
   const decodedQueryString = decodeURIComponent(location.search);
   const searchParams = new URLSearchParams(decodedQueryString);
@@ -39,7 +37,6 @@ const OrderHistory = () => {
   useEffect(() => {
     dispatch(getOrderHistory(auth));
     if (paymentId && param.orderId) {
-      enqueueSnackbar("Payment completed successfully!", "success");
       const data = { orderId: param.orderId, paymentId };
       dispatch(updatePayment(data));
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { cn } from "./utils/cs";
 import { motion } from "framer-motion";
 import { Checkbox } from "@mui/material";
@@ -18,7 +18,7 @@ const HomeSectionCard = ({ product, productLabel }) => {
   const handleFavouriteChange = (event) => {
     setFavChecked(event.target.checked);
 
-    if( event.target.checked === true ) {
+    if (event.target.checked === true) {
       dispatch(addWishItem({ productId: product._id }));
     }
     else {
@@ -55,20 +55,24 @@ const HomeSectionCard = ({ product, productLabel }) => {
       )}
     >
       <div className="relative w-full h-[15rem] rounded-lg transition duration-1000">
-        <img
-          src={product.imageUrls?.[0]?.imageUrl}
-          onClick={() => navigate(`/product/${product._id}`)}
-          style={
-            mouseHover
-              ? {
+        <Link
+          to={`/product/${product._id}`}
+          target="_blank" rel="noopener noreferrer"
+        >
+          <img
+            src={product.imageUrls?.[0]?.imageUrl}
+            style={
+              mouseHover
+                ? {
                   transform: "scale(1.1)",
                   transition: "transform 0.3s",
                 }
-              : {}
-          }
-          alt=""
-          className="object-cover object-left-top w-full h-full transition duration-1000 rounded-lg"
-        />
+                : {}
+            }
+            alt=""
+            className="object-cover object-left-top w-full h-full transition duration-1000 rounded-lg"
+          />
+        </Link>
 
         <div className="fav-icon bg-white rounded-full h-7 w-7 shadow-sm absolute top-3 right-3 flex items-center justify-center">
           <Checkbox
@@ -91,22 +95,24 @@ const HomeSectionCard = ({ product, productLabel }) => {
         )}
       </div>
 
-      <div className="p-4" onClick={() => navigate(`/product/${product._id}`)}>
-        <h3 className="text-base font-sans font-semibold inline-block w-full whitespace-nowrap overflow-hidden text-ellipsis">{product.title}</h3>
-        <div className="flex items-center justify-between mt-1">
-          <div className="flex gap-3 items-center justify-center">
-            <p className="text-lg font-sans text-gray-800 font-semibold">
-              ₹ {product.discountedPrice}
-            </p>
-            <p className="text-base font-sans text-gray-400 line-through font-semibold">
-              ₹ {product.price}
+      <Link to={`/product/${product._id}`} target="_blank" rel="noopener noreferrer" >
+        <div className="p-4">
+          <h3 className="text-base font-sans font-semibold inline-block w-full whitespace-nowrap overflow-hidden text-ellipsis">{product.title}</h3>
+          <div className="flex items-center justify-between mt-1">
+            <div className="flex gap-3 items-center justify-center">
+              <p className="text-lg font-sans text-gray-800 font-semibold">
+                ₹ {product.discountedPrice}
+              </p>
+              <p className="text-base font-sans text-gray-400 line-through font-semibold">
+                ₹ {product.price}
+              </p>
+            </div>
+            <p className="text-sm font-sans text-red-500 font-bold">
+              {product.discountPercent}% off
             </p>
           </div>
-          <p className="text-sm font-sans text-red-500 font-bold">
-            {product.discountPercent}% off
-          </p>
         </div>
-      </div>
+      </Link>
     </motion.div>
   );
 };

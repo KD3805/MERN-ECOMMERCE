@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 const HomeSectionCategory = () => {
@@ -50,7 +50,7 @@ const HomeSectionCategory = () => {
 
 
   return (
-    <div className='my-5'>
+    <div className='my-5' id='categories'>
       <div>
         <h2
           style={{ letterSpacing: "1px" }}
@@ -69,22 +69,24 @@ const HomeSectionCategory = () => {
       <div className='flex gap-5 items-center justify-center flex-wrap mt-3'>
         {
           categories.map((item) => (
-            <div onClick={() => navigate(`${item.nav}`)} className='flex flex-col flex-wrap h-fit w-[12vw] border rounded-sm hover:shadow-lg transition-all duration-300 cursor-pointer'>
-              <div className=' border rounded-sm'>
-                <div className='w-full h-[20vh]'>
-                  <img src={item.img} alt="jewelery" className='h-full w-full object-cover ' />
+            <Link to={`${item.nav}`} target="_blank" rel="noopener noreferrer">
+              <div className='flex flex-col flex-wrap h-fit w-[12vw] border rounded-sm hover:shadow-lg transition-all duration-300 cursor-pointer'>
+                <div className=' border rounded-sm'>
+                  <div className='w-full h-[20vh]'>
+                    <img src={item.img} alt="jewelery" className='h-full w-full object-cover ' />
+                  </div>
                 </div>
-              </div>
 
-              <div className='flex justify-center items-center flex-col p-3 w-full gap-2 transition-all duration-300'>
-                <h1 className='text-lg font-semibold' style={{color: '#852B2D'}}>{item.name}</h1>
-                <h3 className='flex justify-center gap-2 items-center w-full hover:text-red-500'>
-                  <span>Explore</span>
-                  <span className='text-lg mt-1'>&gt;</span>
-                </h3>
-              </div>
+                <div className='flex justify-center items-center flex-col p-3 w-full gap-2 transition-all duration-300'>
+                  <h1 className='text-lg font-semibold' style={{ color: '#852B2D' }}>{item.name}</h1>
+                  <h3 className='flex justify-center gap-2 items-center w-full hover:text-red-500'>
+                    <span>Explore</span>
+                    <span className='text-lg mt-1'>&gt;</span>
+                  </h3>
+                </div>
 
-            </div>
+              </div>
+            </Link>
           ))
         }
       </div>

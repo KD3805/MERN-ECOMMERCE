@@ -40,7 +40,7 @@ const ProductCard = ({ product, index }) => {
               : product.imageUrls[1].imageUrl
           }
           alt="jewellery"
-          className="h-full w-full object-cover rounded-lg border transition duration-300"
+          className="h-full w-full object-cover rounded-t-lg rounded-b-none border transition duration-300"
         />
       </div>
 

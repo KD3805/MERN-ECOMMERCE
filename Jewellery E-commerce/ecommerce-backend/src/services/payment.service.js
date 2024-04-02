@@ -1,5 +1,6 @@
 const razorpay = require("../config/razorpayClient.js");
 const orderService = require("../services/order.service.js");
+const { removeAllCartItems } = require("./cart.service.js");
 
 const createPaymentLink = async(orderId) => {
 
@@ -49,7 +50,6 @@ const updatePaymentInformation = async(reqData) => {
 
     try {
         const order = await orderService.findOrderById(orderId);
-
         const payment = await razorpay.payments.fetch(paymentId);
 
         if(payment.status == "captured") {
@@ -57,6 +57,7 @@ const updatePaymentInformation = async(reqData) => {
             order.paymentDetails.paymentStatus = "COMPLETED";
             order.orderStatus = "PLACED";
             order.deliveryDate = Date.now();
+            await removeAllCartItems(order.user._id);
 
             await order.save();
         }

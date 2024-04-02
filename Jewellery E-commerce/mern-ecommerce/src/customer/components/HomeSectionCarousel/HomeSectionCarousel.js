@@ -15,6 +15,7 @@ const HomeSectionCarousel = ({
     sectionDisc,
     sectionLabel,
     sectionCategory,
+    _id,
 }) => {
     const [activeIndex, setActiveIndex] = useState(0);
     const dispatch = useDispatch();
@@ -50,15 +51,62 @@ const HomeSectionCarousel = ({
 
     const settings = {
         dots: true,
-        // infinite: true,
-        // speed: 500,
+        infinite: false,
+        speed: 1000,
         slidesToShow: 4,
-        slidesToScroll: 3,
+        slidesToScroll: 4,
         fade: false,
         arrows: true,
-        syncActiveIndex: { syncActiveIndex },
-        activeIndex: { activeIndex },
-        // autoplay:true
+        autoplay: false,
+        initialSlide: 0,
+        swipeToSlide: true,
+        className: "center",
+        leftPadding: "60px",
+        // focusOnSelect: true,
+        responsive: [
+            {
+                breakpoint: 1150,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    dots: false,
+                    className: "center",
+                    centerPadding: "60px",
+                    swipeToSlide: true,
+                },
+            },
+            {
+                breakpoint: 968,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    // centerMode: true,
+                    dots: false,
+                    speed: 500,
+                    className: "center",
+                    infinite: true,
+                    centerPadding: "60px",
+                    swipeToSlide: true,
+                },
+            },
+            {
+                breakpoint: 700,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    dots: false,
+                    speed: 500,
+                    initialSlide: 2,
+                    className: "center",
+                    infinite: true,
+                    centerPadding: "60px",
+                    swipeToSlide: true,
+                    // className: "center",
+                    // centerMode: true,
+                    // centerPadding: "40px",
+                },
+            },
+        ],
     };
 
     // const slidePrev = ()=>setActiveIndex(activeIndex-1);
@@ -76,7 +124,7 @@ const HomeSectionCarousel = ({
         : null;
 
     return (
-        <div className="my-5">
+        <div className="my-5" id={_id}>
             {sectionName && (
                 <div>
                     <h2
@@ -94,7 +142,7 @@ const HomeSectionCarousel = ({
                 </div>
             )}
 
-            <div className="relative p-4">
+            <div className="slider-container">
                 <Slider {...settings}>{items}</Slider>
 
                 {/* <AliceCarousel

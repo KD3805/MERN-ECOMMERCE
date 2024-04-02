@@ -1,230 +1,283 @@
+import { Button, Grid, Typography } from '@mui/material'
 import React from 'react'
+import { Link, Navigate } from 'react-router-dom'
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 
 const Footer = () => {
-  return (
-    <div className="footer bg-black text-white px-10">
-        {/* <!-- footer section starts --> */}
+    return (
+        <div className='w-screen'>
+            <Grid
+                container
+                className='text-center mt-12 sticky bottom-0 left-0 right-0 overflow-hidden w-full'
+                sx={{ bgcolor: "#EFE3E3", color: '#852B2D', pt: 8, pb: 4, pr: 5 }}
+            >
+                <Grid item xs={12} sm={6} md={3}>
 
-        <footer class="footer_widgets footer_black">
-            <div class="container">
-                <div class="footer_top">
-                    <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-8">
-                            <div class="widgets_container contact_us">
-                                <h3>About Gayatri</h3>
-                                <div class="footer_contact">
-                                    <p>Address : Gayatri palace, Surat, Gujarat</p>
-                                    <p>Phone : <a href="tel:(+91)888888885555">(+91)888888885555</a></p>
-                                    <p>Email : gayatrijewlers@gmail.com</p>
-                                    <ul>
-                                        <li><a href="#"><i class="fa-brands fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa-brands fa-x-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa-solid fa-rss"></i></a></li>
-                                        <li><a href="#"><i class="fa-brands fa-google-plus-g"></i></a></li>
-                                        <li><a href="#"><i class="fa-brands fa-youtube"></i></a></li>
-                                    </ul>
-                                </div>
-                            </div>
+                    <div className='mb-14'>
+                        <h3 className='text-2xl pb-3 font-semibold'>Information</h3>
+                        <div>
+                            <ul
+                                role="list"
+                                aria-labelledby={`Information-heading`}
+                                className="mt-6 text-black text-lg space-y-6 sm:mt-4 sm:space-y-4 flex flex-col justify-center items-center "
+                            >
+                                <li className='flex'>
+                                    <Link
+                                        to={"/user-details/?layout=0"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        My Account
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        About us
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Blog
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/user-details/?layout=3"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Contact
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Portfolio
+                                    </Link>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="col-lg-2 col-md-6 col-sm-4 col-6">
-                            <div class="widgets_container widget_menu">
-                                <h3>Information</h3>
-                                <div class="footer_menu">
-                                    <ul>
-                                        <li><a href="#">About Us</a></li>
-                                        <li><a href="#">Blog</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                        <li><a href="#">Services</a></li>
-                                        <li><a href="#">Collection</a></li>
-                                        <li><a href="#">Portfolio</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-6 col-sm-5 col-6">
-                            <div class="widgets_container widget_menu">
-                                <h3>My Account</h3>
-                                <div class="footer_menu">
-                                    <ul>
-                                        <li><a href="#">My Account</a></li>
-                                        <li><a href="#">Contact</a></li>
-                                        <li><a href="#">Wishlist</a></li>
-                                        <li><a href="#">Portfolio</a></li>
-                                        <li><a href="#">Checkout</a></li>
-                                        <li><a href="#">Frequently Questions</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-7">
-                            <div class="widgets_container product_widget">
-                                {/* <h3>Top Rated Products</h3> */}
-                                <div class="simple_product">
+                    </div>
 
-                                    {/* <img src="assets/images/banner/gayatri_eng.jpg" className='py-3 mx-5' width={350} alt="" /> */}
-                                    <div class="simple_product_items">
-                                        <div class="simple_product_thumb">
-                                            <a href="#"><img src="assets/images/product/38.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="simple_product_content">
-                                            <div class="tag_cate">
-                                                <a href="#">Women,</a>
-                                                <a href="#">Earrings</a>
-                                            </div>
-                                            <div class="product_name">
-                                                <h3><a href="#">Bracelet</a></h3>
-                                            </div>
-                                            <div class="product_price">
-                                                <span class="old_price">Rs. 45612.54</span>
-                                                <span class="current_price">Rs. 41612.54</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="simple_product_items">
-                                        <div class="simple_product_thumb">
-                                            <a href="#"><img src="assets/images/product/48.jpg" alt="" /></a>
-                                        </div>
-                                        <div class="simple_product_content">
-                                            <div class="tag_cate">
-                                                <a href="#">Women,</a>
-                                                <a href="#">Earrings</a>
-                                            </div>
-                                            <div class="product_name">
-                                                <h3><a href="#">Ring</a></h3>
-                                            </div>
-                                            <div class="product_price">
-                                                <span class="old_price">Rs. 75612.54</span>
-                                                <span class="current_price">Rs. 71612.54</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3}>
+
+                    <div className='mb-14'>
+                        <h3 className='text-2xl pb-3 font-semibold'>Services</h3>
+                        <div>
+                            <ul
+                                role="list"
+                                aria-labelledby={`Services-heading`}
+                                className="mt-6 text-black text-lg space-y-6 sm:mt-4 sm:space-y-4 flex flex-col justify-center items-center "
+                            >
+                                <li className='flex'>
+                                    <a
+                                        href={"/#best-of-gayatri"}
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Best of Gayatri
+                                    </a>
+                                </li>
+                                <li className='flex'>
+                                    <a
+                                        href={"#categories"}
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Categories
+                                    </a>
+                                </li>
+                                <li className='flex'>
+                                    <a
+                                        href={"#offers-contest"}
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Offers & Contest
+                                    </a>
+                                </li>
+                                <li className='flex'>
+                                    <a
+                                        href={"#new-arrivals"}
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        New Arrivals
+                                    </a>
+                                </li>
+                                <li className='flex'>
+                                    <a
+                                        href={"#reccomanded"}
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Reccomanded
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3}>
+
+                    <div className='mb-14'>
+                        <h3 className='text-2xl pb-3 font-semibold'>Quick Links</h3>
+                        <div>
+                            <ul
+                                role="list"
+                                aria-labelledby={`QuickLinks-heading`}
+                                className="mt-6 text-black text-lg space-y-6 sm:mt-4 sm:space-y-4 flex flex-col justify-center items-center "
+                            >
+                                <li className='flex'>
+                                    <Link
+                                        to={"/user-details/?layout=1"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Favourites
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/all-jewellery/category/jewellery"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Collection
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/cart"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Cart
+                                    </Link>
+                                </li>
+                                <li className='flex'>
+                                    <Link
+                                        to={"/user-details/?layout=2"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        Orders
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3}>
+
+                    <div className='mb-14'>
+                        {/* <h3 className='text-2xl pb-3 font-semibold'>About Gayatri</h3> */}
+                        <div>
+                            <ul
+                                role="list"
+                                aria-labelledby={`QuickLinks-heading`}
+                                className="mt-6 px-3 text-black text-lg space-y-8 sm:mt-4 sm:space-y-4 flex flex-col justify-center items-start "
+                            >
+                                <li className='flex justify-between gap-4 items-start'>
+                                    <img
+                                        src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711911170/map_gzuopc.png"
+                                        alt="address"
+                                        style={{ width: 25, height: 25 }}
+                                    />
+                                    <Link
+                                        to={"https://maps.app.goo.gl/5gPT97dw1itGHXyDA"}
+                                        target="_blank" rel="noopener noreferrer"
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm text-left transition duration-300 cursor-pointer'
+                                    >
+                                        VNC Complex, Housing board, <br /> Morbi-2, Gujrat
+                                    </Link>
+                                </li>
+                                <li className='flex justify-between gap-4 items-start'>
+                                    <img
+                                        src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711911170/call_ndbyg5.png"
+                                        alt="phone"
+                                        style={{ width: 25, height: 25 }}
+                                    />
+                                    <p
+                                        className='text-pink-950 hover:underline hover:shadow-sm transition duration-300 cursor-pointer'
+                                    >
+                                        <a href="tel:(+91)888888885555" target='_blank'>(+91) 98700 81835</a>
+                                    </p>
+                                </li>
+                                <li className='flex justify-between gap-4 items-center'>
+                                    <img
+                                        src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711911169/gmail_dryfgp.png"
+                                        alt="gmail"
+                                        style={{ width: 25, height: 25 }}
+                                    />
+                                    <p
+                                        className='hover:text-pink-950 hover:underline hover:shadow-sm text-left transition duration-300 cursor-pointer'
+                                    >
+                                        gayatrijewels30@gmail.com
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <div className='w-3/4 mt-5'>
+                                <ul className='flex justify-around items-center'>
+                                    <li className='text-2xl'>
+                                        <Link
+                                            to={"https://www.linkedin.com/in/kishan-dabhi-837a64257/"} 
+                                            target="_blank" rel="noopener noreferrer"
+                                        >
+                                            <i class="fa-brands fa-linkedin"></i>
+                                        </Link>
+                                    </li>
+                                    <li className='text-2xl'>
+                                        <Link 
+                                            to={"https://twitter.com/Kishan3805"} 
+                                            target="_blank" rel="noopener noreferrer"
+                                        >
+                                            <i class="fa-brands fa-x-twitter"></i>
+                                        </Link>
+                                    </li>
+                                    <li className='text-2xl'>
+                                        <Link 
+                                            to={"https://github.com/KD3805/MERN-ECOMMERCE"} 
+                                            target="_blank" rel="noopener noreferrer"
+                                        >
+                                            <i class="fa-brands fa-github"></i>
+                                        </Link>
+                                    </li>
+                                    <li className='text-2xl'>
+                                        <Link 
+                                            to={"https://www.instagram.com/gayatri_fashion_jewellery/"}
+                                            target="_blank" rel="noopener noreferrer"
+                                        >
+                                            <i class="fa-brands fa-instagram"></i>
+                                        </Link>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
+
+                </Grid>
+
+                <div className='flex justify-center items-center w-full'>
+                    <p className='text-center text-lg font-semibold'>Copyright &copy; 2024 &nbsp; <a href="#" className='text-pink-950 hover:underline'>Gayatri</a> &nbsp; All rights Reserved.</p>
                 </div>
-                <div class="footer_bottom">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="copyright_area">
-                                <p>Copyright &copy; 2020 <a href="#">Gayatri</a> All rights Reserved.</p>
-                                <img src="images/icon/papyel2.png" alt="" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            </Grid>
 
-            </div>
-        </footer>
-
-    {/* <!-- footer section ends --> */}
-
-    {/* <!-- modal section starts --> */}
-
-    <div class="modal fade" id="modal_box" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="modal_body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-5 col-md-5 col-sm-12">
-                                <div class="modal_tab">
-                                    <div class="tab-content product-details-large">
-                                        <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-                                            <div class="modal_tab_img">
-                                                <a href="#"><img src="images/product/70.jpg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="tab2" role="tabpanel">
-                                            <div class="modal_tab_img">
-                                                <a href="#"><img src="images/product/71.jpg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="tab3" role="tabpanel">
-                                            <div class="modal_tab_img">
-                                                <a href="#"><img src="images/product/72.jpg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="tab4" role="tabpanel">
-                                            <div class="modal_tab_img">
-                                                <a href="#"><img src="images/product/73.jpg" alt="" /></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="modal_tab_button">
-                                        <ul class="nav product_navactive owl-carousel" role="tablist">
-                                            <li>
-                                                <a href="#tab1" class="nav-link active" data-toggle="tab" role="tab"
-                                                    aria-controls="tab1" aria-selected="false"><img
-                                                        src="images/product/70.jpg" alt="" /></a>
-                                            </li>
-                                            <li>
-                                                <a href="#tab2" class="nav-link" data-toggle="tab" role="tab"
-                                                    aria-controls="tab2" aria-selected="false"><img
-                                                        src="images/product/71.jpg" alt="" /></a>
-                                            </li>
-                                            <li>
-                                                <a href="#tab3" class="nav-link button_three" data-toggle="tab"
-                                                    role="tab" aria-controls="tab3" aria-selected="false"><img
-                                                        src="images/product/72.jpg" alt="" /></a>
-                                            </li>
-                                            <li>
-                                                <a href="#tab4" class="nav-link" data-toggle="tab" role="tab"
-                                                    aria-controls="tab4" aria-selected="false"><img
-                                                        src="images/product/73.jpg" alt="" /></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-7 col-md-7 col-sm-12">
-                                <div class="modal_right">
-                                    <div class="modal_title mb-10">
-                                        <h2>Women's Necklace</h2>
-                                    </div>
-                                    <div class="modal_price mb-10">
-                                        <span class="new_price">Rs. 51164</span>
-                                        <span class="old_price">Rs. 54164</span>
-                                    </div>
-                                    <div class="see_all">
-                                        <a href="#">See All Features</a>
-                                    </div>
-                                    <div class="modal_add_to_cart mb-15">
-                                        <form action="#">
-                                            <input type="number" min="0" max="100" step="1" />
-                                            <button type="submit">Add To Cart</button>
-                                        </form>
-                                    </div>
-                                    <div class="modal_description mb-15">
-                                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus quibusdam
-                                            nisi voluptas consequatur tempora, recusandae nemo blanditiis eaque odit
-                                            voluptatibus voluptatem, ipsa incidunt fugiat a.</p>
-                                    </div>
-                                    <div class="modal_social">
-                                        <h2>Share this Product</h2>
-                                        <ul>
-                                            <li><a href="#"><i class="ion-social-facebook"></i></a></li>
-                                            <li><a href="#"><i class="ion-social-twitter"></i></a></li>
-                                            <li><a href="#"><i class="ion-social-rss"></i></a></li>
-                                            <li><a href="#"><i class="ion-social-googleplus"></i></a></li>
-                                            <li><a href="#"><i class="ion-social-youtube"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
-
-    {/* <!-- modal section ends --> */}
-    </div>
-  )
+    )
 }
 
 export default Footer

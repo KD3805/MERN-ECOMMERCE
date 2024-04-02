@@ -150,10 +150,10 @@ export default function ProductDetails() {
   const modal = useContext(RRContext);
 
   const [selectedSize, setSelectedSize] = useState(
-    products.product?.sizes[0]?.size || ""
+    products?.product?.sizes[0]?.size || ""
   );
   const [selectedWeight, setSelectedWeight] = useState(
-    products.product?.sizes[0]?.weight || ""
+    products?.product?.sizes[0]?.weight || ""
   );
 
 
@@ -318,7 +318,7 @@ export default function ProductDetails() {
                         {products.product?.sizes?.map((wt) => (
                           <MenuItem
                             onClick={() => setSelectedWeight(wt.weight)}
-                            value={parseFloat(wt.weight.split(" ")[0])}
+                            value={Number(wt.weight.split(" ")[0])}
                           >
                             {wt.weight}
                           </MenuItem>
@@ -356,8 +356,8 @@ export default function ProductDetails() {
                         >
                           {products.product?.sizes?.map((s) => (
                             <MenuItem
-                              onClick={() => setSelectedWeight(s.size)}
-                              value={parseFloat(s.size.split(" ")[0])}
+                              onClick={() => setSelectedSize(s.size)}
+                              value={Number(s.size.split(" ")[0])}
                             >
                               {s.size}
                             </MenuItem>
@@ -648,7 +648,7 @@ export default function ProductDetails() {
 
           <HomeSectionCarousel
             sectionLabel={"similar"}
-            sectionCategory={products.product?.category.name}
+            sectionCategory={products?.product?.category?.name}
           />
         </section>
       </div >

@@ -41,6 +41,16 @@ code {
   margin-bottom: 24px;
 }
 
+.footer_contact {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 89%;
+  max-width: 1170px;
+  height: 100%;
+  margin: auto;
+}
+
 .footer_contact p {
   margin-bottom: 0;
   line-height: 30px;
@@ -51,12 +61,14 @@ code {
   color: #a8741a;
 }
 
+/* _______________ Only this part is useful ______________ */
+
 .footer_contact ul {
   margin-top: 10px;
 }
 .footer_contact ul li {
   display: inline-block;
-  margin-right: 7px;
+  margin-right: 10px;
 }
 
 .footer_contact ul li:last-child {
@@ -69,15 +81,20 @@ code {
   height: 40px;
   line-height: 40px;
   border: 0;
-  background: #2f2f2f;
+  background: #a1393b;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
-  display: block;
+  /* display: block; */
 }
 
 .footer_contact ul li a:hover {
-  background: #a8741a;
+  background: #852B2D;
 }
+
+/* _______________ Over ______________ */
 
 .footer_menu ul li a {
   display: block;
@@ -409,14 +426,12 @@ code {
   align-items: center;
   padding-left: 10vmin;
   padding-right: 10vmin;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  flex-wrap: wrap;
 }
 
 .header-searchbar{
   /* margin-top: 5.9rem; */
-  width: 40vw;
+  width: 100%;
   padding: 10px;
   font-size: 14px;
   font-weight: 400;
@@ -433,18 +448,11 @@ code {
   cursor: pointer;
 }
 
-.logo-search-div{
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  /* flex-wrap: wrap; */
-}
-
 .unline-animation::after{
   content: '';
   position: absolute;
   left: 0;
-  bottom: 8px;
+  bottom: 0px;
   width: 100%;
   height: 2px;
   /* --tw-text-opacity: 0.7; */
@@ -465,7 +473,7 @@ code {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -10px;
+  bottom: 0px;
   width: 100%;
   height: 2px;
   /* --tw-text-opacity: 0.7; */
@@ -488,6 +496,10 @@ code {
 
 .top-13 {
   top: 3.25rem;
+}
+
+.mt-4_5 {
+  margin-top: 1.25rem;
 }
 
 /* Delivery address form & Order summary */
@@ -513,4 +525,28 @@ code {
 }
 #user-details::-webkit-scrollbar { 
   display: none;  /* Safari and Chrome */
+}
+
+@media (max-width: 1024px) {
+  .searchbar-div {
+    display: none;
+  }
+  .my-header {
+    padding-left: 3vmin !important;
+    padding-right: 3vmin !important;
+  }
+}
+
+@media (max-width: 574px) {
+  .logo-div {
+    width: 80% !important;
+    justify-content: end;
+  }
+  .user-btns {
+    width: 100% !important;
+    height: 7vh !important;
+    justify-content: space-evenly;
+    margin-bottom: 80px !important;
+    border: 1px solid black;
+  }
 }

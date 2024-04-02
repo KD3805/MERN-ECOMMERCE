@@ -29,9 +29,13 @@ const HomePage = () => {
           sectionDisc={
             "Browse through your favorite categories. We've got them all!"
           }
+          _id="best-of-gayatri"
         />
 
-        <div className="flex justify-around flex-wrap transition-all duration-200 items-start space-x-4 my-5 w-full h-[25rem] overflow-hidden">
+        <div 
+          className="flex justify-around flex-wrap transition-all duration-200 items-start space-x-4 my-5 w-full h-[25rem] overflow-hidden"
+          id="offers-contest"  
+        >
           <div
             onMouseEnter={() => setHoverFirst(true)}
             onMouseLeave={() => setHoverFirst(false)}
@@ -117,9 +121,10 @@ const HomePage = () => {
           sectionName={"New Arrivals"}
           sectionLabel={"New Arrivals"}
           sectionDisc={"Our latest releases, just for you !!"}
+          _id="new-arrivals"
         />
 
-        <div className="flex justify-center items-center px-5">
+        <div className="flex justify-center items-center px-5 ">
           <div className="w-full h-[70vh] flex justify-center items-center gap-5 flex-wrap">
             <img
               onClick={() => navigate('/all-jewellery/category/necklace')}
@@ -143,6 +148,7 @@ const HomePage = () => {
           sectionDisc={
             "Discover products tailored to your preferences and interests!"
           }
+          _id="reccomanded"
         />
         {/* <HomeSectionCarousel data={best_sellers} sectionName={"Best of Gayatri"} sectionDisc={"Browse through your favorite categories. We've got them all!"}/> */}
       </div>

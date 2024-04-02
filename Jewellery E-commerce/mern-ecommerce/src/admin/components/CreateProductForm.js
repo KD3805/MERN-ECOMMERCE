@@ -26,8 +26,6 @@ const CssTextField = styled(TextField)({
 const initialImages = [{ imageUrl: '' }];
 const initialSizes = [
   { weight: 'g', size: 'MM', stock: 0 },
-  // { weight: '', size: 'M', stock: 0 },
-  // { weight: '', size: 'L', stock: 0 },
 ];
 
 const CreateProductForm = () => {
@@ -54,15 +52,60 @@ const CreateProductForm = () => {
   const dispatch = useDispatch();
 
   // Function to handle changes in text fields
-  const handleChange = (e, index, type) => {
-    const { name, value } = e.target;
+  const handleChange = async (e, index, type) => {
+    const { name, value, files } = e.target;
 
-    // Update the state based on the type of property
-    if (type === 'imageUrls') {
-      const updatedImageUrls = [...productData.imageUrls];
-      updatedImageUrls[index] = { imageUrl: value };
-      setProductData({ ...productData, imageUrls: updatedImageUrls });
-    } else if (type === 'sizes') {
+    if (files && files.length > 0) {
+      const formData = new FormData();
+
+      // Append each selected file to the FormData object
+      for (let i = 0; i < files.length; i++) {
+        formData.append('file', files[i]);
+      }
+
+      formData.append('upload_preset', 'myCloud'); // Your Cloudinary upload preset
+
+      // Upload images to Cloudinary
+      fetch('https://api.cloudinary.com/v1_1/deq0hxr3t/image/upload', {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to upload images to Cloudinary');
+          }
+        })
+        .then(data => {
+          const newImageUrl = data.secure_url;
+
+          // Update image URL in the productData state
+          setProductData(prevProductData => {
+            const updatedImageUrls = [...prevProductData.imageUrls];
+
+            updatedImageUrls[index] = { imageUrl: newImageUrl };
+            console.log("updatedImageUrls :::", updatedImageUrls)
+
+            return { ...prevProductData, imageUrls: updatedImageUrls };
+          });
+          console.log("productData after new image added :::", productData)
+        })
+        .catch(error => {
+          console.error(error.message);
+        });
+
+    }
+
+
+    // // Update the state based on the type of property
+    // if (type === 'imageUrls') {
+    //   const updatedImageUrls = [...productData.imageUrls];
+    //   updatedImageUrls[index] = { imageUrl: value };
+    //   setProductData({ ...productData, imageUrls: updatedImageUrls });
+    // } 
+
+    if (type === 'sizes') {
       const updatedSizes = [...productData.sizes];
       updatedSizes[index] = { ...updatedSizes[index], [name]: value };
       setProductData({ ...productData, sizes: updatedSizes });
@@ -76,6 +119,14 @@ const CreateProductForm = () => {
     setProductData((prevState) => ({
       ...prevState,
       imageUrls: [...prevState.imageUrls, { imageUrl: '' }],
+    }));
+  };
+
+  // Function to add additional image input field
+  const handleAddImageField = () => {
+    setProductData((prevState) => ({
+      ...prevState,
+      imageUrls: [...prevState.imageUrls, { imageUrl: '' }] // Add an empty object for each new image input field
     }));
   };
 
@@ -128,8 +179,22 @@ const CreateProductForm = () => {
 
         <Grid container spacing={2}>
 
+          <Grid item xs={12}>
+            {productData.imageUrls.map((image, index) => (
+              <Grid item xs={12} key={index}>
+                <TextField
+                  type='file'
+                  name="imageUrl"
+                  onChange={(e) => handleChange(e, index, 'imageUrls')}
+                  fullWidth
+                />
+              </Grid>
+            ))}
+
+          </Grid>
+
           {/* Add dynamic fields for image URLs */}
-          {productData.imageUrls.map((image, index) => (
+          {/* {productData.imageUrls.map((image, index) => (
             <Grid item xs={12} key={index}>
               <TextField
                 label={`Image URL ${index + 1}`}
@@ -139,10 +204,10 @@ const CreateProductForm = () => {
                 fullWidth
               />
             </Grid>
-          ))}
+          ))} */}
           <Grid item xs={12}>
             <Button
-              onClick={() => handleAddImageUrl()}
+              onClick={() => handleAddImageField()}
               sx={{ textTransform: "capitalize", fontSize: "1rem", marginBottom: "0.75rem" }}
               variant="outlined"
             >

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AddressCard from '../AddressCard/AddressCard'
 import Cart from '../Cart/Cart'
 import CartItem from '../Cart/CartItem'
@@ -15,13 +15,15 @@ const OrderSummary = () => {
   const { order } = useSelector(store => store);
   const searchParams = new URLSearchParams(location.search);
   const orderId = searchParams.get("order_id");
+  const [disablePay, setDisablePay] = useState(false);
 
   useEffect(() => {
     dispatch(getOrderById(orderId));
   }, [orderId])
 
   const handlePayment = () => {
-    dispatch(createPayment(orderId));
+    setDisablePay(true)
+    dispatch(createPayment(orderId)).then(() => setDisablePay(false))
   }
 
   // const {firstName, lastName, streetAddress, city, state, zipCode, mobile} = order.order?.shippingAddress;
@@ -66,7 +68,7 @@ const OrderSummary = () => {
                       <p className='text-sm py-1 text-gray-400 font-medium'>Weight : {item.weight} 
                       {/* | Size : 16.40 MM */}
                       </p>
-                      <p className='text-sm  text-gray-400 font-medium'>Seller: {item.product?.brand}</p>
+                      <p className='text-sm  text-gray-400 font-medium'>Quantity: {item.quantity}</p>
 
                       <div className="flex space-x-5 items-center text-lg lg:text-xl text-gray-900 mt-3">
                         <p className="font-semibold lg:text-xl">₹ {item.product?.discountedPrice}</p>
@@ -99,12 +101,12 @@ const OrderSummary = () => {
 
                   <div className='flex justify-between pt-3'>
                     <span>Discount</span>
-                    <span className='text-green-600'>- {order.order?.discount} %</span>
+                    <span className='text-red-600'>{order.order?.discount} %</span>
                   </div>
 
                   <div className='flex justify-between pt-3'>
                     <span>Delivery Charge</span>
-                    <span className='text-green-600'>FREE</span>
+                    <span className='text-red-600'>FREE</span>
                   </div>
                   <hr />
                   <div
@@ -117,11 +119,12 @@ const OrderSummary = () => {
                 </div>
 
                 <Button
-                  onClick={handlePayment}
+                  onClick={() => handlePayment()}
                   variant="contained"
                   type="submit"
+                  disabled={disablePay}
                   sx={{ my: '2rem', bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
-                  className="flex w-full uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none "
+                  className="flex w-full uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none disabled:bg-gray-500"
                 >
                   Payment
                 </Button>

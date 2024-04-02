@@ -31,29 +31,32 @@ const CssTextField = styled(TextField)({
 const DeliveryAddressForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({
+    firstName: '',
+    lastName: '',
+    streetAddress: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    mobile: ''
+  });
   const { auth } = useSelector(store => store);
-  console.log('auth user', auth?.user)
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('e.currentTarget', e.currentTarget)
-    const data = new FormData(e.currentTarget);
-    console.log('formdata', data.set('firstName', 'jsk'))
-    console.log('formdata', data.get('firstName'))
-
+    // console.log("address on handleSubmit", data)
+    
     const address = {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      streetAddress: data.get('address'),
-      city: data.get('city'),
-      state: data.get('state'),
-      zipCode: data.get('zip'),
-      mobile: data.get('phoneNumber')
+      firstName: data.firstName,
+      lastName: data.lastName,
+      streetAddress: data.streetAddress,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      mobile: data.mobile
     }
-    const orderData = {address, navigate}
+    const orderData = { address, navigate }
     dispatch(createOrder(orderData))
-    console.log('address', orderData);
   }
 
   const handleDelivery = () => {
@@ -93,7 +96,7 @@ const DeliveryAddressForm = () => {
                   ))}
                 </div>
               </div>
-              
+
             </Grid>
           </div>
         </Grid >
@@ -114,7 +117,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='given-name'
                     value={data.firstName}
-                    defaultValue={data ? data.firstName : ''}
+                    onChange={(e) => {
+                      setData({ ...data, firstName: e.target.value })
+                    }}
+                    // defaultValue={data ? data.firstName : ''}
                   />
                 </Grid>
 
@@ -127,7 +133,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='given-name'
                     value={data.lastName}
-                    defaultValue={data ? data.lastName : ''}
+                    onChange={(e) => {
+                      setData({ ...data, lastName: e.target.value })
+                    }}
+                    // defaultValue={data ? data.lastName : ''}
                   />
                 </Grid>
 
@@ -142,7 +151,10 @@ const DeliveryAddressForm = () => {
                     multiline
                     rows={4}
                     value={data.streetAddress}
-                    defaultValue={data ? data.streetAddress : ''}
+                    onChange={(e) => {
+                      setData({ ...data, streetAddress: e.target.value })
+                    }}
+                    // defaultValue={data ? data.streetAddress : ''}
                   />
                 </Grid>
 
@@ -155,7 +167,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='given-name'
                     value={data.city}
-                    defaultValue={data ? data.city : ''}
+                    onChange={(e) => {
+                      setData({ ...data, city: e.target.value })
+                    }}
+                    // defaultValue={data ? data.city : ''}
                   />
                 </Grid>
 
@@ -168,7 +183,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='given-name'
                     value={data.state}
-                    defaultValue={data ? data.state : ''}
+                    onChange={(e) => {
+                      setData({ ...data, state: e.target.value })
+                    }}
+                    // defaultValue={data ? data.state : ''}
                   />
                 </Grid>
 
@@ -181,7 +199,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='shipping postal-code'
                     value={data.zipCode}
-                    defaultValue={data ? data.zipCode : ''}
+                    onChange={(e) => {
+                      setData({ ...data, zipCode: e.target.value })
+                    }}
+                    // defaultValue={data ? data.zipCode : ''}
                   />
                 </Grid>
 
@@ -194,7 +215,10 @@ const DeliveryAddressForm = () => {
                     required
                     autoComplete='given-number'
                     value={data.mobile}
-                    defaultValue={data ? data.mobile : ''}
+                    onChange={(e) => {
+                      setData({ ...data, mobile: e.target.value })
+                    }}
+                    // defaultValue={data ? data.mobile : ''}
                   />
                 </Grid>
 

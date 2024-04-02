@@ -14,8 +14,10 @@ const MainCarousel = () => {
         slidesToShow: 1,
         slidesToScroll: 1,
         fade: true,
-        arrows: true,
-        autoplay: true
+        arrows: false,
+        autoplay: true,
+        autoplaySpeed: 1000,
+        // pauseOnHover: true,
     };
 
     const items = mainCarouselData.map((item) => {

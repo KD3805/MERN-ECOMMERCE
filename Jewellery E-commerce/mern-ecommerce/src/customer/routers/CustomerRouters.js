@@ -8,7 +8,6 @@ import Checkout from "../components/Checkout/Checkout";
 import OrderHistory from "../components/MyOrders/OrderHistory";
 import OrderDetails from "../components/MyOrders/OrderDetails";
 import Navigation from "../components/navigation/Navigation";
-import Footer from "../components/Footer/footer";
 import Loading from "../../Loading";
 import axios from "axios";
 import ModalState from "../../context/modal/modalState";
@@ -17,35 +16,36 @@ import PageNotFound from "../components/NotFound/PageNotFound";
 import { useSelector } from "react-redux";
 import { store } from "../../state/store";
 import UserDetails from "../components/User_Details/UserDetails";
+import Footer from "../components/Footer/Footer";
 
 // Define a higher-order component to conditionally render Navigation and Footer
 const WithLayout = ({ children, showLayout }) => {
-  const [isLoading, setIsLoading] = React.useState(false);
+  // const [isLoading, setIsLoading] = React.useState(false);
 
-  useEffect(() => {
-    const requestInterceptor = axios.interceptors.request.use(function (config) {
-      setIsLoading(true);
-      return config;
-    });
+  // useEffect(() => {
+  //   const requestInterceptor = axios.interceptors.request.use(function (config) {
+  //     setIsLoading(true);
+  //     return config;
+  //   });
 
-    const responseInterceptor = axios.interceptors.response.use(function (response) {
-      setIsLoading(false);
-      return response;
-    }, function (error) {
-      setIsLoading(false);
-      return Promise.reject(error);
-    });
+  //   const responseInterceptor = axios.interceptors.response.use(function (response) {
+  //     setIsLoading(false);
+  //     return response;
+  //   }, function (error) {
+  //     setIsLoading(false);
+  //     return Promise.reject(error);
+  //   });
 
-    return () => {
-      axios.interceptors.request.eject(requestInterceptor);
-      axios.interceptors.response.eject(responseInterceptor);
-    };
-  }, []);
+  //   return () => {
+  //     axios.interceptors.request.eject(requestInterceptor);
+  //     axios.interceptors.response.eject(responseInterceptor);
+  //   };
+  // }, []);
 
   return showLayout ? (
     <div>
       <Navigation />
-      {isLoading && <Loading />}
+      {/* {isLoading ? <Loading /> : children} */}
       {children}
       <Footer />
     </div>
@@ -55,7 +55,7 @@ const WithLayout = ({ children, showLayout }) => {
 };
 
 const CustomerRouters = () => {
-  const [authenticated, setAuthenticated] = useState(false); // You need to implement this
+  const [authenticated, setAuthenticated] = useState(true); // You need to implement this
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem("jwt") !== null; // Example: Check if token exists in localStorage
@@ -104,11 +104,15 @@ const CustomerRouters = () => {
         <Route
           path="/product/:productId/ratrev"
           element={
-            <WithLayout showLayout={true}>
-              <RRState>
-                <ProductDetails />
-              </RRState>
-            </WithLayout>
+            authenticated ? (
+              <WithLayout showLayout={true}>
+                <RRState>
+                  <ProductDetails />
+                </RRState>
+              </WithLayout>
+            ) : (
+              <Navigate to="/login" replace />
+            )
           }
         />
         <Route
@@ -189,7 +193,7 @@ const CustomerRouters = () => {
         <Route
           path="*"
           element={
-            <WithLayout showLayout={false}>
+            <WithLayout showLayout={true}>
               <PageNotFound />
             </WithLayout>
           }

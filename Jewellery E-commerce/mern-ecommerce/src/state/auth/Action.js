@@ -7,7 +7,7 @@ const registerRequest = () => ({type: REGESTER_REQUEST});
 const registerSuccess = (user) => ({type: REGESTER_SUCCESS, payload: user});
 const registerFailure = (error) => ({type: REGESTER_FAILURE, payload: error});
 
-export const register = (userData, modal) => async (dispatch) => {
+export const register = (userData) => async (dispatch) => {
     dispatch(registerRequest());
 
     try {
@@ -21,12 +21,9 @@ export const register = (userData, modal) => async (dispatch) => {
 
         dispatch(registerSuccess(user.jwt));
 
-        if (user) {
-            userData.navigate('/');
-            modal.closeModal();
-        }
     } catch (error) {
         dispatch(registerFailure(error.message));
+        throw new Error(error.message);
     }
 };
 
@@ -35,7 +32,7 @@ const loginRequest = () => ({type: LOGIN_REQUEST});
 const loginSuccess = (user) => ({type: LOGIN_SUCCESS, payload: user});
 const loginFailure = (error) => ({type: LOGIN_FAILURE, payload: error});
 
-export const login = (userData, modal) => async (dispatch) => {
+export const login = (userData) => async (dispatch) => {
     dispatch(loginRequest());
 
     try {
@@ -46,19 +43,12 @@ export const login = (userData, modal) => async (dispatch) => {
         if (user.jwt) {
             localStorage.setItem("jwt", user.jwt);
         }
-        if(user.role) {
-            localStorage.setItem('role', user.role);
-        }
 
         dispatch(loginSuccess(user.jwt));
 
-        if (user) {
-            userData.navigate('/');
-            modal.closeModal();
-        }
     } catch (error) {
-        console.error("Error during login:", error);
         dispatch(loginFailure(error.message));
+        throw new Error(error.message);
     }
 };
 

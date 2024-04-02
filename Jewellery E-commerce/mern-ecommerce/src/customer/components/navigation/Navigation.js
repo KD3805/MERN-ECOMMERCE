@@ -10,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { deepOrange, deepPurple } from "@mui/material/colors";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import { Badge, Button, Grid } from "@mui/material";
 import AuthModel from "../../auth/AuthModel";
@@ -288,7 +288,7 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
-  // const [openAuthModel, setOpenAuthModel] = useState(false);
+  const [openAuthModel, setOpenAuthModel] = useState(false);
   const modal = useContext(ModalContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const openUserMenu = Boolean(anchorEl);
@@ -342,7 +342,8 @@ export default function Navigation() {
 
   const handleLogout = () => {
     dispatch(logout());
-    modal.closeModal()
+    modal.closeModal();
+    window.location.reload();
   };
 
   return (
@@ -463,7 +464,7 @@ export default function Navigation() {
                   </Tab.Panels>
                 </Tab.Group>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                {/* <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   {navigation.pages.map((page, index) => (
                     <div key={`${page.name}-${index}`} className="flow-root">
                       <a
@@ -474,9 +475,9 @@ export default function Navigation() {
                       </a>
                     </div>
                   ))}
-                </div>
+                </div> */}
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                {/* <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                   <div className="flow-root">
                     <a
                       href="#"
@@ -493,7 +494,7 @@ export default function Navigation() {
                       Create account
                     </a>
                   </div>
-                </div>
+                </div> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -503,202 +504,218 @@ export default function Navigation() {
       <header className="relative">
         <div className="bg-pink-100 text-pink-950 sm:px-6">
           <div className="my-header">
+
+            <button
+              type="button"
+              className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
+              onClick={() => setOpen(true)}
+            >
+              <span className="absolute -inset-0.5" />
+              <span className="sr-only">Open menu</span>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
+
             {/* Logo */}
-            <div className="logo-search-div w-[85%]">
-              <a href="#" className="cursor-pointer">
+            <div className="h-full flex justify-start items-center logo-div">
+              <Link to="/" className="cursor-pointer">
                 <span className="sr-only">Your Company</span>
                 <img
                   className="object-cover w-40 mt-4"
                   src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1707743755/gayatri_logo_yylmuj.png"
                   alt=""
                 />
-              </a>
+              </Link>
+            </div>
 
-              {/* Search bar */}
-              <div className="relative header-search-div">
-                <input
-                  type="text"
-                  placeholder="Search for Gold Jewellery, Diamond…"
-                  className="bg-white header-searchbar text-pink-950"
-                />
-                <span className="search-icon">
-                  <i className="fa-solid fa-magnifying-glass"></i>
-                </span>
-              </div>
+            {/* Search bar */}
+            <div className="w-[40%] relative searchbar-div">
+              <input
+                type="text"
+                placeholder="Search for Gold Jewellery, Diamond…"
+                className="bg-white header-searchbar text-pink-950"
+              />
+              <span className="search-icon">
+                <i className="fa-solid fa-magnifying-glass"></i>
+              </span>
             </div>
 
             {/* customer's action buttons */}
-            <div
-              className="flex items-center justify-between w-[15%]"
-            >
-              
+            <div className="flex items-center justify-end space-x-8 user-btns">
               <div
+                className="h-[10vh] flex items-center justify-center relative unline-navigation"
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
-                xs={4}
-                className="flex items-center flex-col cursor-pointer transition duration-1000 border-pink-950 relative unline-navigation"
               >
-                <PermIdentityOutlinedIcon
-                  sx={{ width: "25px", height: "25px" }}
-                  className="opacity-60"
-                />
-                <span className="font-semibold uppercase text-sm">
-                  {auth.user?.firstName ? auth.user?.firstName : "Account"}
-                </span>
+                <div className="flex items-center flex-col cursor-pointer transition duration-1000 border-pink-950">
+                  <PermIdentityOutlinedIcon
+                    sx={{ width: "25px", height: "25px" }}
+                    className="opacity-60"
+                  />
+                  <span className="font-semibold uppercase text-sm">
+                    {auth.user?.firstName ? auth.user?.firstName : "Account"}
+                  </span>
 
-                {!auth.user?.firstName
-                  ? isHovering && (
-                    <div className="p-3 absolute top-14 z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
-                      <h1 className="text-2xl font-normal uppercase">
-                        My Account
-                      </h1>
-                      <p className="text-xs font-normal">
-                        LOGIN TO ACCESS YOUR ACCOUNT
-                      </p>
+                  {!auth.user?.firstName
+                    ? isHovering && (
+                      <div className="p-3 absolute top-[10vh] z-50 w-[16rem] text-center bg-white rounded-md shadow-lg space-y-3 text-pink-950 transition-all duration-1000">
+                        <h1 className="text-2xl font-normal uppercase">
+                          My Account
+                        </h1>
+                        <p className="text-xs font-normal">
+                          LOGIN TO ACCESS YOUR ACCOUNT
+                        </p>
 
-                      <div className="py-2 flex items-center justify-around">
-                        <Button
-                          onClick={(e) => handleOpen(e, "login")}
-                          variant="outlined"
-                          type="submit"
-                          sx={{
-                            fontSize: "0.75rem",
-                            color: "#832729",
-                            borderColor: "#832729",
-                            "&:hover": {
-                              boxShadow: "#f9a8d4 0px 5px 20px",
+                        <div className="py-2 flex items-center justify-around">
+                          <Button
+                            onClick={(e) => handleOpen(e, "login")}
+                            variant="outlined"
+                            type="submit"
+                            sx={{
+                              fontSize: "0.75rem",
+                              color: "#832729",
                               borderColor: "#832729",
-                            },
-                          }}
-                          // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
-                          className="flex items-center justify-center rounded-md border-none px-2 py-1"
-                        >
-                          log in
-                        </Button>
-                        <Button
-                          onClick={(e) => handleOpen(e, "register")}
-                          variant="contained"
-                          type="submit"
-                          sx={{
-                            fontSize: "0.75rem",
-                            bgcolor: "#832729",
-                            "&:hover": { bgcolor: "#500724" },
-                          }}
-                          className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
-                        >
-                          sign up
-                        </Button>
+                              "&:hover": {
+                                boxShadow: "#f9a8d4 0px 5px 20px",
+                                borderColor: "#832729",
+                              },
+                            }}
+                            // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
+                            className="flex items-center justify-center rounded-md border-none px-2 py-1"
+                          >
+                            log in
+                          </Button>
+                          <Button
+                            onClick={(e) => handleOpen(e, "register")}
+                            variant="contained"
+                            type="submit"
+                            sx={{
+                              fontSize: "0.75rem",
+                              bgcolor: "#832729",
+                              "&:hover": { bgcolor: "#500724" },
+                            }}
+                            className="flex uppercase items-center justify-center rounded-md border-none px-2 py-1 text-white focus:outline-none"
+                          >
+                            sign up
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  )
-                  : isHovering && (
-                    <div
-                      className="p-3 absolute top-13 z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
-                      style={{ color: "#832729" }}
-                    >
-                      <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
-                        <h1 className="text-xl font-semibold">
-                          Hi! {auth.user?.firstName},
-                        </h1>
-                        <h1 className="text-xs font-normal lowercase">
-                          {auth.user?.email}
-                        </h1>
-                      </div>
-
+                    )
+                    : isHovering && (
                       <div
-                        key="acount-details"
-                        className="py-2 flex flex-col space-y-3"
+                        className="p-3 absolute top-[10vh] z-50 w-[13rem] flex flex-col bg-white rounded-md shadow-lg space-y-2 transition-all duration-1000 uppercase"
+                        style={{ color: "#832729" }}
                       >
-                        {
-                          auth.user?.role === "ADMIN" && (
+                        <div className="px-2 pb-3 flex flex-col border-b-2 border-pink-950 space-y-1">
+                          <h1 className="text-xl font-semibold">
+                            Hi! {auth.user?.firstName},
+                          </h1>
+                          <h1 className="text-xs font-normal lowercase text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                            {auth.user?.email}
+                          </h1>
+                        </div>
+
+                        <div
+                          key="acount-details"
+                          className="py-2 flex flex-col space-y-3"
+                        >
+                          {auth.user?.role === "ADMIN" && (
                             <h1
-                              onClick={() => navigate('/admin')}
+                              onClick={() => {
+                                setIsHovering(false)
+                                navigate("/admin")
+                              }}
                               key="admin-panel"
                               className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
                             >
                               Admin Panel
                             </h1>
-                          )
-                        }
-                        <h1
-                          key="my-acount"
-                          onClick={() => {
-                            navigate("/user-details/?layout=0")
-                          }}
-                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                        >
-                          My Account
-                        </h1>
-                        <h1
-                          onClick={() => {
-                            navigate("/user-details/?layout=2")
-                          }}
-                          key="order-history"
-                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                        >
-                          Order History
-                        </h1>
-                        <h1
-                          key="contact-us"
-                          onClick={() => {
-                            // document.getElementById('nav-fav-btn').classList.add("border-b-2");
-                            navigate("/user-details/?layout=3")
-                          }}
-                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                        >
-                          Contact Us
-                        </h1>
-                        <h1
-                          key="log-out"
-                          className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
-                          onClick={handleLogout}
-                        >
-                          Log out
-                        </h1>
+                          )}
+                          <h1
+                            key="my-acount"
+                            onClick={() => {
+                              setIsHovering(false)
+                              navigate("/user-details/?layout=0");
+                            }}
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            My Account
+                          </h1>
+                          <h1
+                            onClick={() => {
+                              setIsHovering(false)
+                              navigate("/user-details/?layout=2");
+                            }}
+                            key="order-history"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            Order History
+                          </h1>
+                          <h1
+                            key="contact-us"
+                            onClick={() => {
+                              setIsHovering(false)
+                              navigate("/user-details/?layout=3");
+                            }}
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                          >
+                            Contact Us
+                          </h1>
+                          <h1
+                            key="log-out"
+                            className="text-md p-2 font-medium hover:text-pink-950 hover:font-bold hover:bg-pink-50"
+                            onClick={() => handleLogout()}
+                          >
+                            Log out
+                          </h1>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                </div>
               </div>
 
-              {/* Favourite */}
-              <div
-                xs={4}
-                onClick={() => {
-                  // document.getElementById('nav-fav-btn').classList.add("border-b-2");
-                  navigate("/user-details/?layout=1")
-                }}
-                className="flex items-center flex-col cursor-pointer border-pink-950 relative unline-navigation"
-              >
-                <Badge badgeContent={wishlist?.wishItems?.length} color="error">
-                  <FavoriteBorderIcon
-                    sx={{ width: "25px", height: "25px" }}
-                    className="opacity-60"
-                  />
-                </Badge>
-                <span className="font-semibold uppercase text-sm">
-                  Wishlist
-                </span>
+              <div className="h-[10vh] flex items-center justify-center unline-navigation relative">
+                {/* Favourite */}
+                <div
+                  onClick={() => {
+                    // document.getElementById('nav-fav-btn').classList.add("border-b-2");
+                    navigate("/user-details/?layout=1");
+                  }}
+                  className="flex items-center flex-col cursor-pointer border-pink-950"
+                >
+                  <Badge
+                    badgeContent={wishlist?.wishItems?.length}
+                    color="error"
+                  >
+                    <FavoriteBorderIcon
+                      sx={{ width: "25px", height: "25px" }}
+                      className="opacity-60"
+                    />
+                  </Badge>
+                  <span className="font-semibold uppercase text-sm">
+                    Wishlist
+                  </span>
+                </div>
               </div>
 
               {/* Cart */}
-              <div
-                onClick={() => {
-                  // document.getElementById('nav-cart-btn').classList.add("border-b-2");
-                  navigate("/cart")
-                }}
-                xs={4}
-                id="nav-cart-btn"
-                className="flex items-center flex-col cursor-pointer border-pink-950  relative unline-navigation"
-              >
-                <Badge badgeContent={cart.cart?.totalItem} color="error">
-                  <AddShoppingCartIcon
-                    sx={{ width: "25px", height: "25px" }}
-                    className="opacity-60"
-                  />
-                </Badge>
-                <span className="font-semibold uppercase text-sm">
-                  Cart
-                </span>
+              <div className="h-[10vh] flex items-center justify-center unline-navigation relative">
+                <div
+                  onClick={() => {
+                    // document.getElementById('nav-cart-btn').classList.add("border-b-2");
+                    navigate("/cart");
+                  }}
+                  xs={4}
+                  id="nav-cart-btn"
+                  className="flex items-center flex-col cursor-pointer border-pink-950"
+                >
+                  <Badge badgeContent={cart.cart?.totalItem} color="error">
+                    <AddShoppingCartIcon
+                      sx={{ width: "25px", height: "25px" }}
+                      className="opacity-60"
+                    />
+                  </Badge>
+                  <span className="font-semibold uppercase text-sm">Cart</span>
+                </div>
               </div>
             </div>
           </div>
@@ -710,14 +727,6 @@ export default function Navigation() {
         >
           <div className="border-b border-gray-200">
             <div className="flex h-16 items-center">
-              <button
-                type="button"
-                className="relative rounded-md bg-white p-2 text-gray-400 lg:hidden"
-              >
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Open menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
 
               {/* Flyout menus */}
               <Popover.Group className="hidden z-50 lg:ml-8 lg:block lg:self-stretch">

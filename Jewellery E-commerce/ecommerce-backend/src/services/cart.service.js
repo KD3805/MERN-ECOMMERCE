@@ -82,4 +82,28 @@ async function addCartItem(userId, req) {
     }
 }
 
-module.exports = {createCart, addCartItem, findUserCart};
+async function removeAllCartItems(userId) {
+    try {
+        let cart = await Cart.findOne({user: userId});
+        
+        cart.cartItems.length = 0;
+        console.log("removeAllCartItems called :: and cart.cartItems ::", cart.cartItems)
+
+        const totals = {
+            totalPrice: 0,
+            totalItem: 0,
+            totalDiscountedPrice: 0,
+            discount: Math.floor(((totalPrice - totalDiscountedPrice) / totalPrice) * 100),
+        };
+        Object.assign(cart, totals);
+        await cart.save();
+        console.log("removeAllCartItems called :: and cart.save() ::", cart)
+
+        return cart;
+
+    } catch (error) {
+        throw new Error(error.message);
+    }
+}
+
+module.exports = {createCart, addCartItem, findUserCart, removeAllCartItems};

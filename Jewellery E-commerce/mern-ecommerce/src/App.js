@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import CustomerRouters from './customer/routers/CustomerRouters';
 import AdminRouters from './customer/routers/AdminRouters';
+import IsAdmin from './config/isAdmin';
 
 function App() {
-  const isAdmin = localStorage.getItem('role') === 'ADMIN';
+  const isAdmin = IsAdmin();
 
   return (
     <div>
