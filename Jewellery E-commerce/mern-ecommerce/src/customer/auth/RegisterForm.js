@@ -105,7 +105,7 @@ const RegisterForm = () => {
     }
 
     const nameForV = (stringName) => {
-        if (stringName.length <= 30) {
+        if (stringName.length >= 30) {
             setErrMsg("Please enter your name properly");
             return false;
         } else {

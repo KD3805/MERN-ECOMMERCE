@@ -1,30 +1,18 @@
 import React, { useContext, useEffect } from "react";
 import { useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { RadioGroup } from "@headlessui/react";
 import {
   Box,
   Button,
-  Fab,
   Grid,
-  IconButton,
-  LinearProgress,
   Rating,
   TextField,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
 import styled from "@emotion/styled";
 import { styled as selectStyle } from "@mui/material/styles";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import ProductReviewCard from "./ProductReviewCard";
 import ProductRatingBox from "./ProductRatingBox";
-import { best_sellers } from "../Data/best_sellers";
-import HomeSectionCard from "../Section_card/HomeSectionCard";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { findProductById } from "../../../state/product/Action";

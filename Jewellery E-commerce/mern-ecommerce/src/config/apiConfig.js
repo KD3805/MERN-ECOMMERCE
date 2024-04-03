@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE_URL = "https://mern-ecommerce-backend-cyan.vercel.app";
+export const API_BASE_URL = "http://localhost:5454";
 const jwt = localStorage.getItem("jwt");
 
 export const api = axios.create({

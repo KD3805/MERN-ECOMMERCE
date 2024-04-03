@@ -1,5 +1,5 @@
 import { applyMiddleware, combineReducers, legacy_createStore } from 'redux';
-import { thunk, withExtraArgument } from 'redux-thunk';
+import thunk from 'redux-thunk';
 import { authReducer } from './auth/Reducer';
 import { customerProductReducer } from './product/Reducer';
 import { cartReducer } from './cart/Reducer';

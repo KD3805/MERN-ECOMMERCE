@@ -1,5 +1,4 @@
-import { Disclosure } from "@headlessui/react";
-import { Button, Grid, Skeleton } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import OrderCard from "./OrderCard";
@@ -67,11 +66,11 @@ const OrderHistory = () => {
   };
 
   return (
-    !order?.orders ? 
-    <Loading /> :
-    (<div className="p-5">
-      <Grid container>
-        {/* <Grid item xs={2.5}>
+    !order?.orders ?
+      <Loading /> :
+      (<div className="p-5">
+        <Grid container>
+          {/* <Grid item xs={2.5}>
           <div className="h-auto shadow-md bg-white p-5 sticky top-5">
             <h1 className="text-xl font-semibold">Filter</h1>
             <hr />
@@ -115,54 +114,58 @@ const OrderHistory = () => {
           </div>
         </Grid> */}
 
-        <Grid item xs={12}>
-          {order?.orders?.length === 0 ?
-            (
-              <div className="p-4 h-full flex justify-center flex-col items-center flex-wrap flex-grow">
-                <div>
-                  <img src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711647931/no-order_fa6v9a.svg" alt="empty-wish" />
-                </div>
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <h1 className="text-2xl font-semibold text-pink-900">No orders found!</h1>
-                  <Button
-                    onClick={() => navigate('/')}
-                    variant="contained"
-                    type="submit"
-                    sx={{ bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
-                    className="flex w-full uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none "
-                  >
-                    Continue Shopping
-                  </Button>
-                </div>
-              </div>
-            )
-            :
-            (<div>
-              {order.orders?.map((order) => {
-                const formatOrderDate = format(order.orderDate, "MMMM, dd");
-
-                return (
-                  <div className="space-y-5 mb-5">
-                    <h1 className="text-2xl my-3 font-semibold text-pink-950">
-                      {formatOrderDate}
-                    </h1>
-                    {order.orderItems?.map((item, index) => (
-                      <OrderCard
-                        item={item}
-                        orderDate={formatOrderDate}
-                        orderId={order._id}
-                        index={index}
-                        orderStatus={order.orderStatus}
-                      />
-                    ))}
+          <Grid item xs={12}>
+            {order?.orders?.length === 0 ?
+              (
+                <div className="p-4 h-full flex justify-center flex-col items-center flex-wrap flex-grow">
+                  <div>
+                    <img src="https://res.cloudinary.com/deq0hxr3t/image/upload/v1711647931/no-order_fa6v9a.svg" alt="empty-wish" />
                   </div>
-                );
-              })}
-            </div>)
-          }
+                  <div className="flex flex-col justify-center items-center gap-2">
+                    <h1 className="text-2xl font-semibold text-pink-900">No orders found!</h1>
+                    <Button
+                      onClick={() => navigate('/')}
+                      variant="contained"
+                      type="submit"
+                      sx={{ bgcolor: '#832729', "&:hover": { bgcolor: "#500724" }, }}
+                      className="flex w-full uppercase items-center justify-center rounded-md border-none px-8 py-3 text-base font-medium text-white focus:outline-none "
+                    >
+                      Continue Shopping
+                    </Button>
+                  </div>
+                </div>
+              )
+              :
+              (<div>
+                {order.orders?.map((order) => {
+                  // Check if orderDate is a valid date object
+                  const orderDate = order.orderDate instanceof Date ? order.orderDate : new Date(order.orderDate);
+                  const formatOrderDate = orderDate instanceof Date ? format(orderDate, "MMMM, dd") : '';
+
+                  return (
+                    <div className="space-y-5 mb-5">
+                      <h1 className="text-2xl my-3 font-semibold text-pink-950">
+                        {formatOrderDate}
+                      </h1>
+                      {order.orderItems?.map((item, index) => (
+                        <OrderCard
+                          key={index} // Adding a unique key for each OrderCard
+                          item={item}
+                          orderDate={formatOrderDate}
+                          orderId={order._id}
+                          index={index}
+                          orderStatus={order.orderStatus}
+                        />
+                      ))}
+                    </div>
+                  );
+                })}
+
+              </div>)
+            }
+          </Grid>
         </Grid>
-      </Grid>
-    </div>)
+      </div>)
   );
 };
 

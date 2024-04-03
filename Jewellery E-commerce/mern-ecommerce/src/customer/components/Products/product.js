@@ -2,15 +2,11 @@ import React, { useEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
-import { best_sellers } from "../Data/best_sellers";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
+import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import ProductCard from "./productCard";
 import RangeSlider from 'react-range-slider-input';
 import 'react-range-slider-input/dist/style.css';
@@ -290,7 +286,6 @@ export default function Product() {
                       onClick={() => setMobileFiltersOpen(false)}
                     >
                       <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                     </button>
                   </div>
 
@@ -325,12 +320,12 @@ export default function Product() {
                                 </span>
                                 <span className="ml-6 flex items-center">
                                   {open ? (
-                                    <MinusIcon
+                                    <RemoveIcon
                                       className="h-5 w-5"
                                       aria-hidden="true"
                                     />
                                   ) : (
-                                    <PlusIcon
+                                    <AddIcon
                                       className="h-5 w-5"
                                       aria-hidden="true"
                                     />
@@ -385,7 +380,7 @@ export default function Product() {
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
                     Sort
-                    <ChevronDownIcon
+                    <KeyboardArrowDownIcon
                       className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
@@ -433,7 +428,7 @@ export default function Product() {
                 className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
               >
                 <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
+                <SpaceDashboardIcon className="h-5 w-5" aria-hidden="true" />
               </button>
               <button
                 type="button"
@@ -441,7 +436,7 @@ export default function Product() {
                 onClick={() => setMobileFiltersOpen(true)}
               >
                 <span className="sr-only">Filters</span>
-                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+                <FilterAltIcon className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
           </div>
@@ -482,12 +477,12 @@ export default function Product() {
                           </span>
                           <span className="ml-6 flex items-center">
                             {open ? (
-                              <MinusIcon
+                              <RemoveIcon
                                 className="h-5 w-5"
                                 aria-hidden="true"
                               />
                             ) : (
-                              <PlusIcon
+                              <AddIcon
                                 className="h-5 w-5"
                                 aria-hidden="true"
                               />
@@ -542,12 +537,12 @@ export default function Product() {
                           </span>
                           <span className="ml-6 flex items-center">
                             {open ? (
-                              <MinusIcon
+                              <RemoveIcon
                                 className="h-5 w-5"
                                 aria-hidden="true"
                               />
                             ) : (
-                              <PlusIcon
+                              <AddIcon
                                 className="h-5 w-5"
                                 aria-hidden="true"
                               />
@@ -603,12 +598,12 @@ export default function Product() {
                             </span>
                             <span className="ml-6 flex items-center">
                               {open ? (
-                                <MinusIcon
+                                <RemoveIcon
                                   className="h-5 w-5"
                                   aria-hidden="true"
                                 />
                               ) : (
-                                <PlusIcon
+                                <AddIcon
                                   className="h-5 w-5"
                                   aria-hidden="true"
                                 />

@@ -1,18 +1,12 @@
 import { Fragment, useContext, useEffect, useState } from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
-import Avatar from "@mui/material/Avatar";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { deepOrange, deepPurple } from "@mui/material/colors";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
-import { Badge, Button, Grid } from "@mui/material";
+import { Badge, Button } from "@mui/material";
 import AuthModel from "../../auth/AuthModel";
 import { getUser, logout } from "../../../state/auth/Action";
 import { useDispatch, useSelector } from "react-redux";
@@ -382,7 +376,7 @@ export default function Navigation() {
                   >
                     <span className="absolute -inset-0.5" />
                     <span className="sr-only">Close menu</span>
-                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                    <CloseIcon className="h-6 w-6" aria-hidden="true" />
                   </button>
                 </div>
 
@@ -512,7 +506,7 @@ export default function Navigation() {
             >
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open menu</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </button>
 
             {/* Logo */}
