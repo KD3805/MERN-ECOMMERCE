@@ -73,8 +73,8 @@ export const getUser = (jwt) => async (dispatch) => {
         dispatch(getUserSuccess(user));
         
     } catch (error) {
-        console.log("error.response.status", error.response.status)
-        if(error.response.status == 500) {
+        console.log("error.response.status", error?.response?.status)
+        if(error?.response?.status == 500) {
             // remove jwt token from local storage and show the login page
             localStorage.clear();
             window.location.href='/login';
