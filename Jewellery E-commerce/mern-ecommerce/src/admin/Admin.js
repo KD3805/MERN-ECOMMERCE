@@ -2,13 +2,11 @@ import {
   Avatar,
   Box,
   CssBaseline,
-  Drawer,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Toolbar,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -19,7 +17,6 @@ import LocalMallIcon from "@mui/icons-material/LocalMall";
 import Diversity1Icon from "@mui/icons-material/Diversity1";
 import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import PersonIcon from "@mui/icons-material/Person";
 import ProductsTable from "./components/ProductsTable";
 import CustomersTable from "./components/CustomersTable";
 import OrdersTable from "./components/OrdersTable";

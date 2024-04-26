@@ -1,7 +1,6 @@
-import { Button, Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 import React from 'react'
-import { Link, Navigate } from 'react-router-dom'
-import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
     return (
@@ -11,7 +10,7 @@ const Footer = () => {
                 className='text-center mt-12 sticky bottom-0 left-0 right-0 overflow-hidden w-full'
                 sx={{ bgcolor: "#EFE3E3", color: '#852B2D', pt: 8, pb: 4, pr: 5 }}
             >
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={6} sm={6} md={3}>
 
                     <div className='mb-14'>
                         <h3 className='text-2xl pb-3 font-semibold'>Information</h3>
@@ -72,7 +71,7 @@ const Footer = () => {
 
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={3}>
+                <Grid item xs={6} sm={6} md={3}>
 
                     <div className='mb-14'>
                         <h3 className='text-2xl pb-3 font-semibold'>Services</h3>

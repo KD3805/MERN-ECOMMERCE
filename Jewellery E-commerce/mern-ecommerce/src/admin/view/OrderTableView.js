@@ -10,11 +10,7 @@ import Paper from "@mui/material/Paper";
 import { Avatar, AvatarGroup, Button, Card, CardHeader, Divider, Menu, MenuItem, alpha } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../state/store";
-import { confirmedOrder, deleteOrder, deliveredOrder, getOrders, shippedOrder } from '../../state/admin/order/Action';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
-import LogoutIcon from '@mui/icons-material/Logout';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { getOrders } from '../../state/admin/order/Action';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({

@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import MainCarousel from "../../components/Carousel/MainCarousel";
 import HomeSectionCarousel from "../../components/HomeSectionCarousel/HomeSectionCarousel";
-import { best_sellers } from "../../components/Data/best_sellers";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ModalContext } from "../../../context/modal/modalContext";
 import HomeSectionCategory from "../../components/Section_card/HomeSectionCategory";

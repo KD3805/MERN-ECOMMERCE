@@ -7,10 +7,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Avatar, Button, Card, CardHeader, Divider } from "@mui/material";
+import { Avatar, Card, CardHeader, Divider } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../state/store";
-import { deleteProduct, findProducts } from "../../state/product/Action";
+import { findProducts } from "../../state/product/Action";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {

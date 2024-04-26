@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { Link, useNavigate } from "react-router-dom";
-import { cn } from "./utils/cs";
-import { motion } from "framer-motion";
 import { Checkbox } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { store } from "../../../state/store";
 import { addWishItem, removeWishItem } from "../../../state/wishlist/Action";
 
@@ -47,12 +45,11 @@ const HomeSectionCard = ({ product, productLabel }) => {
   }, [product._id]);
 
   return (
-    <motion.div
+    <div
       id={`product-card-${product._id}`}
-      className={cn(
-        "transition duration-300 cursor-pointer flex flex-col bg-white rounded-lg shadow-md overflow-hidden h-[22rem] w-[18rem] border",
+      className={`transition duration-300 cursor-pointer flex flex-col bg-white rounded-lg shadow-md overflow-hidden h-[22rem] w-[18rem] border ${
         mouseHover ? "shadow-2xl -translate-y-2 z-50 absolute" : ""
-      )}
+      }`}
     >
       <div className="relative w-full h-[15rem] rounded-lg transition duration-1000">
         <Link
@@ -113,7 +110,7 @@ const HomeSectionCard = ({ product, productLabel }) => {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 };
 

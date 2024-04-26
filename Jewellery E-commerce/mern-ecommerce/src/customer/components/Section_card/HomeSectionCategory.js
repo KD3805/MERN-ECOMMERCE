@@ -1,9 +1,8 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 const HomeSectionCategory = () => {
-  const navigate = useNavigate();
 
   const categories = [
     {
@@ -70,7 +69,7 @@ const HomeSectionCategory = () => {
         {
           categories.map((item) => (
             <Link to={`${item.nav}`} target="_blank" rel="noopener noreferrer">
-              <div className='flex flex-col flex-wrap h-fit w-[12vw] border rounded-sm hover:shadow-lg transition-all duration-300 cursor-pointer'>
+              <div key={`${item.nav}`} className='flex flex-col flex-wrap h-fit w-[12vw] border rounded-sm hover:shadow-lg transition-all duration-300 cursor-pointer'>
                 <div className=' border rounded-sm'>
                   <div className='w-full h-[20vh]'>
                     <img src={item.img} alt="jewelery" className='h-full w-full object-cover ' />

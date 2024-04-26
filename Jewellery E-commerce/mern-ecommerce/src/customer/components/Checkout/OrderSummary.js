@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import AddressCard from '../AddressCard/AddressCard'
-import Cart from '../Cart/Cart'
-import CartItem from '../Cart/CartItem'
 import { Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
@@ -40,14 +37,6 @@ const OrderSummary = () => {
             <p className='text-sm text-gray-500 font-normal'>Phone : {order.order?.shippingAddress.mobile}</p>
           </div>
 
-          {/* <Button
-            variant="outlined"
-            type="submit"
-            sx={{ my: '1rem', fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderColor: '#832729' }, }}
-            className="flex w-2/12 items-center justify-center rounded-md border-none p-3"
-          >
-            Change Address
-          </Button> */}
         </div>
 
         <hr />

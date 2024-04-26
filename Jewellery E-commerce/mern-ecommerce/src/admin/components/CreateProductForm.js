@@ -97,14 +97,6 @@ const CreateProductForm = () => {
 
     }
 
-
-    // // Update the state based on the type of property
-    // if (type === 'imageUrls') {
-    //   const updatedImageUrls = [...productData.imageUrls];
-    //   updatedImageUrls[index] = { imageUrl: value };
-    //   setProductData({ ...productData, imageUrls: updatedImageUrls });
-    // } 
-
     if (type === 'sizes') {
       const updatedSizes = [...productData.sizes];
       updatedSizes[index] = { ...updatedSizes[index], [name]: value };
@@ -193,18 +185,6 @@ const CreateProductForm = () => {
 
           </Grid>
 
-          {/* Add dynamic fields for image URLs */}
-          {/* {productData.imageUrls.map((image, index) => (
-            <Grid item xs={12} key={index}>
-              <TextField
-                label={`Image URL ${index + 1}`}
-                name="imageUrl"
-                value={image.imageUrl}
-                onChange={(e) => handleChange(e, index, 'imageUrls')}
-                fullWidth
-              />
-            </Grid>
-          ))} */}
           <Grid item xs={12}>
             <Button
               onClick={() => handleAddImageField()}
@@ -222,7 +202,7 @@ const CreateProductForm = () => {
               value={productData.title}
               onChange={(e) => handleChange(e)}
               fullWidth
-            // required
+              required
             />
 
           </Grid>
@@ -234,7 +214,7 @@ const CreateProductForm = () => {
               name="brand"
               value={productData.brand}
               onChange={(e) => handleChange(e)}
-            // required
+              required
             />
           </Grid>
 
@@ -265,7 +245,7 @@ const CreateProductForm = () => {
               name="quantity"
               value={productData.quantity}
               onChange={(e) => handleChange(e)}
-            // required
+              required
             />
           </Grid>
 
@@ -333,7 +313,7 @@ const CreateProductForm = () => {
               value={productData.price}
               onChange={(e) => handleChange(e)}
               type='number'
-            // required
+              required
             />
           </Grid>
 
@@ -345,7 +325,7 @@ const CreateProductForm = () => {
               value={productData.discountedPrice}
               onChange={(e) => handleChange(e)}
               type='number'
-            // required
+              required
             />
           </Grid>
 
@@ -357,7 +337,7 @@ const CreateProductForm = () => {
               value={productData.discountPercent}
               onChange={(e) => handleChange(e)}
               type='number'
-            // required
+              required
             />
           </Grid>
 
@@ -438,7 +418,7 @@ const CreateProductForm = () => {
               name="description"
               value={productData.description}
               onChange={(e) => handleChange(e)}
-            // required
+              required
             />
           </Grid>
 
@@ -452,7 +432,7 @@ const CreateProductForm = () => {
               name="details"
               value={productData.details}
               onChange={(e) => handleChange(e)}
-            // required
+              required
             />
           </Grid>
 
@@ -467,7 +447,7 @@ const CreateProductForm = () => {
                   value={size.weight}
                   onChange={(e) => handleChange(e, index, 'sizes')}
                   fullWidth
-                // required
+                  required
                 />
               </Grid>
               <Grid item xs={12} sm={4}>

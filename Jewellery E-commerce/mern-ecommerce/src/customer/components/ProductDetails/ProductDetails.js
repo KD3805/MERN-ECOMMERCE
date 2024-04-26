@@ -311,9 +311,6 @@ export default function ProductDetails() {
                             {wt.weight}
                           </MenuItem>
                         ))}
-
-                        {/* <MenuItem value={5.434}>5.434 g</MenuItem>
-                        <MenuItem value={5.444}>5.444 g</MenuItem> */}
                       </CssTextField>
                     </Box>
                   </div>
@@ -355,93 +352,7 @@ export default function ProductDetails() {
                     </div>
                   )}
 
-                  {/*  Quantity */}
-                  {/* <div className="flex flex-col items-center justify-center gap-1">
-                    <Typography
-                      id="size-label"
-                      sx={{ fontWeight: 600 }}
-                      variant="body2"
-                    >
-                      Qty
-                    </Typography>
-
-                    <div className="flex items-center gap-1 justify-between">
-                      <IconButton disabled={quantity <= 1} onClick={() => setQuantity(quantity - 1)}>
-                        <Fab size="small" aria-label="add">
-                          <RemoveIcon />
-                        </Fab>
-                      </IconButton>
-                      <h1 className="text-lg font-semibold">{quantity}N</h1>
-                      <IconButton>
-                        <Fab size="small" aria-label="add" onClick={() => setQuantity(quantity + 1)}>
-                          <AddIcon />
-                        </Fab>
-                      </IconButton>
-                    </div>
-                  </div> */}
                 </div>
-
-                {/* Sizes
-              <div className="mt-10">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-medium text-gray-900">Size</h3>
-                  <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-                    Size guide
-                  </a>
-                </div>
-
-                <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
-                  <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
-                  <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {product.sizes.map((size) => (
-                      <RadioGroup.Option
-                        key={size.name}
-                        value={size}
-                        disabled={!size.inStock}
-                        className={({ active }) =>
-                          classNames(
-                            size.inStock
-                              ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
-                              : 'cursor-not-allowed bg-gray-50 text-gray-200',
-                            active ? 'ring-2 ring-indigo-500' : '',
-                            'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6'
-                          )
-                        }
-                      >
-                        {({ active, checked }) => (
-                          <>
-                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
-                            {size.inStock ? (
-                              <span
-                                className={classNames(
-                                  active ? 'border' : 'border-2',
-                                  checked ? 'border-indigo-500' : 'border-transparent',
-                                  'pointer-events-none absolute -inset-px rounded-md'
-                                )}
-                                aria-hidden="true"
-                              />
-                            ) : (
-                              <span
-                                aria-hidden="true"
-                                className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
-                              >
-                                <svg
-                                  className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
-                                  viewBox="0 0 100 100"
-                                  preserveAspectRatio="none"
-                                  stroke="currentColor"
-                                >
-                                  <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
-                                </svg>
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </RadioGroup.Option>
-                    ))}
-                  </div>
-                </RadioGroup>
-              </div> */}
 
                 <Button
                   onClick={(e) => handleAddToCart(e)}
@@ -614,22 +525,6 @@ export default function ProductDetails() {
 
         {/* Similar Products */}
         <section className="mb-20">
-          {/* <h2
-            style={{ letterSpacing: "1px" }}
-            className="text-3xl font-semibold text-pink-950 text-center px-10"
-          >
-            You may also like
-          </h2>
-          <img
-            src="https://www.tanishq.co.in/on/demandware.static/-/Library-Sites-TanishqSharedLibrary/default/dw78fb320b/images/home/Line-Design.svg"
-            className="w-full h-20 object-cover"
-            alt=""
-          /> */}
-
-          {/* <div className="flex flex-wrap items-baseline justify-evenly space-y-10">
-            
-          </div> */}
-
           <h1 className="font-semibold text-2xl font-sans sm:pl-10">
             You May Also Like
           </h1>

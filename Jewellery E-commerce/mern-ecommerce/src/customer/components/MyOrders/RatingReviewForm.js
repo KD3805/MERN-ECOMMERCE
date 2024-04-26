@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { styled as ratingStyle } from '@mui/material/styles';
 import { addReviewToProduct } from '../../../state/review/Action';
 import { addRatingToProduct } from '../../../state/rating/Action';
-import RRState from '../../../context/rrBox/rrState';
 import { RRContext } from '../../../context/rrBox/rrContext';
 
 

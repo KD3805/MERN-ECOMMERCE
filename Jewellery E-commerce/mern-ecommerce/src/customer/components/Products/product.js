@@ -15,12 +15,10 @@ import { findProducts } from '../../../state/product/Action';
 import { store } from '../../../state/store';
 import { Pagination } from '@mui/material';
 import Loading from '../../../Loading';
+import './productStyle.css'
 
 
 const sortOptions = [
-  // { name: 'Most Popular', href: '#', current: true },
-  // { name: 'Best Rating', href: '#', current: false },
-  // { name: 'Newest', href: '#', current: false },
   { name: "Price: Low to High", value: "low_to_high", current: false },
   { name: "Price: High to Low", value: "high_to_low", current: false },
 ];
@@ -37,20 +35,6 @@ const rangeFilters = [
 ];
 
 const filters = [
-  // {
-  //   id: "product",
-  //   name: "Product",
-  //   options: [
-  //     { value: "bangle", label: "Bangles", checked: false },
-  //     { value: "bracelet", label: "Bracelets", checked: false },
-  //     { value: "earring", label: "Earrings", checked: false },
-  //     { value: "pendant", label: "Pendants", checked: false },
-  //     { value: "mangal-sutra", label: "Mangal sutra", checked: false },
-  //     { value: "chain", label: "Chains", checked: false },
-  //     { value: "necklace", label: "Necklaces", checked: false },
-  //     { value: "ring", label: "Rings", checked: false },
-  //   ],
-  // },
   {
     id: "type",
     name: "Jewellery Type",
@@ -118,7 +102,6 @@ export default function Product() {
   const discountValue = searchParams.get("discount");
   const sortValue = searchParams.get("sort");
   const pageNumberValue = searchParams.get("page");
-  // const stockValue = searchParams.get("stock");
   const typeValue = searchParams.get("type");
   const occasionValue = searchParams.get("occasion");
 
@@ -292,18 +275,6 @@ export default function Product() {
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
-                      {/* {subCategories.map((category) => (
-                        <li key={category.name}>
-                          <a href={category.href} className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))} */}
-                    </ul>
 
                     {filters.map((section, index) => (
                       <Disclosure
@@ -341,6 +312,7 @@ export default function Product() {
                                     className="flex items-center"
                                   >
                                     <input
+                                      onChange={() => handleFilters(option.value, section.id)}
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
                                       name={`${section.id}[]`}
                                       defaultValue={option.value}
@@ -371,7 +343,7 @@ export default function Product() {
 
         <main className="mx-auto px-4 sm:px-6 lg:px-20">
           <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+            <h1 className="lg:text-4xl md:text-3xl text-2xl font-bold tracking-tight text-gray-900">
               New Arrivals
             </h1>
 
@@ -450,17 +422,6 @@ export default function Product() {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
-                  {/* {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href}>{category.name}</a>
-                    </li>
-                  ))} */}
-                </ul>
-
 
                 {/* Price range slider */}
                 <Disclosure

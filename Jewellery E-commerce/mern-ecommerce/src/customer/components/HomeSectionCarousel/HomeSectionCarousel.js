@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import AliceCarousel from "react-alice-carousel";
 import HomeSectionCard from "../Section_card/HomeSectionCard";
-import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
-import { Button } from "@mui/material";
 import Slider from "react-slick";
 import "./style1.css";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../../state/store";
 import { findProducts } from "../../../state/product/Action";
@@ -17,7 +13,6 @@ const HomeSectionCarousel = ({
     sectionCategory,
     _id,
 }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
     const dispatch = useDispatch();
     const { products } = useSelector((store) => store);
 
@@ -41,13 +36,6 @@ const HomeSectionCarousel = ({
             console.error("Error in useEffect:", error);
         }
     }, [sectionCategory]);
-
-    const responsive = {
-        0: { items: 1 },
-        720: { items: 3 },
-        1024: { items: 5 },
-    };
-    const syncActiveIndex = ({ item }) => setActiveIndex(item);
 
     const settings = {
         dots: true,
@@ -109,9 +97,6 @@ const HomeSectionCarousel = ({
         ],
     };
 
-    // const slidePrev = ()=>setActiveIndex(activeIndex-1);
-    // const slideNext = ()=>setActiveIndex(activeIndex+1);
-
     const items = products.products?.content
         ? products.products.content?.map((item, index) => (
             <HomeSectionCard
@@ -144,38 +129,6 @@ const HomeSectionCarousel = ({
 
             <div className="slider-container">
                 <Slider {...settings}>{items}</Slider>
-
-                {/* <AliceCarousel
-                    disableButtonsControls
-                    items={items}
-                    responsive={responsive}
-                    disableDotsControls
-                    onSlideChanged={syncActiveIndex}
-                    activeIndex={activeIndex}
-                />
-                { 
-                    activeIndex !== items.length-5 && <Button
-                        onClick={slideNext}
-                        variant="contained" 
-                        className="z-50" 
-                        sx={{position:'absolute', top:"8rem", right:"0rem", transform:"translateX(50%) rotate(90deg)", bgcolor:'white'}}
-                        aria-label='next'
-                    >
-                        <KeyboardArrowLeftIcon sx={{transform:"rotate(90deg)", color:'black'}}/>
-                    </Button>
-                }
-
-                {
-                    activeIndex !== 0 && <Button
-                        onClick={slidePrev}
-                        variant="contained" 
-                        className="z-50" 
-                        sx={{position:'absolute', top:"8rem", left:"0rem", transform:"translateX(-50%) rotate(-90deg)", bgcolor:'white'}}
-                        aria-label='next'
-                    >
-                        <KeyboardArrowLeftIcon sx={{transform:"rotate(90deg)", color:'black'}}/>
-                    </Button>
-                } */}
             </div>
         </div>
     );

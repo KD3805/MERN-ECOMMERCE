@@ -4,8 +4,6 @@ import { getWish, addWishItem, removeWishItem } from '../../../state/wishlist/Ac
 import { useNavigate } from 'react-router-dom';
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { cn } from "../Section_card/utils/cs";
-import { motion } from "framer-motion";
 import { Button, Checkbox } from "@mui/material";
 
 const WishList = () => {

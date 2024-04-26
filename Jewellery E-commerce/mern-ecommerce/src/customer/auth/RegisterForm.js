@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Box, Button, Divider, Grid, TextField, styled } from '@mui/material'
+import { Button, Grid, TextField, styled } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, register } from '../../state/auth/Action';

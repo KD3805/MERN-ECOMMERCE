@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./productStyle.css";
 import { useNavigate } from "react-router-dom";
 import zIndex from "@mui/material/styles/zIndex";
 

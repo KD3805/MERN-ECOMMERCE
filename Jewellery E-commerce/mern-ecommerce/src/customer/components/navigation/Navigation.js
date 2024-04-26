@@ -210,21 +210,6 @@ const navigation = {
     {
       id: "wedding",
       name: "Wedding",
-      // featured: [
-      //   {
-      //     name: 'New Arrivals',
-      //     href: '#',
-      //     imageSrc: 'assets/images/nav-product/product.jpg',
-      //     imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-      //   },
-      //   {
-      //     name: 'Artwork Tees',
-      //     href: '#',
-      //     imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-      //     imageAlt:
-      //       'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-      //   },
-      // ],
       sections: [
         {
           id: "category",
@@ -314,13 +299,13 @@ export default function Navigation() {
     close();
   };
 
-  const handleSectionClick = (section, item, close) => {
+  const handleSideMenuClick = (category, section, item) => {
     navigate(
-      `/${section.id.replace(/\s/g, "-").toLowerCase()}/${item.id
+      `/${category.id.replace(/\s/g, "-").toLowerCase()}/${section.id
         .replace(/\s/g, "-")
-        .toLowerCase()}`
+        .toLowerCase()}/${item.id.replace(/\s/g, "-").toLowerCase()}`
     );
-    close();
+    setOpen(false);
   };
 
   const handleOpen = (e, auth) => {
@@ -407,26 +392,7 @@ export default function Navigation() {
                         key={category.id}
                         className="space-y-10 px-4 pb-8 pt-10"
                       >
-                        {/* <div className="grid grid-cols-2 gap-x-4">
-                          {category.featured.map((item) => (
-                            <div key={item.name} className="group relative text-base sm:text-sm">
-                              <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                <img
-                                  src={item.imageSrc}
-                                  alt={item.imageAlt}
-                                  className="object-cover object-center"
-                                />
-                              </div>
-                              <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                <span className="absolute inset-0 z-10" aria-hidden="true" />
-                                {item.name}
-                              </a>
-                              <p aria-hidden="true" className="mt-1">
-                                Shop now
-                              </p>
-                            </div>
-                          ))}
-                        </div> */}
+                        
                         {category.sections.map((section) => (
                           <div key={section.id}>
                             <p
@@ -443,7 +409,9 @@ export default function Navigation() {
                               {section.items.map((item) => (
                                 <li key={item.id} className="flow-root">
                                   <a
-                                    href={item.href}
+                                    onClick={()=>{
+                                      handleSideMenuClick(category, section, item)
+                                    }}
                                     className="-m-2 block p-2 text-gray-500"
                                   >
                                     {item.name}
@@ -458,37 +426,6 @@ export default function Navigation() {
                   </Tab.Panels>
                 </Tab.Group>
 
-                {/* <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {navigation.pages.map((page, index) => (
-                    <div key={`${page.name}-${index}`} className="flow-root">
-                      <a
-                        href={page.href}
-                        className="-m-2 block p-2 font-medium text-gray-900"
-                      >
-                        {page.name}
-                      </a>
-                    </div>
-                  ))}
-                </div> */}
-
-                {/* <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Sign in
-                    </a>
-                  </div>
-                  <div className="flow-root">
-                    <a
-                      href="#"
-                      className="-m-2 block p-2 font-medium text-gray-900"
-                    >
-                      Create account
-                    </a>
-                  </div>
-                </div> */}
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -573,7 +510,6 @@ export default function Navigation() {
                                 borderColor: "#832729",
                               },
                             }}
-                            // sx={{ fontSize: '0.75rem', color: '#832729', borderColor: '#832729', "&:hover": { bgcolor: "#832729", color: '#fff', borderCo0or:5'#822729' }, }}
                             className="flex items-center justify-center rounded-md border-none px-2 py-1"
                           >
                             log in
@@ -671,7 +607,6 @@ export default function Navigation() {
                 {/* Favourite */}
                 <div
                   onClick={() => {
-                    // document.getElementById('nav-fav-btn').classList.add("border-b-2");
                     navigate("/user-details/?layout=1");
                   }}
                   className="flex items-center flex-col cursor-pointer border-pink-950"
@@ -695,7 +630,6 @@ export default function Navigation() {
               <div className="h-[10vh] flex items-center justify-center unline-navigation relative">
                 <div
                   onClick={() => {
-                    // document.getElementById('nav-cart-btn').classList.add("border-b-2");
                     navigate("/cart");
                   }}
                   xs={4}
@@ -761,23 +695,6 @@ export default function Navigation() {
                               <div className="relative bg-white">
                                 <div className="mx-auto max-w-7xl px-8">
                                   <div className="grid grid-cols-1 gap-x-8 gap-y-10 py-10">
-                                    {/* <div className="col-start-2 grid grid-cols-2 gap-x-8">
-                                      {category.featured.map((item) => (
-                                        <div key={item.name} className="group relative text-sm">
-                                          <div className="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                            <img src={item.imageSrc} alt={item.imageAlt} className="object-cover object-center" />
-                                          </div>
-                                          <a href={item.href} className="mt-6 block font-medium text-gray-900">
-                                            <span className="absolute inset-0 z-10" aria-hidden="true" />
-                                            {item.name}
-                                          </a>
-                                          <p aria-hidden="true" className="mt-1">
-                                            Shop now
-                                          </p>
-                                        </div>
-                                      ))}
-
-                                    </div> */}
 
                                     <div className="row-start-1 grid grid-cols-4 gap-x-8 gap-y-10 text-sm">
                                       {category.sections.map((section) => (
@@ -794,7 +711,7 @@ export default function Navigation() {
                                             className="mt-6 space-y-6 sm:mt-4 sm:space-y-4"
                                           >
                                             {section.items.map(
-                                              (item, index) => (
+                                              (item) => (
                                                 <li
                                                   key={item.id}
                                                   className="flex"
@@ -829,15 +746,6 @@ export default function Navigation() {
                     </Popover>
                   ))}
 
-                  {/* {navigation.pages.map((page) => (
-                    <a
-                      key={page.name}
-                      href={page.href}
-                      className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
-                    >
-                      {page.name}
-                    </a>
-                  ))} */}
                 </div>
               </Popover.Group>
 
