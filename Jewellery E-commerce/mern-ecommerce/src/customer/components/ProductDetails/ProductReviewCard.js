@@ -1,27 +1,29 @@
 import { Avatar, Box, Grid, Rating } from '@mui/material';
 import React from 'react';
 import styled from "@emotion/styled";
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
+
+const StyledRating = styled(Rating)({
+  "& .MuiRating-iconFilled": {
+    color: "#831843",
+  },
+  "& .MuiRating-iconHover": {
+    color: "#500724",
+  },
+});
 
 const ProductReviewCard = ({ reviewData, ratingData }) => {
 
-    const StyledRating = styled(Rating)({
-        "& .MuiRating-iconFilled": {
-          color: "#831843",
-        },
-        "& .MuiRating-iconHover": {
-          color: "#500724",
-        },
-    });
+    // const formattedDate = format(reviewData.createdAt, 'MMMM d, yyyy');
+    const formattedDate = reviewData.createdAt && isValid(new Date(reviewData.createdAt)) ? format(new Date(reviewData.createdAt), 'MMMM d, yyyy') : '';
 
-    const formattedDate = format(reviewData.createdAt, 'MMMM d, yyyy');
 
   return (
     <div className='my-3'>
       <Grid container gap={3}>
         <Box>
             <Avatar className='text-white' sx={{width: 50, height: 50, fontSize: '1.3rem', bgcolor: '#832729'}}>
-                {reviewData.user?.firstName.charAt(0).toUpperCase()}
+                {reviewData.user?.firstName.charAt(0).toUpperCase() ?? ''}
             </Avatar>
         </Box>
 
